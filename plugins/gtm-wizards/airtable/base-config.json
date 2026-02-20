@@ -3,6 +3,7 @@
   "baseUrl": "https://airtable.com/apphIEJ1MRUISs8mK",
   "tables": {
     "Companies": "tblkhSBbxXmijUCq7",
+    "Contacts": "tblhO8T6Ekjb9aOaz",
     "Deals": "tbljzM6OI6AnjYD8b",
     "Pricing": "tblgvcvQo5FMljAMG",
     "Assumptions": "tblZv4uy1y1MWGHyo",
