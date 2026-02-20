@@ -15,7 +15,7 @@
 set -euo pipefail
 
 # ── Config ───────────────────────────────────────────────────────────────────
-GCP_PROJECT="YOUR_GCP_PROJECT_ID"  # TODO: fill in your GCP project ID
+GCP_PROJECT="g-workspace-apis"
 REGION="us-central1"
 SERVICE_NAME="airtable-mcp"
 IMAGE="gcr.io/$GCP_PROJECT/$SERVICE_NAME"
@@ -27,10 +27,6 @@ if [[ -z "${AIRTABLE_PAT:-}" ]]; then
 fi
 if [[ -z "${AIRTABLE_BASE_ID:-}" ]]; then
   echo "Error: AIRTABLE_BASE_ID is not set" >&2
-  exit 1
-fi
-if [[ "$GCP_PROJECT" == "YOUR_GCP_PROJECT_ID" ]]; then
-  echo "Error: Update GCP_PROJECT in this script before running" >&2
   exit 1
 fi
 
