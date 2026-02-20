@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{{DECK_TITLE}} | Baseline Payments + Esker</title>
+<!--
+  STAGE DECK TEMPLATE: Business Case
+  ========================================
+  Purpose: Formal ROI presentation for budget approval. The "boardroom deck."
+  Persona: CFO, VP Finance, Procurement
+  Calculator: Business case mode — AE-controlled pricing displayed, prospect-editable assumptions
+  Pipeline Stage: Proposal / Committed
+
+  Section composition:
+    1. Hero                     → sections/hero.html
+    2. Executive Summary        → Custom: 1-screen elevator pitch with key metrics
+    3. Current State            → Custom: prospect's current AP landscape (from discovery)
+    4. Proposed Solution        → Custom: Esker solution mapped to requirements
+    5. ROI Calculator           → sections/roi-calculator.html (business-case mode)
+    6. Three-Year Projection    → Custom: year-by-year benefit projection table
+    7. Implementation Timeline  → Custom: phased rollout plan
+    8. Case Studies             → Custom: 2-3 peer references
+    9. Investment Summary       → Custom: pricing breakdown + ROI summary
+   10. CTA                      → sections/cta.html
+
+  Data sources:
+    - All prior meeting data (discovery, demo, scoping)
+    - Pricing from Airtable (Esker SaaS Annual, Implementation Fee, discounts)
+    - ROI calculator with locked pricing + editable assumptions
+    - Financial projections based on calculator outputs
+-->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #01395d; --bg-dark: #012d4a; --bg-darker: #01243c;
+    --surface: rgba(255,255,255,0.06); --surface-hover: rgba(255,255,255,0.10);
+    --border: rgba(255,255,255,0.10); --border-hover: rgba(255,255,255,0.18);
+    --text: #ffffff; --text-mid: rgba(255,255,255,0.75); --text-dim: rgba(255,255,255,0.50);
+    --coral: #e85d56; --coral-light: #f08a85; --teal: #7ecac1; --teal-light: #a8ddd7;
+    --green: #10b981; --green-light: #34d399; --amber: #f59e0b; --amber-light: #fbbf24;
+    --esker-red: #e4042a;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; scroll-snap-type: y mandatory; font-size: 16px; }
+  body { font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; color: var(--text); background: var(--bg); overflow-x: hidden; -webkit-font-smoothing: antialiased; }
+
+  /* Core UI */
+  .progress-bar { position: fixed; top: 0; left: 0; height: 3px; background: linear-gradient(90deg, var(--teal), var(--coral)); z-index: 200; transition: width 0.15s ease-out; }
+  .nav-dots { position: fixed; right: 28px; top: 50%; transform: translateY(-50%); z-index: 100; display: flex; flex-direction: column; gap: 10px; }
+  .nav-dot { width: 8px; height: 8px; border-radius: 50%; background: rgba(255,255,255,0.2); border: 1.5px solid rgba(255,255,255,0.35); cursor: pointer; transition: all 0.4s; position: relative; }
+  .nav-dot.active { background: var(--teal); border-color: var(--teal); transform: scale(1.4); box-shadow: 0 0 12px rgba(126,202,193,0.5); }
+  .nav-dot .tooltip { position: absolute; right: 20px; top: 50%; transform: translateY(-50%); background: var(--bg-dark); color: var(--text); padding: 6px 14px; border-radius: 6px; font-size: 11px; font-weight: 500; white-space: nowrap; opacity: 0; pointer-events: none; transition: opacity 0.3s; border: 1px solid var(--border); }
+  .nav-dot:hover .tooltip { opacity: 1; }
+  section { min-height: 100vh; scroll-snap-align: start; display: flex; flex-direction: column; justify-content: center; align-items: center; position: relative; overflow: hidden; padding: clamp(40px,6vh,80px) clamp(24px,5vw,120px); }
+  .section-inner { width: 100%; max-width: 1100px; position: relative; z-index: 2; }
+  .reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.8s cubic-bezier(0.16,1,0.3,1), transform 0.8s cubic-bezier(0.16,1,0.3,1); }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+  .reveal-scale { opacity: 0; transform: scale(0.88); transition: opacity 0.8s cubic-bezier(0.16,1,0.3,1), transform 0.8s cubic-bezier(0.16,1,0.3,1); }
+  .reveal-scale.visible { opacity: 1; transform: scale(1); }
+  .reveal-delay-1{transition-delay:.1s} .reveal-delay-2{transition-delay:.2s} .reveal-delay-3{transition-delay:.3s} .reveal-delay-4{transition-delay:.4s} .reveal-delay-5{transition-delay:.5s} .reveal-delay-6{transition-delay:.6s} .reveal-delay-7{transition-delay:.7s}
+  .glass { background: var(--surface); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid var(--border); border-radius: 16px; padding: 28px 32px; transition: background 0.3s, border-color 0.3s, transform 0.4s cubic-bezier(0.16,1,0.3,1); }
+  .glass:hover { background: var(--surface-hover); border-color: var(--border-hover); transform: translateY(-3px); }
+  @keyframes shimmer { 0% { background-position: -200% center; } 100% { background-position: 200% center; } }
+  .shimmer-text { background: linear-gradient(90deg, var(--teal-light) 0%, #fff 30%, var(--coral-light) 60%, var(--teal-light) 100%); background-size: 200% auto; -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; animation: shimmer 6s linear infinite; }
+  @keyframes pulse { 0%,100%{opacity:.15;transform:scale(1)} 50%{opacity:.28;transform:scale(1.05)} }
+  .glow-orb { position: absolute; border-radius: 50%; filter: blur(120px); pointer-events: none; animation: pulse 8s ease-in-out infinite; z-index: 0; }
+  @keyframes float-up { 0%{transform:translateY(0) translateX(0);opacity:0} 10%{opacity:.6} 90%{opacity:.6} 100%{transform:translateY(-100vh) translateX(30px);opacity:0} }
+  .particle { position: fixed; width: 2px; height: 2px; background: var(--teal); border-radius: 50%; pointer-events: none; z-index: 1; opacity: 0; animation: float-up var(--duration) var(--delay) linear infinite; }
+
+  /* Hero */
+  #hero { background: linear-gradient(160deg, var(--bg-darker) 0%, var(--bg) 40%, var(--bg-dark) 100%); text-align: center; }
+  .logo-row { display: flex; align-items: center; justify-content: center; gap: 28px; margin-bottom: 56px; }
+  .logo-row img { height: 52px; } .logo-row svg { height: 46px; }
+  .logo-divider { width: 1px; height: 56px; background: rgba(255,255,255,0.2); }
+  .hero-title { font-size: clamp(48px,6vw,80px); font-weight: 800; letter-spacing: -3px; line-height: 1.05; margin-bottom: 20px; }
+  .hero-subtitle { font-size: clamp(18px,1.6vw,24px); font-weight: 400; color: var(--text-mid); letter-spacing: 0.5px; margin-bottom: 64px; }
+  .hero-meta { font-size: 13px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; color: var(--text-dim); }
+
+  .section-label { font-size: 13px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: var(--coral); margin-bottom: 16px; }
+  .section-title { font-size: clamp(40px,5vw,64px); font-weight: 800; letter-spacing: -2.5px; line-height: 1.1; margin-bottom: 12px; }
+  .section-subtitle { font-size: 17px; color: var(--text-mid); margin-bottom: 44px; max-width: 650px; }
+
+  /* Executive summary — hero-like stat strip */
+  .exec-stats { display: grid; grid-template-columns: repeat(4,1fr); gap: 16px; margin-bottom: 32px; }
+  .exec-stat { text-align: center; padding: 24px 16px; }
+  .exec-stat .stat-value { font-size: clamp(36px,3.5vw,48px); font-weight: 800; letter-spacing: -2px; line-height: 1; margin-bottom: 8px; font-variant-numeric: tabular-nums; }
+  .exec-stat .stat-label { font-size: 12px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--text-dim); }
+  .exec-summary-text { font-size: 17px; color: var(--text-mid); line-height: 1.6; max-width: 800px; margin: 0 auto; text-align: center; }
+  .exec-summary-text strong { color: var(--text); }
+
+  /* Current state / proposed solution — side-by-side */
+  .comparison-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+  .comparison-card { padding: 28px; }
+  .comparison-card .comp-header { font-size: 13px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 20px; }
+  .comparison-card.current .comp-header { color: var(--coral); }
+  .comparison-card.current { border-top: 3px solid var(--coral); }
+  .comparison-card.proposed .comp-header { color: var(--green); }
+  .comparison-card.proposed { border-top: 3px solid var(--green); }
+  .comp-list { list-style: none; display: flex; flex-direction: column; gap: 12px; }
+  .comp-list li { font-size: 15px; color: var(--text-mid); line-height: 1.4; display: flex; align-items: flex-start; gap: 10px; }
+  .comp-list li::before { content: ''; width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; margin-top: 7px; }
+  .comparison-card.current .comp-list li::before { background: var(--coral); }
+  .comparison-card.proposed .comp-list li::before { background: var(--green); }
+
+  /* Three-year projection table */
+  .projection-table { width: 100%; border-collapse: separate; border-spacing: 0; }
+  .projection-table th { font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--text-dim); padding: 12px 16px; text-align: left; border-bottom: 1px solid var(--border); }
+  .projection-table td { font-size: 15px; color: var(--text-mid); padding: 14px 16px; border-bottom: 1px solid rgba(255,255,255,0.04); font-variant-numeric: tabular-nums; }
+  .projection-table td strong { color: var(--text); }
+  .projection-table td.positive { color: var(--green-light); font-weight: 700; }
+  .projection-table tfoot td { border-top: 2px solid var(--teal); color: var(--text); font-weight: 700; font-size: 16px; }
+
+  /* Investment summary */
+  .investment-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+  .investment-card { padding: 28px; }
+  .investment-card .inv-title { font-size: 13px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 20px; }
+  .investment-card.cost { border-top: 3px solid var(--coral); }
+  .investment-card.cost .inv-title { color: var(--coral); }
+  .investment-card.return { border-top: 3px solid var(--green); }
+  .investment-card.return .inv-title { color: var(--green); }
+  .inv-line { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.04); font-size: 15px; color: var(--text-mid); }
+  .inv-line .inv-value { font-weight: 700; color: var(--text); font-variant-numeric: tabular-nums; }
+  .inv-total { display: flex; justify-content: space-between; padding: 12px 0; margin-top: 8px; border-top: 2px solid var(--border); font-size: 18px; font-weight: 800; }
+  .inv-total.cost-total .inv-value { color: var(--coral-light); }
+  .inv-total.return-total .inv-value { color: var(--green-light); }
+
+  /* Case studies */
+  .case-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  .case-card { padding: 28px; border-top: 3px solid var(--teal); }
+  .case-card .case-company { font-size: 13px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--teal); margin-bottom: 12px; }
+  .case-card .case-stat { font-size: clamp(28px,2.5vw,36px); font-weight: 800; color: var(--green-light); margin-bottom: 4px; }
+  .case-card .case-metric { font-size: 14px; font-weight: 600; color: var(--text-mid); margin-bottom: 16px; }
+  .case-card .case-desc { font-size: 15px; color: var(--text-mid); line-height: 1.5; }
+
+  /* Phase timeline */
+  .phase-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; }
+  .phase-card { padding: 24px; border-top: 3px solid var(--teal); text-align: center; }
+  .phase-card .phase-num { font-size: 28px; font-weight: 800; color: var(--teal-light); margin-bottom: 4px; }
+  .phase-card .phase-name { font-size: 15px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--text-mid); margin-bottom: 8px; }
+  .phase-card .phase-duration { font-size: 13px; color: var(--amber); font-weight: 600; margin-bottom: 12px; }
+  .phase-card .phase-desc { font-size: 14px; color: var(--text-mid); line-height: 1.4; }
+
+  /* CTA */
+  #cta { background: linear-gradient(160deg, var(--bg) 0%, var(--bg-darker) 100%); text-align: center; }
+  .cta-title { font-size: clamp(40px,5vw,64px); font-weight: 800; letter-spacing: -2.5px; line-height: 1.1; margin-bottom: 12px; }
+  .cta-subtitle { font-size: 18px; color: var(--text-mid); margin-bottom: 40px; max-width: 520px; margin-left: auto; margin-right: auto; }
+  .cta-card { max-width: 600px; margin: 0 auto 48px; text-align: left; padding: 32px 36px; }
+  .cta-list { list-style: none; display: flex; flex-direction: column; gap: 18px; }
+  .cta-list li { display: flex; align-items: flex-start; gap: 14px; font-size: 17px; color: var(--text-mid); line-height: 1.5; }
+  .cta-list li strong { color: var(--text); }
+  .cta-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--teal); box-shadow: 0 0 12px rgba(126,202,193,0.5); flex-shrink: 0; margin-top: 6px; }
+  .contact-block { margin-bottom: 40px; }
+  .contact-name { font-size: 20px; font-weight: 700; margin-bottom: 4px; }
+  .contact-details { font-size: 16px; color: var(--text-mid); }
+  .contact-details a { color: var(--teal); text-decoration: none; }
+  .footer-logos { display: flex; align-items: center; justify-content: center; gap: 24px; opacity: 0.5; }
+  .footer-logos img { height: 38px; } .footer-logos svg { height: 32px; }
+  .footer-divider { width: 1px; height: 42px; background: rgba(255,255,255,0.15); }
+
+  @media (max-width: 900px) {
+    .exec-stats, .comparison-grid, .investment-grid, .case-grid { grid-template-columns: 1fr; }
+    .nav-dots { display: none; }
+  }
+  @media (max-width: 600px) { section { padding: 40px 20px; } .exec-stats { grid-template-columns: 1fr 1fr; gap: 10px; } }
+</style>
+</head>
+<body>
+
+<div class="progress-bar" id="progressBar"></div>
+<nav class="nav-dots" id="navDots">
+  <div class="nav-dot active" data-section="hero"><span class="tooltip">Cover</span></div>
+  <div class="nav-dot" data-section="exec-summary"><span class="tooltip">Summary</span></div>
+  <div class="nav-dot" data-section="current-state"><span class="tooltip">Current</span></div>
+  <div class="nav-dot" data-section="solution"><span class="tooltip">Solution</span></div>
+  <div class="nav-dot" data-section="roi"><span class="tooltip">ROI</span></div>
+  <div class="nav-dot" data-section="projection"><span class="tooltip">Projection</span></div>
+  <div class="nav-dot" data-section="impl-timeline"><span class="tooltip">Timeline</span></div>
+  <div class="nav-dot" data-section="cases"><span class="tooltip">References</span></div>
+  <div class="nav-dot" data-section="investment"><span class="tooltip">Investment</span></div>
+  <div class="nav-dot" data-section="cta"><span class="tooltip">Next Steps</span></div>
+</nav>
+
+<div class="particle" style="left:10%;--duration:20s;--delay:0s;"></div>
+<div class="particle" style="left:40%;--duration:18s;--delay:3s;"></div>
+<div class="particle" style="left:75%;--duration:22s;--delay:6s;"></div>
+
+<!-- ===== SECTION 1: HERO ===== -->
+<section id="hero">
+  <div class="glow-orb" style="width:500px;height:500px;background:rgba(126,202,193,0.12);top:-15%;right:-10%;"></div>
+  <div class="section-inner">
+    <div class="logo-row reveal">
+      <img src="data:image/webp;base64,..." alt="Baseline Payments">
+      <div class="logo-divider"></div>
+      <svg viewBox="0 0 1555 725" fill="none" xmlns="http://www.w3.org/2000/svg" style="height:32px;"><!-- Esker --></svg>
+    </div>
+    <h1 class="hero-title shimmer-text reveal reveal-delay-1">{{DECK_TITLE}}</h1>
+    <p class="hero-subtitle reveal reveal-delay-2">{{DECK_SUBTITLE}}</p>
+    <p class="hero-meta reveal reveal-delay-3">Confidential &middot; {{PREPARED_FOR}} &middot; {{DATE}}</p>
+  </div>
+</section>
+
+<!-- ===== SECTION 2: EXECUTIVE SUMMARY ===== -->
+<section id="exec-summary">
+  <div class="glow-orb" style="width:400px;height:400px;background:rgba(16,185,129,0.08);top:-10%;left:-5%;animation-delay:1s;"></div>
+  <div class="section-inner" style="text-align:center;">
+    <p class="section-label reveal" style="color:var(--green);">{{EXEC_LABEL}}</p>
+    <h2 class="section-title reveal reveal-delay-1">{{EXEC_TITLE}}</h2>
+    <div class="exec-stats">
+      <div class="glass exec-stat reveal-scale reveal-delay-2"><div class="stat-value" style="color:var(--green-light);" data-target="{{EXEC_STAT_1_TARGET}}" data-prefix="{{EXEC_STAT_1_PREFIX}}" data-suffix="{{EXEC_STAT_1_SUFFIX}}">0</div><div class="stat-label">{{EXEC_STAT_1_LABEL}}</div></div>
+      <div class="glass exec-stat reveal-scale reveal-delay-3"><div class="stat-value" style="color:var(--teal-light);" data-target="{{EXEC_STAT_2_TARGET}}" data-prefix="{{EXEC_STAT_2_PREFIX}}" data-suffix="{{EXEC_STAT_2_SUFFIX}}">0</div><div class="stat-label">{{EXEC_STAT_2_LABEL}}</div></div>
+      <div class="glass exec-stat reveal-scale reveal-delay-4"><div class="stat-value" style="color:var(--coral-light);" data-target="{{EXEC_STAT_3_TARGET}}" data-prefix="{{EXEC_STAT_3_PREFIX}}" data-suffix="{{EXEC_STAT_3_SUFFIX}}">0</div><div class="stat-label">{{EXEC_STAT_3_LABEL}}</div></div>
+      <div class="glass exec-stat reveal-scale reveal-delay-5"><div class="stat-value" style="color:var(--amber);" data-target="{{EXEC_STAT_4_TARGET}}" data-prefix="{{EXEC_STAT_4_PREFIX}}" data-suffix="{{EXEC_STAT_4_SUFFIX}}">0</div><div class="stat-label">{{EXEC_STAT_4_LABEL}}</div></div>
+    </div>
+    <p class="exec-summary-text reveal reveal-delay-6">{{EXEC_SUMMARY_TEXT}}</p>
+  </div>
+</section>
+
+<!-- ===== SECTION 3: CURRENT STATE ===== -->
+<!-- ===== SECTION 4: PROPOSED SOLUTION ===== -->
+<!-- Combined into side-by-side comparison -->
+<section id="current-state">
+  <div class="section-inner">
+    <p class="section-label reveal">{{COMPARISON_LABEL}}</p>
+    <h2 class="section-title reveal reveal-delay-1">{{COMPARISON_TITLE}}</h2>
+    <p class="section-subtitle reveal reveal-delay-2">{{COMPARISON_SUBTITLE}}</p>
+    <div class="comparison-grid">
+      <div class="glass comparison-card current reveal reveal-delay-3">
+        <div class="comp-header">Current State</div>
+        <ul class="comp-list">
+          <li>{{CURRENT_1}}</li><li>{{CURRENT_2}}</li><li>{{CURRENT_3}}</li><li>{{CURRENT_4}}</li><li>{{CURRENT_5}}</li>
+        </ul>
+      </div>
+      <div class="glass comparison-card proposed reveal reveal-delay-4">
+        <div class="comp-header">With Esker</div>
+        <ul class="comp-list">
+          <li>{{PROPOSED_1}}</li><li>{{PROPOSED_2}}</li><li>{{PROPOSED_3}}</li><li>{{PROPOSED_4}}</li><li>{{PROPOSED_5}}</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== SECTION 5: ROI CALCULATOR ===== -->
+<!-- #include sections/roi-calculator.html (business-case mode — pricing locked) -->
+<section id="roi">
+  <div class="glow-orb" style="width:450px;height:450px;background:rgba(16,185,129,0.08);top:5%;right:-8%;animation-delay:1s;"></div>
+  <div class="section-inner">
+    <p class="section-label reveal" style="color:var(--green);">{{ROI_LABEL}}</p>
+    <h2 class="section-title reveal reveal-delay-1">{{ROI_TITLE}}</h2>
+    <p class="section-subtitle reveal reveal-delay-2">{{ROI_SUBTITLE}}</p>
+    <!-- ROI Calculator component inline — see sections/roi-calculator.html for full implementation -->
+    <p class="reveal reveal-delay-3" style="text-align:center;font-size:14px;color:var(--text-dim);">Adjust operational assumptions. Investment pricing is based on your scoped solution.</p>
+  </div>
+</section>
+
+<!-- ===== SECTION 6: THREE-YEAR PROJECTION ===== -->
+<section id="projection">
+  <div class="section-inner">
+    <p class="section-label reveal" style="color:var(--teal);">{{PROJECTION_LABEL}}</p>
+    <h2 class="section-title reveal reveal-delay-1">{{PROJECTION_TITLE}}</h2>
+    <p class="section-subtitle reveal reveal-delay-2">{{PROJECTION_SUBTITLE}}</p>
+    <div class="glass reveal reveal-delay-3" style="overflow-x:auto;">
+      <table class="projection-table">
+        <thead><tr><th>Metric</th><th>Year 1</th><th>Year 2</th><th>Year 3</th><th>Cumulative</th></tr></thead>
+        <tbody>
+          <tr><td>AP Processing Savings</td><td class="positive">{{Y1_AP}}</td><td class="positive">{{Y2_AP}}</td><td class="positive">{{Y3_AP}}</td><td class="positive">{{CUM_AP}}</td></tr>
+          <tr><td>FTE Reallocation Value</td><td class="positive">{{Y1_FTE}}</td><td class="positive">{{Y2_FTE}}</td><td class="positive">{{Y3_FTE}}</td><td class="positive">{{CUM_FTE}}</td></tr>
+          <tr><td>Working Capital Impact</td><td class="positive">{{Y1_WC}}</td><td class="positive">{{Y2_WC}}</td><td class="positive">{{Y3_WC}}</td><td class="positive">{{CUM_WC}}</td></tr>
+          <tr><td><strong>Total Benefit</strong></td><td class="positive"><strong>{{Y1_TOTAL}}</strong></td><td class="positive"><strong>{{Y2_TOTAL}}</strong></td><td class="positive"><strong>{{Y3_TOTAL}}</strong></td><td class="positive"><strong>{{CUM_TOTAL}}</strong></td></tr>
+          <tr><td>Esker Investment</td><td>{{Y1_COST}}</td><td>{{Y2_COST}}</td><td>{{Y3_COST}}</td><td>{{CUM_COST}}</td></tr>
+        </tbody>
+        <tfoot><tr><td><strong>Net Value</strong></td><td class="positive">{{Y1_NET}}</td><td class="positive">{{Y2_NET}}</td><td class="positive">{{Y3_NET}}</td><td class="positive">{{CUM_NET}}</td></tr></tfoot>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ===== SECTION 7: IMPLEMENTATION TIMELINE ===== -->
+<section id="impl-timeline">
+  <div class="glow-orb" style="width:400px;height:400px;background:rgba(126,202,193,0.06);top:-8%;left:10%;animation-delay:3s;"></div>
+  <div class="section-inner">
+    <p class="section-label reveal" style="color:var(--teal);">{{IMPL_LABEL}}</p>
+    <h2 class="section-title reveal reveal-delay-1">{{IMPL_TITLE}}</h2>
+    <p class="section-subtitle reveal reveal-delay-2">{{IMPL_SUBTITLE}}</p>
+    <div class="phase-grid">
+      <div class="glass phase-card reveal-scale reveal-delay-3"><div class="phase-num">1</div><div class="phase-name">{{PHASE_1_NAME}}</div><div class="phase-duration">{{PHASE_1_DURATION}}</div><div class="phase-desc">{{PHASE_1_DESC}}</div></div>
+      <div class="glass phase-card reveal-scale reveal-delay-4"><div class="phase-num">2</div><div class="phase-name">{{PHASE_2_NAME}}</div><div class="phase-duration">{{PHASE_2_DURATION}}</div><div class="phase-desc">{{PHASE_2_DESC}}</div></div>
+      <div class="glass phase-card reveal-scale reveal-delay-5"><div class="phase-num">3</div><div class="phase-name">{{PHASE_3_NAME}}</div><div class="phase-duration">{{PHASE_3_DURATION}}</div><div class="phase-desc">{{PHASE_3_DESC}}</div></div>
+      <div class="glass phase-card reveal-scale reveal-delay-6"><div class="phase-num">4</div><div class="phase-name">{{PHASE_4_NAME}}</div><div class="phase-duration">{{PHASE_4_DURATION}}</div><div class="phase-desc">{{PHASE_4_DESC}}</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== SECTION 8: CASE STUDIES ===== -->
+<section id="cases">
+  <div class="section-inner">
+    <p class="section-label reveal" style="color:var(--teal);">{{CASES_LABEL}}</p>
+    <h2 class="section-title reveal reveal-delay-1">{{CASES_TITLE}}</h2>
+    <div class="case-grid">
+      <div class="glass case-card reveal-scale reveal-delay-2"><div class="case-company">{{CASE_1_COMPANY}}</div><div class="case-stat">{{CASE_1_STAT}}</div><div class="case-metric">{{CASE_1_METRIC}}</div><div class="case-desc">{{CASE_1_DESC}}</div></div>
+      <div class="glass case-card reveal-scale reveal-delay-3"><div class="case-company">{{CASE_2_COMPANY}}</div><div class="case-stat">{{CASE_2_STAT}}</div><div class="case-metric">{{CASE_2_METRIC}}</div><div class="case-desc">{{CASE_2_DESC}}</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== SECTION 9: INVESTMENT SUMMARY ===== -->
+<section id="investment">
+  <div class="glow-orb" style="width:400px;height:400px;background:rgba(16,185,129,0.08);bottom:-10%;right:-5%;animation-delay:2s;"></div>
+  <div class="section-inner">
+    <p class="section-label reveal" style="color:var(--green);">{{INVESTMENT_LABEL}}</p>
+    <h2 class="section-title reveal reveal-delay-1">{{INVESTMENT_TITLE}}</h2>
+    <p class="section-subtitle reveal reveal-delay-2">{{INVESTMENT_SUBTITLE}}</p>
+    <div class="investment-grid">
+      <div class="glass investment-card cost reveal reveal-delay-3">
+        <div class="inv-title">3-Year Investment</div>
+        <div class="inv-line"><span>Implementation</span><span class="inv-value">{{INV_IMPLEMENTATION}}</span></div>
+        <div class="inv-line"><span>Year 1 SaaS</span><span class="inv-value">{{INV_Y1_SAAS}}</span></div>
+        <div class="inv-line"><span>Year 2 SaaS</span><span class="inv-value">{{INV_Y2_SAAS}}</span></div>
+        <div class="inv-line"><span>Year 3 SaaS</span><span class="inv-value">{{INV_Y3_SAAS}}</span></div>
+        <div class="inv-total cost-total"><span>Total Investment</span><span class="inv-value">{{INV_TOTAL_COST}}</span></div>
+      </div>
+      <div class="glass investment-card return reveal reveal-delay-4">
+        <div class="inv-title">3-Year Return</div>
+        <div class="inv-line"><span>AP Savings</span><span class="inv-value">{{RET_AP_SAVINGS}}</span></div>
+        <div class="inv-line"><span>FTE Reallocation</span><span class="inv-value">{{RET_FTE}}</span></div>
+        <div class="inv-line"><span>Working Capital</span><span class="inv-value">{{RET_WC}}</span></div>
+        <div class="inv-total return-total"><span>Total Return</span><span class="inv-value">{{RET_TOTAL}}</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== SECTION 10: CTA ===== -->
+<section id="cta">
+  <div class="glow-orb" style="width:500px;height:500px;background:rgba(126,202,193,0.10);top:-20%;left:50%;transform:translateX(-50%);"></div>
+  <div class="section-inner">
+    <h2 class="cta-title reveal">{{CTA_TITLE_LINE1}}<br><span class="shimmer-text">{{CTA_TITLE_SHIMMER}}</span></h2>
+    <p class="cta-subtitle reveal reveal-delay-1">{{CTA_SUBTITLE}}</p>
+    <div class="glass cta-card reveal reveal-delay-2">
+      <ul class="cta-list">
+        <li><div class="cta-dot"></div><span>{{CTA_ITEM_1}}</span></li>
+        <li><div class="cta-dot"></div><span>{{CTA_ITEM_2}}</span></li>
+        <li><div class="cta-dot"></div><span>{{CTA_ITEM_3}}</span></li>
+      </ul>
+    </div>
+    <div class="contact-block reveal reveal-delay-3">
+      <div class="contact-name">{{CONTACT_NAME}}</div>
+      <div class="contact-details">{{CONTACT_COMPANY}} &middot; <a href="mailto:{{CONTACT_EMAIL}}">{{CONTACT_EMAIL}}</a></div>
+    </div>
+    <div class="footer-logos reveal reveal-delay-4">
+      <img src="data:image/webp;base64,..." alt="Baseline Payments">
+      <div class="footer-divider"></div>
+      <svg viewBox="0 0 1555 725" fill="none" xmlns="http://www.w3.org/2000/svg" style="height:24px;"><!-- Esker --></svg>
+    </div>
+  </div>
+</section>
+
+<script>
+const observer = new IntersectionObserver((entries) => { entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); }); }, { threshold: 0.15 });
+document.querySelectorAll('.reveal, .reveal-scale').forEach(el => observer.observe(el));
+const counterObserver = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (!e.isIntersecting || e.target.dataset.counted) return;
+    e.target.dataset.counted = 'true';
+    const target = parseFloat(e.target.dataset.target);
+    if (isNaN(target)) return;
+    const decimals = parseInt(e.target.dataset.decimals)||0, prefix = e.target.dataset.prefix||'', suffix = e.target.dataset.suffix||'';
+    const start = performance.now();
+    function update(now) { const p = Math.min((now-start)/1800,1); e.target.textContent = prefix+(target*(1-Math.pow(1-p,3))).toFixed(decimals)+suffix; if(p<1) requestAnimationFrame(update); }
+    requestAnimationFrame(update);
+  });
+}, { threshold: 0.3 });
+document.querySelectorAll('[data-target]').forEach(el => counterObserver.observe(el));
+const progressBar = document.getElementById('progressBar');
+window.addEventListener('scroll', () => { const h = document.documentElement.scrollHeight - window.innerHeight; progressBar.style.width = (h>0?(window.scrollY/h)*100:0)+'%'; });
+const dots = document.querySelectorAll('.nav-dot');
+dots.forEach(d => d.addEventListener('click', () => { const t = document.getElementById(d.dataset.section); if(t) t.scrollIntoView({behavior:'smooth'}); }));
+const so = new IntersectionObserver((entries) => { entries.forEach(e => { if(e.isIntersecting) { dots.forEach(d=>d.classList.remove('active')); const d = document.querySelector(`.nav-dot[data-section="${e.target.id}"]`); if(d) d.classList.add('active'); } }); }, { threshold: 0.5 });
+document.querySelectorAll('section').forEach(s => so.observe(s));
+// ROI Calculator JS would be included here from sections/roi-calculator.html
+</script>
+</body>
+</html>

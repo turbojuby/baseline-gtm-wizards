@@ -1,0 +1,24 @@
+{
+  "logos": {
+    "baseline": {
+      "file": "baseline-logo.b64",
+      "format": "webp",
+      "usage": "<img> tag with data:image/webp;base64, prefix",
+      "heights": {
+        "hero": "52px",
+        "footer": "38px",
+        "mobile": "28px"
+      }
+    },
+    "esker": {
+      "file": "esker-logo.svg",
+      "format": "svg",
+      "usage": "Inline <svg> or <img> tag",
+      "heights": {
+        "hero": "46px (viewBox scaled)",
+        "footer": "32px",
+        "mobile": "24px"
+      }
+    }
+  }
+}

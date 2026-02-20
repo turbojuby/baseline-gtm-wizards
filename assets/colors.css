@@ -1,0 +1,22 @@
+/* GTM Wizards — Color System (Single Source of Truth) */
+:root {
+  --bg: #01395d;
+  --bg-dark: #012d4a;
+  --bg-darker: #01243c;
+  --surface: rgba(255,255,255,0.06);
+  --surface-hover: rgba(255,255,255,0.10);
+  --border: rgba(255,255,255,0.10);
+  --border-hover: rgba(255,255,255,0.18);
+  --text: #ffffff;
+  --text-mid: rgba(255,255,255,0.75);
+  --text-dim: rgba(255,255,255,0.50);
+  --coral: #e85d56;
+  --coral-light: #f08a85;
+  --teal: #7ecac1;
+  --teal-light: #a8ddd7;
+  --green: #10b981;
+  --green-light: #34d399;
+  --amber: #f59e0b;
+  --amber-light: #fbbf24;
+  --esker-red: #e4042a;
+}

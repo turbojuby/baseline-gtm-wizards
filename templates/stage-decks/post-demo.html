@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{{DECK_TITLE}} | Baseline Payments + Esker</title>
+<!--
+  STAGE DECK TEMPLATE: Post-Demo
+  ========================================
+  Purpose: Reinforce demo value, maintain momentum, bridge to proposal/scoping.
+  Persona: AP Manager, Controller, CFO
+  Calculator: None
+  Pipeline Stage: Solution Overview
+
+  Section composition:
+    1. Hero                    → sections/hero.html
+    2. Demo Recap              → Custom: key takeaways from the live demo
+    3. Use Case Fit            → Custom: how Esker maps to their specific workflows
+    4. Video Embed             → Custom: Esker demo recording or product video
+    5. Implementation Preview  → Custom: high-level timeline and approach
+    6. Next Steps              → Custom: clear action items with owners
+    7. CTA                     → sections/cta.html
+
+  Data sources:
+    - Demo notes from Fathom transcript
+    - Prospect's specific pain points / use cases discussed in demo
+    - Esker implementation playbook from Notion Sales Wiki
+    - Video URL from Esker asset library or Fathom recording
+-->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #01395d; --bg-dark: #012d4a; --bg-darker: #01243c;
+    --surface: rgba(255,255,255,0.06); --surface-hover: rgba(255,255,255,0.10);
+    --border: rgba(255,255,255,0.10); --border-hover: rgba(255,255,255,0.18);
+    --text: #ffffff; --text-mid: rgba(255,255,255,0.75); --text-dim: rgba(255,255,255,0.50);
+    --coral: #e85d56; --coral-light: #f08a85; --teal: #7ecac1; --teal-light: #a8ddd7;
+    --green: #10b981; --green-light: #34d399; --amber: #f59e0b; --amber-light: #fbbf24;
+    --esker-red: #e4042a;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; scroll-snap-type: y mandatory; font-size: 16px; }
+  body { font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; color: var(--text); background: var(--bg); overflow-x: hidden; -webkit-font-smoothing: antialiased; }
+
+  /* Core UI — same as other stage decks */
+  .progress-bar { position: fixed; top: 0; left: 0; height: 3px; background: linear-gradient(90deg, var(--teal), var(--coral)); z-index: 200; transition: width 0.15s ease-out; box-shadow: 0 0 12px rgba(126,202,193,0.4); }
+  .nav-dots { position: fixed; right: 28px; top: 50%; transform: translateY(-50%); z-index: 100; display: flex; flex-direction: column; gap: 14px; }
+  .nav-dot { width: 10px; height: 10px; border-radius: 50%; background: rgba(255,255,255,0.2); border: 1.5px solid rgba(255,255,255,0.35); cursor: pointer; transition: all 0.4s cubic-bezier(0.25,0.46,0.45,0.94); position: relative; }
+  .nav-dot.active { background: var(--teal); border-color: var(--teal); transform: scale(1.4); box-shadow: 0 0 12px rgba(126,202,193,0.5); }
+  .nav-dot .tooltip { position: absolute; right: 24px; top: 50%; transform: translateY(-50%); background: var(--bg-dark); color: var(--text); padding: 6px 14px; border-radius: 6px; font-size: 12px; font-weight: 500; white-space: nowrap; opacity: 0; pointer-events: none; transition: opacity 0.3s; border: 1px solid var(--border); }
+  .nav-dot:hover .tooltip { opacity: 1; }
+  section { min-height: 100vh; scroll-snap-align: start; display: flex; flex-direction: column; justify-content: center; align-items: center; position: relative; overflow: hidden; padding: clamp(40px,6vh,80px) clamp(24px,5vw,120px); }
+  .section-inner { width: 100%; max-width: 1100px; position: relative; z-index: 2; }
+  .reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.8s cubic-bezier(0.16,1,0.3,1), transform 0.8s cubic-bezier(0.16,1,0.3,1); }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+  .reveal-scale { opacity: 0; transform: scale(0.88); transition: opacity 0.8s cubic-bezier(0.16,1,0.3,1), transform 0.8s cubic-bezier(0.16,1,0.3,1); }
+  .reveal-scale.visible { opacity: 1; transform: scale(1); }
+  .reveal-delay-1{transition-delay:.1s} .reveal-delay-2{transition-delay:.2s} .reveal-delay-3{transition-delay:.3s} .reveal-delay-4{transition-delay:.4s} .reveal-delay-5{transition-delay:.5s} .reveal-delay-6{transition-delay:.6s} .reveal-delay-7{transition-delay:.7s}
+  .glass { background: var(--surface); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid var(--border); border-radius: 16px; padding: 28px 32px; transition: background 0.3s, border-color 0.3s, transform 0.4s cubic-bezier(0.16,1,0.3,1); }
+  .glass:hover { background: var(--surface-hover); border-color: var(--border-hover); transform: translateY(-3px); }
+  @keyframes shimmer { 0% { background-position: -200% center; } 100% { background-position: 200% center; } }
+  .shimmer-text { background: linear-gradient(90deg, var(--teal-light) 0%, #fff 30%, var(--coral-light) 60%, var(--teal-light) 100%); background-size: 200% auto; -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; animation: shimmer 6s linear infinite; }
+  @keyframes pulse { 0%,100%{opacity:.15;transform:scale(1)} 50%{opacity:.28;transform:scale(1.05)} }
+  .glow-orb { position: absolute; border-radius: 50%; filter: blur(120px); pointer-events: none; animation: pulse 8s ease-in-out infinite; z-index: 0; }
+  @keyframes float-up { 0%{transform:translateY(0) translateX(0);opacity:0} 10%{opacity:.6} 90%{opacity:.6} 100%{transform:translateY(-100vh) translateX(30px);opacity:0} }
+  .particle { position: fixed; width: 2px; height: 2px; background: var(--teal); border-radius: 50%; pointer-events: none; z-index: 1; opacity: 0; animation: float-up var(--duration) var(--delay) linear infinite; }
+
+  /* Hero */
+  #hero { background: linear-gradient(160deg, var(--bg-darker) 0%, var(--bg) 40%, var(--bg-dark) 100%); text-align: center; }
+  .logo-row { display: flex; align-items: center; justify-content: center; gap: 28px; margin-bottom: 56px; }
+  .logo-row img { height: 52px; } .logo-row svg { height: 46px; }
+  .logo-divider { width: 1px; height: 56px; background: rgba(255,255,255,0.2); }
+  .hero-title { font-size: clamp(48px,6vw,80px); font-weight: 800; letter-spacing: -3px; line-height: 1.05; margin-bottom: 20px; }
+  .hero-subtitle { font-size: clamp(18px,1.6vw,24px); font-weight: 400; color: var(--text-mid); letter-spacing: 0.5px; margin-bottom: 64px; }
+  .hero-meta { font-size: 13px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; color: var(--text-dim); }
+
+  /* Section common */
+  .section-label { font-size: 13px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: var(--coral); margin-bottom: 16px; }
+  .section-title { font-size: clamp(40px,5vw,64px); font-weight: 800; letter-spacing: -2.5px; line-height: 1.1; margin-bottom: 12px; }
+  .section-subtitle { font-size: 17px; color: var(--text-mid); margin-bottom: 44px; max-width: 650px; }
+
+  /* Demo recap — key takeaway cards */
+  .recap-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 20px; }
+  .recap-card { padding: 28px; text-align: center; border-top: 3px solid var(--teal); }
+  .recap-card .recap-icon { font-size: 28px; margin-bottom: 12px; }
+  .recap-card .recap-title { font-size: 15px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-mid); margin-bottom: 12px; }
+  .recap-card .recap-desc { font-size: 15px; color: var(--text-mid); line-height: 1.5; }
+  .recap-card .recap-desc strong { color: var(--text); }
+
+  /* Use case fit — 2-column: pain → solution mapping */
+  .usecase-list { display: flex; flex-direction: column; gap: 16px; }
+  .usecase-item { display: grid; grid-template-columns: 1fr 1fr; gap: 0; }
+  .usecase-pain, .usecase-solution { padding: 24px 28px; }
+  .usecase-pain { border-radius: 16px 0 0 16px; background: rgba(232,93,86,0.06); border: 1px solid rgba(232,93,86,0.15); border-right: none; }
+  .usecase-solution { border-radius: 0 16px 16px 0; background: rgba(16,185,129,0.06); border: 1px solid rgba(16,185,129,0.15); border-left: none; }
+  .usecase-header { font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 8px; }
+  .usecase-pain .usecase-header { color: var(--coral); }
+  .usecase-solution .usecase-header { color: var(--green); }
+  .usecase-text { font-size: 15px; color: var(--text-mid); line-height: 1.5; }
+  .usecase-text strong { color: var(--text); }
+
+  /* Video embed */
+  .video-container { position: relative; width: 100%; max-width: 900px; margin: 0 auto; border-radius: 16px; overflow: hidden; border: 1px solid var(--border); background: var(--surface); }
+  .video-container iframe { width: 100%; aspect-ratio: 16/9; border: none; display: block; }
+  .video-placeholder { width: 100%; aspect-ratio: 16/9; display: flex; align-items: center; justify-content: center; font-size: 18px; color: var(--text-dim); }
+
+  /* Implementation preview — timeline steps */
+  .timeline { display: flex; flex-direction: column; gap: 0; position: relative; padding-left: 40px; }
+  .timeline::before { content: ''; position: absolute; left: 15px; top: 0; bottom: 0; width: 2px; background: linear-gradient(180deg, var(--teal), var(--green)); }
+  .timeline-step { position: relative; padding: 20px 28px; margin-bottom: 16px; }
+  .timeline-step::before { content: ''; position: absolute; left: -33px; top: 28px; width: 12px; height: 12px; border-radius: 50%; background: var(--teal); border: 2px solid var(--bg); box-shadow: 0 0 12px rgba(126,202,193,0.4); }
+  .timeline-step .step-phase { font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--teal); margin-bottom: 6px; }
+  .timeline-step .step-title { font-size: 18px; font-weight: 700; margin-bottom: 6px; }
+  .timeline-step .step-desc { font-size: 15px; color: var(--text-mid); line-height: 1.5; }
+
+  /* Next steps — action items */
+  .nextsteps-list { display: flex; flex-direction: column; gap: 12px; }
+  .nextstep-item { display: flex; align-items: flex-start; gap: 16px; padding: 20px 24px; }
+  .nextstep-check { width: 24px; height: 24px; border-radius: 6px; border: 2px solid var(--teal); flex-shrink: 0; margin-top: 2px; }
+  .nextstep-content .nextstep-action { font-size: 16px; font-weight: 600; margin-bottom: 4px; }
+  .nextstep-content .nextstep-owner { font-size: 13px; color: var(--text-dim); font-weight: 500; }
+
+  /* CTA */
+  #cta { background: linear-gradient(160deg, var(--bg) 0%, var(--bg-darker) 100%); text-align: center; }
+  .cta-title { font-size: clamp(40px,5vw,64px); font-weight: 800; letter-spacing: -2.5px; line-height: 1.1; margin-bottom: 12px; }
+  .cta-subtitle { font-size: 18px; color: var(--text-mid); margin-bottom: 40px; max-width: 520px; margin-left: auto; margin-right: auto; }
+  .cta-card { max-width: 600px; margin: 0 auto 48px; text-align: left; padding: 32px 36px; }
+  .cta-list { list-style: none; display: flex; flex-direction: column; gap: 18px; }
+  .cta-list li { display: flex; align-items: flex-start; gap: 14px; font-size: 17px; color: var(--text-mid); line-height: 1.5; }
+  .cta-list li strong { color: var(--text); }
+  .cta-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--teal); box-shadow: 0 0 12px rgba(126,202,193,0.5); flex-shrink: 0; margin-top: 6px; }
+  .contact-block { margin-bottom: 40px; }
+  .contact-name { font-size: 20px; font-weight: 700; margin-bottom: 4px; }
+  .contact-details { font-size: 16px; color: var(--text-mid); }
+  .contact-details a { color: var(--teal); text-decoration: none; }
+  .footer-logos { display: flex; align-items: center; justify-content: center; gap: 24px; opacity: 0.5; }
+  .footer-logos img { height: 38px; } .footer-logos svg { height: 32px; }
+  .footer-divider { width: 1px; height: 42px; background: rgba(255,255,255,0.15); }
+
+  @media (max-width: 900px) {
+    .recap-grid { grid-template-columns: 1fr; }
+    .usecase-item { grid-template-columns: 1fr; }
+    .usecase-pain { border-radius: 16px 16px 0 0; border-right: 1px solid rgba(232,93,86,0.15); border-bottom: none; }
+    .usecase-solution { border-radius: 0 0 16px 16px; border-left: 1px solid rgba(16,185,129,0.15); border-top: none; }
+    .nav-dots { display: none; }
+  }
+  @media (max-width: 600px) { section { padding: 40px 20px; } .logo-row { gap: 16px; } .logo-row img { height: 28px; } .logo-row svg { height: 24px; } }
+</style>
+</head>
+<body>
+
+<div class="progress-bar" id="progressBar"></div>
+<nav class="nav-dots" id="navDots">
+  <div class="nav-dot active" data-section="hero"><span class="tooltip">Cover</span></div>
+  <div class="nav-dot" data-section="recap"><span class="tooltip">Demo Recap</span></div>
+  <div class="nav-dot" data-section="usecase"><span class="tooltip">Your Fit</span></div>
+  <div class="nav-dot" data-section="video"><span class="tooltip">Watch Again</span></div>
+  <div class="nav-dot" data-section="implementation"><span class="tooltip">Implementation</span></div>
+  <div class="nav-dot" data-section="nextsteps"><span class="tooltip">Next Steps</span></div>
+  <div class="nav-dot" data-section="cta"><span class="tooltip">Contact</span></div>
+</nav>
+
+<div class="particle" style="left:8%;--duration:18s;--delay:0s;"></div>
+<div class="particle" style="left:45%;--duration:20s;--delay:6s;"></div>
+<div class="particle" style="left:85%;--duration:19s;--delay:5s;"></div>
+
+<!-- ===== SECTION 1: HERO ===== -->
+<section id="hero">
+  <div class="glow-orb" style="width:500px;height:500px;background:rgba(126,202,193,0.12);top:-15%;right:-10%;"></div>
+  <div class="section-inner">
+    <div class="logo-row reveal">
+      <img src="data:image/webp;base64,..." alt="Baseline Payments">
+      <div class="logo-divider"></div>
+      <svg viewBox="0 0 1555 725" fill="none" xmlns="http://www.w3.org/2000/svg" style="height:32px;"><!-- Esker --></svg>
+    </div>
+    <h1 class="hero-title shimmer-text reveal reveal-delay-1">{{DECK_TITLE}}</h1>
+    <p class="hero-subtitle reveal reveal-delay-2">{{DECK_SUBTITLE}}</p>
+    <p class="hero-meta reveal reveal-delay-3">Confidential &middot; {{PREPARED_FOR}} &middot; {{DATE}}</p>
+  </div>
+</section>
+
+<!-- ===== SECTION 2: DEMO RECAP ===== -->
+<section id="recap">
+  <div class="glow-orb" style="width:400px;height:400px;background:rgba(126,202,193,0.08);top:-10%;left:-5%;animation-delay:1s;"></div>
+  <div class="section-inner">
+    <p class="section-label reveal" style="color:var(--teal);">{{RECAP_LABEL}}</p>
+    <h2 class="section-title reveal reveal-delay-1">{{RECAP_TITLE}}</h2>
+    <p class="section-subtitle reveal reveal-delay-2">{{RECAP_SUBTITLE}}</p>
+    <div class="recap-grid">
+      <div class="glass recap-card reveal-scale reveal-delay-3">
+        <div class="recap-title">{{RECAP_1_TITLE}}</div>
+        <div class="recap-desc">{{RECAP_1_DESC}}</div>
+      </div>
+      <div class="glass recap-card reveal-scale reveal-delay-4">
+        <div class="recap-title">{{RECAP_2_TITLE}}</div>
+        <div class="recap-desc">{{RECAP_2_DESC}}</div>
+      </div>
+      <div class="glass recap-card reveal-scale reveal-delay-5">
+        <div class="recap-title">{{RECAP_3_TITLE}}</div>
+        <div class="recap-desc">{{RECAP_3_DESC}}</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== SECTION 3: USE CASE FIT ===== -->
+<section id="usecase">
+  <div class="glow-orb" style="width:400px;height:400px;background:rgba(232,93,86,0.06);bottom:-8%;right:-5%;animation-delay:2s;"></div>
+  <div class="section-inner">
+    <p class="section-label reveal" style="color:var(--green);">{{USECASE_LABEL}}</p>
+    <h2 class="section-title reveal reveal-delay-1">{{USECASE_TITLE}}</h2>
+    <p class="section-subtitle reveal reveal-delay-2">{{USECASE_SUBTITLE}}</p>
+    <div class="usecase-list">
+      <div class="usecase-item reveal reveal-delay-3">
+        <div class="usecase-pain"><div class="usecase-header">Current State</div><div class="usecase-text">{{USECASE_1_PAIN}}</div></div>
+        <div class="usecase-solution"><div class="usecase-header">With Esker</div><div class="usecase-text">{{USECASE_1_SOLUTION}}</div></div>
+      </div>
+      <div class="usecase-item reveal reveal-delay-4">
+        <div class="usecase-pain"><div class="usecase-header">Current State</div><div class="usecase-text">{{USECASE_2_PAIN}}</div></div>
+        <div class="usecase-solution"><div class="usecase-header">With Esker</div><div class="usecase-text">{{USECASE_2_SOLUTION}}</div></div>
+      </div>
+      <div class="usecase-item reveal reveal-delay-5">
+        <div class="usecase-pain"><div class="usecase-header">Current State</div><div class="usecase-text">{{USECASE_3_PAIN}}</div></div>
+        <div class="usecase-solution"><div class="usecase-header">With Esker</div><div class="usecase-text">{{USECASE_3_SOLUTION}}</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== SECTION 4: VIDEO EMBED ===== -->
+<section id="video">
+  <div class="section-inner" style="text-align:center;">
+    <p class="section-label reveal" style="color:var(--esker-red);">{{VIDEO_LABEL}}</p>
+    <h2 class="section-title reveal reveal-delay-1">{{VIDEO_TITLE}}</h2>
+    <p class="section-subtitle reveal reveal-delay-2" style="margin-left:auto;margin-right:auto;">{{VIDEO_SUBTITLE}}</p>
+    <div class="video-container reveal-scale reveal-delay-3">
+      <!-- Replace with actual video embed URL or Fathom recording -->
+      <iframe src="{{VIDEO_EMBED_URL}}" allowfullscreen></iframe>
+      <!-- Fallback: <div class="video-placeholder">Video recording will be available here</div> -->
+    </div>
+  </div>
+</section>
+
+<!-- ===== SECTION 5: IMPLEMENTATION PREVIEW ===== -->
+<section id="implementation">
+  <div class="glow-orb" style="width:400px;height:400px;background:rgba(126,202,193,0.06);top:-10%;right:10%;animation-delay:3s;"></div>
+  <div class="section-inner">
+    <p class="section-label reveal" style="color:var(--teal);">{{IMPL_LABEL}}</p>
+    <h2 class="section-title reveal reveal-delay-1">{{IMPL_TITLE}}</h2>
+    <p class="section-subtitle reveal reveal-delay-2">{{IMPL_SUBTITLE}}</p>
+    <div class="timeline">
+      <div class="glass timeline-step reveal reveal-delay-3">
+        <div class="step-phase">{{STEP_1_PHASE}}</div>
+        <div class="step-title">{{STEP_1_TITLE}}</div>
+        <div class="step-desc">{{STEP_1_DESC}}</div>
+      </div>
+      <div class="glass timeline-step reveal reveal-delay-4">
+        <div class="step-phase">{{STEP_2_PHASE}}</div>
+        <div class="step-title">{{STEP_2_TITLE}}</div>
+        <div class="step-desc">{{STEP_2_DESC}}</div>
+      </div>
+      <div class="glass timeline-step reveal reveal-delay-5">
+        <div class="step-phase">{{STEP_3_PHASE}}</div>
+        <div class="step-title">{{STEP_3_TITLE}}</div>
+        <div class="step-desc">{{STEP_3_DESC}}</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== SECTION 6: NEXT STEPS ===== -->
+<section id="nextsteps">
+  <div class="section-inner">
+    <p class="section-label reveal" style="color:var(--amber);">{{NEXTSTEPS_LABEL}}</p>
+    <h2 class="section-title reveal reveal-delay-1">{{NEXTSTEPS_TITLE}}</h2>
+    <p class="section-subtitle reveal reveal-delay-2">{{NEXTSTEPS_SUBTITLE}}</p>
+    <div class="nextsteps-list">
+      <div class="glass nextstep-item reveal reveal-delay-3">
+        <div class="nextstep-check"></div>
+        <div class="nextstep-content">
+          <div class="nextstep-action">{{NEXTSTEP_1_ACTION}}</div>
+          <div class="nextstep-owner">{{NEXTSTEP_1_OWNER}}</div>
+        </div>
+      </div>
+      <div class="glass nextstep-item reveal reveal-delay-4">
+        <div class="nextstep-check"></div>
+        <div class="nextstep-content">
+          <div class="nextstep-action">{{NEXTSTEP_2_ACTION}}</div>
+          <div class="nextstep-owner">{{NEXTSTEP_2_OWNER}}</div>
+        </div>
+      </div>
+      <div class="glass nextstep-item reveal reveal-delay-5">
+        <div class="nextstep-check"></div>
+        <div class="nextstep-content">
+          <div class="nextstep-action">{{NEXTSTEP_3_ACTION}}</div>
+          <div class="nextstep-owner">{{NEXTSTEP_3_OWNER}}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== SECTION 7: CTA ===== -->
+<section id="cta">
+  <div class="glow-orb" style="width:500px;height:500px;background:rgba(126,202,193,0.10);top:-20%;left:50%;transform:translateX(-50%);"></div>
+  <div class="section-inner">
+    <h2 class="cta-title reveal">{{CTA_TITLE_LINE1}}<br><span class="shimmer-text">{{CTA_TITLE_SHIMMER}}</span></h2>
+    <p class="cta-subtitle reveal reveal-delay-1">{{CTA_SUBTITLE}}</p>
+    <div class="glass cta-card reveal reveal-delay-2">
+      <ul class="cta-list">
+        <li><div class="cta-dot"></div><span>{{CTA_ITEM_1}}</span></li>
+        <li><div class="cta-dot"></div><span>{{CTA_ITEM_2}}</span></li>
+        <li><div class="cta-dot"></div><span>{{CTA_ITEM_3}}</span></li>
+      </ul>
+    </div>
+    <div class="contact-block reveal reveal-delay-3">
+      <div class="contact-name">{{CONTACT_NAME}}</div>
+      <div class="contact-details">{{CONTACT_COMPANY}} &middot; <a href="mailto:{{CONTACT_EMAIL}}">{{CONTACT_EMAIL}}</a></div>
+    </div>
+    <div class="footer-logos reveal reveal-delay-4">
+      <img src="data:image/webp;base64,..." alt="Baseline Payments">
+      <div class="footer-divider"></div>
+      <svg viewBox="0 0 1555 725" fill="none" xmlns="http://www.w3.org/2000/svg" style="height:24px;"><!-- Esker --></svg>
+    </div>
+  </div>
+</section>
+
+<script>
+// Standard deck JavaScript
+const observer = new IntersectionObserver((entries) => { entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); }); }, { threshold: 0.15 });
+document.querySelectorAll('.reveal, .reveal-scale').forEach(el => observer.observe(el));
+const progressBar = document.getElementById('progressBar');
+window.addEventListener('scroll', () => { const h = document.documentElement.scrollHeight - window.innerHeight; progressBar.style.width = (h>0?(window.scrollY/h)*100:0)+'%'; });
+const dots = document.querySelectorAll('.nav-dot');
+dots.forEach(d => d.addEventListener('click', () => { const t = document.getElementById(d.dataset.section); if(t) t.scrollIntoView({behavior:'smooth'}); }));
+const so = new IntersectionObserver((entries) => { entries.forEach(e => { if(e.isIntersecting) { dots.forEach(d=>d.classList.remove('active')); const d = document.querySelector(`.nav-dot[data-section="${e.target.id}"]`); if(d) d.classList.add('active'); } }); }, { threshold: 0.5 });
+document.querySelectorAll('section').forEach(s => so.observe(s));
+</script>
+</body>
+</html>

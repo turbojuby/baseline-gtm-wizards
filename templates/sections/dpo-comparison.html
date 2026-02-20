@@ -1,0 +1,117 @@
+<!--
+  SECTION TEMPLATE: DPO / Horizontal Bar Comparison
+  Pattern extracted from Lululemon Esker Teaser Deck #hook section.
+
+  Use this pattern for any horizontal bar comparison (DPO, DSO, cost per invoice, etc.)
+  The bars animate from 0% to their target width when scrolled into view.
+
+  Dynamic placeholders:
+    {{BAR_1_LABEL}}     — Label text (e.g. "Lululemon")
+    {{BAR_1_COLOR}}     — CSS color variable (e.g. "var(--coral-light)")
+    {{BAR_1_BG}}        — Bar gradient (e.g. "linear-gradient(90deg, var(--coral), rgba(232,93,86,0.6))")
+    {{BAR_1_WIDTH}}     — Target width percentage (e.g. "30%")
+    {{BAR_1_VALUE}}     — Display text inside bar (e.g. "23 days")
+    {{BAR_1_CLASS}}     — Unique class name for JS targeting (e.g. "bar-company")
+    (repeat for BAR_2, BAR_3, etc. — supports any number of bars)
+-->
+
+<!-- ===== CSS for DPO Comparison ===== -->
+<style>
+  .dpo-comparison {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    margin-bottom: 44px;
+  }
+
+  .dpo-row {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .dpo-label {
+    width: 130px;
+    font-size: 15px;
+    font-weight: 600;
+    text-align: right;
+    flex-shrink: 0;
+  }
+
+  .dpo-bar-track {
+    flex: 1;
+    height: 40px;
+    background: rgba(255,255,255,0.04);
+    border-radius: 8px;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .dpo-bar {
+    height: 100%;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    padding-left: 14px;
+    font-size: 16px;
+    font-weight: 700;
+    transition: width 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+    position: relative;
+    width: 0%;
+  }
+
+  /* Responsive */
+  @media (max-width: 900px) {
+    .dpo-label { width: 80px; font-size: 11px; }
+  }
+</style>
+
+<!-- ===== DPO Comparison HTML ===== -->
+<div class="dpo-comparison reveal reveal-delay-3">
+  <!-- Bar 1 -->
+  <div class="dpo-row">
+    <span class="dpo-label" style="color:{{BAR_1_COLOR}};">{{BAR_1_LABEL}}</span>
+    <div class="dpo-bar-track">
+      <div class="dpo-bar {{BAR_1_CLASS}}" data-width="{{BAR_1_WIDTH}}" style="background:{{BAR_1_BG}};">{{BAR_1_VALUE}}</div>
+    </div>
+  </div>
+
+  <!-- Bar 2 -->
+  <div class="dpo-row">
+    <span class="dpo-label" style="color:{{BAR_2_COLOR}};">{{BAR_2_LABEL}}</span>
+    <div class="dpo-bar-track">
+      <div class="dpo-bar {{BAR_2_CLASS}}" data-width="{{BAR_2_WIDTH}}" style="background:{{BAR_2_BG}};">{{BAR_2_VALUE}}</div>
+    </div>
+  </div>
+
+  <!-- Bar 3 -->
+  <div class="dpo-row">
+    <span class="dpo-label" style="color:{{BAR_3_COLOR}};">{{BAR_3_LABEL}}</span>
+    <div class="dpo-bar-track">
+      <div class="dpo-bar {{BAR_3_CLASS}}" data-width="{{BAR_3_WIDTH}}" style="background:{{BAR_3_BG}};">{{BAR_3_VALUE}}</div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== Bar Animation JavaScript ===== -->
+<script>
+const barObserver = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting && !e.target.dataset.animated) {
+      e.target.dataset.animated = 'true';
+      const bars = e.target.querySelectorAll('.dpo-bar');
+      bars.forEach(bar => {
+        const targetWidth = bar.dataset.width;
+        bar.style.width = '0%';
+        requestAnimationFrame(() => {
+          requestAnimationFrame(() => {
+            bar.style.width = targetWidth;
+          });
+        });
+      });
+    }
+  });
+}, { threshold: 0.3 });
+
+document.querySelectorAll('.dpo-comparison').forEach(el => barObserver.observe(el));
+</script>

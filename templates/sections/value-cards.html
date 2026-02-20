@@ -1,0 +1,115 @@
+<!--
+  SECTION TEMPLATE: Value Cards (3-Column)
+  Pattern extracted from Lululemon Esker Teaser Deck #value section.
+
+  Dynamic placeholders:
+    {{SECTION_LABEL}}       — Uppercase label (e.g. "Why Esker")
+    {{SECTION_LABEL_COLOR}} — CSS color for label (e.g. "var(--esker-red)")
+    {{SECTION_TITLE}}       — Main heading
+    {{SECTION_HIGHLIGHT}}   — Optional highlighted subhead (e.g. "8 Consecutive Years")
+    {{SECTION_SUBTITLE}}    — Description below heading
+
+    {{CARD_1_ACCENT}}       — Big number or data-target for counter
+    {{CARD_1_ACCENT_PREFIX}} — e.g. "$"
+    {{CARD_1_ACCENT_SUFFIX}} — e.g. "M", " FTEs"
+    {{CARD_1_ACCENT_DECIMALS}} — Number of decimal places
+    {{CARD_1_TITLE}}        — Card title (uppercase label)
+    {{CARD_1_DESC}}         — Card description (HTML allowed for <strong>)
+    {{CARD_1_COLOR}}        — green-accent | teal-accent | coral-accent
+    (repeat for CARD_2, CARD_3)
+-->
+
+<!-- ===== CSS for Value Cards ===== -->
+<style>
+  .value-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    margin-bottom: 40px;
+  }
+
+  .value-card {
+    padding: 32px 28px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .value-card .card-accent {
+    font-size: clamp(32px, 3vw, 44px);
+    font-weight: 800;
+    letter-spacing: -1.5px;
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+
+  .value-card .card-title {
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--text-mid);
+    margin-bottom: 16px;
+  }
+
+  .value-card .card-desc {
+    font-size: 16px;
+    color: var(--text-mid);
+    line-height: 1.5;
+    flex: 1;
+  }
+
+  .value-card .card-desc strong {
+    color: var(--text);
+  }
+
+  /* Color variants */
+  .value-card.green-accent { border-top: 3px solid var(--green); }
+  .value-card.green-accent .card-accent { color: var(--green-light); }
+
+  .value-card.teal-accent { border-top: 3px solid var(--teal); }
+  .value-card.teal-accent .card-accent { color: var(--teal-light); }
+
+  .value-card.coral-accent { border-top: 3px solid var(--coral); }
+  .value-card.coral-accent .card-accent { color: var(--coral-light); }
+
+  /* Responsive */
+  @media (max-width: 900px) {
+    .value-grid { grid-template-columns: 1fr; }
+  }
+</style>
+
+<!-- ===== Value Cards Section HTML ===== -->
+<div class="section-inner">
+  <!-- {{SECTION_LABEL_COLOR}} defaults to var(--esker-red) -->
+  <p class="section-label reveal" style="color:{{SECTION_LABEL_COLOR}};">{{SECTION_LABEL}}</p>
+  <h2 class="section-title reveal reveal-delay-1">{{SECTION_TITLE}}</h2>
+
+  <!-- Optional highlight line (omit if not needed) -->
+  <p class="reveal reveal-delay-2" style="font-size:clamp(24px,3vw,36px);font-weight:700;color:var(--teal-light);margin-bottom:8px;letter-spacing:-1px;">{{SECTION_HIGHLIGHT}}</p>
+
+  <p class="section-subtitle reveal reveal-delay-2">{{SECTION_SUBTITLE}}</p>
+
+  <div class="value-grid">
+    <!-- Card 1 -->
+    <div class="glass value-card {{CARD_1_COLOR}} reveal-scale reveal-delay-3">
+      <!-- Use data-target for animated counter, or static text for ranges like "$142M-$260M" -->
+      <div class="card-accent" data-target="{{CARD_1_ACCENT}}" data-prefix="{{CARD_1_ACCENT_PREFIX}}" data-suffix="{{CARD_1_ACCENT_SUFFIX}}" data-decimals="{{CARD_1_ACCENT_DECIMALS}}">{{CARD_1_ACCENT_STATIC}}</div>
+      <div class="card-title">{{CARD_1_TITLE}}</div>
+      <div class="card-desc">{{CARD_1_DESC}}</div>
+    </div>
+
+    <!-- Card 2 -->
+    <div class="glass value-card {{CARD_2_COLOR}} reveal-scale reveal-delay-4">
+      <div class="card-accent" data-target="{{CARD_2_ACCENT}}" data-prefix="{{CARD_2_ACCENT_PREFIX}}" data-suffix="{{CARD_2_ACCENT_SUFFIX}}" data-decimals="{{CARD_2_ACCENT_DECIMALS}}">{{CARD_2_ACCENT_STATIC}}</div>
+      <div class="card-title">{{CARD_2_TITLE}}</div>
+      <div class="card-desc">{{CARD_2_DESC}}</div>
+    </div>
+
+    <!-- Card 3 -->
+    <div class="glass value-card {{CARD_3_COLOR}} reveal-scale reveal-delay-5">
+      <div class="card-accent" data-target="{{CARD_3_ACCENT}}" data-prefix="{{CARD_3_ACCENT_PREFIX}}" data-suffix="{{CARD_3_ACCENT_SUFFIX}}" data-decimals="{{CARD_3_ACCENT_DECIMALS}}">{{CARD_3_ACCENT_STATIC}}</div>
+      <div class="card-title">{{CARD_3_TITLE}}</div>
+      <div class="card-desc">{{CARD_3_DESC}}</div>
+    </div>
+  </div>
+</div>

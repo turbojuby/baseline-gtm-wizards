@@ -1,0 +1,169 @@
+<!--
+  SECTION TEMPLATE: Stat Grid (4-Column)
+  Pattern extracted from Lululemon Esker Teaser Deck #hook section.
+
+  Dynamic placeholders:
+    {{SECTION_LABEL}}       — Uppercase label above title (e.g. "The Opportunity")
+    {{SECTION_TITLE}}       — Main section heading
+    {{SECTION_SUBTITLE}}    — Description below heading
+    {{STAT_1_TARGET}}       — Numeric value for counter animation
+    {{STAT_1_PREFIX}}       — e.g. "$"
+    {{STAT_1_SUFFIX}}       — e.g. "M+", " days", " bps"
+    {{STAT_1_DECIMALS}}     — Number of decimal places (0 if omitted)
+    {{STAT_1_LABEL}}        — Label below the stat
+    {{STAT_1_COLOR}}        — coral | teal | amber | green
+    (repeat for STAT_2, STAT_3, STAT_4)
+    {{HOOK_FOOTER}}         — Optional footer line below stat grid
+-->
+
+<!-- ===== CSS for Stat Grid ===== -->
+<style>
+  /* Section labels */
+  .section-label {
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--coral);
+    margin-bottom: 16px;
+  }
+
+  .section-title {
+    font-size: clamp(40px, 5vw, 64px);
+    font-weight: 800;
+    letter-spacing: -2.5px;
+    line-height: 1.1;
+    margin-bottom: 12px;
+  }
+
+  .section-subtitle {
+    font-size: 17px;
+    color: var(--text-mid);
+    margin-bottom: 44px;
+    max-width: 650px;
+  }
+
+  /* Stat cards grid */
+  .stat-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+  }
+
+  .stat-card {
+    text-align: center;
+    padding: 24px 16px;
+  }
+
+  .stat-value {
+    font-size: clamp(36px, 3.5vw, 48px);
+    font-weight: 800;
+    letter-spacing: -2px;
+    line-height: 1;
+    margin-bottom: 8px;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .stat-label {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    line-height: 1.4;
+  }
+
+  /* Color variants */
+  .stat-card.coral .stat-value { color: var(--coral); }
+  .stat-card.coral { border-top: 3px solid var(--coral); }
+
+  .stat-card.teal .stat-value { color: var(--teal); }
+  .stat-card.teal { border-top: 3px solid var(--teal); }
+
+  .stat-card.amber .stat-value { color: var(--amber); }
+  .stat-card.amber { border-top: 3px solid var(--amber); }
+
+  .stat-card.green .stat-value { color: var(--green-light); }
+  .stat-card.green { border-top: 3px solid var(--green); }
+
+  .hook-footer {
+    margin-top: 32px;
+    font-size: 16px;
+    color: var(--text-mid);
+    font-weight: 500;
+    text-align: center;
+  }
+
+  /* Responsive */
+  @media (max-width: 900px) {
+    .stat-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (max-width: 600px) {
+    .stat-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
+  }
+</style>
+
+<!-- ===== Stat Grid Section HTML ===== -->
+<div class="section-inner">
+  <p class="section-label reveal">{{SECTION_LABEL}}</p>
+  <h2 class="section-title reveal reveal-delay-1">{{SECTION_TITLE}}</h2>
+  <p class="section-subtitle reveal reveal-delay-2">{{SECTION_SUBTITLE}}</p>
+
+  <!-- Stat Cards -->
+  <div class="stat-grid">
+    <!-- Stat 1 -->
+    <div class="glass stat-card {{STAT_1_COLOR}} reveal-scale reveal-delay-3">
+      <div class="stat-value" data-target="{{STAT_1_TARGET}}" data-prefix="{{STAT_1_PREFIX}}" data-suffix="{{STAT_1_SUFFIX}}" data-decimals="{{STAT_1_DECIMALS}}">0</div>
+      <div class="stat-label">{{STAT_1_LABEL}}</div>
+    </div>
+
+    <!-- Stat 2 -->
+    <div class="glass stat-card {{STAT_2_COLOR}} reveal-scale reveal-delay-4">
+      <div class="stat-value" data-target="{{STAT_2_TARGET}}" data-prefix="{{STAT_2_PREFIX}}" data-suffix="{{STAT_2_SUFFIX}}" data-decimals="{{STAT_2_DECIMALS}}">0</div>
+      <div class="stat-label">{{STAT_2_LABEL}}</div>
+    </div>
+
+    <!-- Stat 3 -->
+    <div class="glass stat-card {{STAT_3_COLOR}} reveal-scale reveal-delay-5">
+      <div class="stat-value" data-target="{{STAT_3_TARGET}}" data-prefix="{{STAT_3_PREFIX}}" data-suffix="{{STAT_3_SUFFIX}}" data-decimals="{{STAT_3_DECIMALS}}">0</div>
+      <div class="stat-label">{{STAT_3_LABEL}}</div>
+    </div>
+
+    <!-- Stat 4 -->
+    <div class="glass stat-card {{STAT_4_COLOR}} reveal-scale reveal-delay-6">
+      <div class="stat-value" data-target="{{STAT_4_TARGET}}" data-prefix="{{STAT_4_PREFIX}}" data-suffix="{{STAT_4_SUFFIX}}" data-decimals="{{STAT_4_DECIMALS}}">0</div>
+      <div class="stat-label">{{STAT_4_LABEL}}</div>
+    </div>
+  </div>
+
+  <!-- Optional footer -->
+  <p class="hook-footer reveal reveal-delay-7">{{HOOK_FOOTER}}</p>
+</div>
+
+<!-- ===== Counter Animation JavaScript ===== -->
+<script>
+const counterObserver = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (!e.isIntersecting || e.target.dataset.counted) return;
+    e.target.dataset.counted = 'true';
+    const target = parseFloat(e.target.dataset.target);
+    const decimals = parseInt(e.target.dataset.decimals) || 0;
+    const prefix = e.target.dataset.prefix || '';
+    const suffix = e.target.dataset.suffix || '';
+    const duration = 1800;
+    const start = performance.now();
+
+    function update(now) {
+      const elapsed = now - start;
+      const progress = Math.min(elapsed / duration, 1);
+      const eased = 1 - Math.pow(1 - progress, 3); // ease-out cubic
+      const current = (target * eased).toFixed(decimals);
+      e.target.textContent = prefix + current + suffix;
+      if (progress < 1) requestAnimationFrame(update);
+    }
+    requestAnimationFrame(update);
+  });
+}, { threshold: 0.3 });
+
+document.querySelectorAll('[data-target]').forEach(el => counterObserver.observe(el));
+</script>

@@ -1,0 +1,449 @@
+<!--
+  SECTION TEMPLATE: Interactive ROI Calculator
+  NEW component — designed to match the existing design system.
+
+  Provides real-time ROI calculations with slider inputs and animated stat outputs.
+  Used in discovery decks (pre-discovery mode) and business case decks (locked pricing mode).
+
+  Dynamic placeholders:
+    {{SECTION_LABEL}}       — e.g. "ROI Calculator"
+    {{SECTION_TITLE}}       — e.g. "Your Projected Return"
+    {{SECTION_SUBTITLE}}    — e.g. "Adjust assumptions to see real-time impact"
+    {{MODE}}                — "discovery" (no pricing shown) or "business-case" (locked pricing displayed)
+-->
+
+<!-- ===== CSS for ROI Calculator ===== -->
+<style>
+  .calc-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    margin-top: 40px;
+  }
+
+  .calc-inputs,
+  .calc-outputs {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .calc-inputs .glass,
+  .calc-outputs .glass {
+    border-radius: 16px;
+    padding: 32px;
+  }
+
+  .calc-group-title {
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--teal);
+    margin-bottom: 24px;
+  }
+
+  /* Slider input groups */
+  .slider-group {
+    margin-bottom: 20px;
+  }
+
+  .slider-group:last-child {
+    margin-bottom: 0;
+  }
+
+  .slider-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+  }
+
+  .slider-label {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-mid);
+  }
+
+  .slider-value-display {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text);
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* Custom range slider */
+  input[type="range"] {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 100%;
+    height: 6px;
+    background: rgba(255,255,255,0.08);
+    border-radius: 3px;
+    outline: none;
+    cursor: pointer;
+  }
+
+  input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: var(--teal);
+    border: 2px solid var(--bg);
+    box-shadow: 0 0 12px rgba(126,202,193,0.4);
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+
+  input[type="range"]::-webkit-slider-thumb:hover {
+    transform: scale(1.2);
+    box-shadow: 0 0 20px rgba(126,202,193,0.6);
+  }
+
+  input[type="range"]::-moz-range-thumb {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: var(--teal);
+    border: 2px solid var(--bg);
+    box-shadow: 0 0 12px rgba(126,202,193,0.4);
+    cursor: pointer;
+  }
+
+  /* Output stat cards */
+  .calc-output-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+
+  .calc-stat {
+    text-align: center;
+    padding: 20px 12px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    transition: border-color 0.3s;
+  }
+
+  .calc-stat:hover {
+    border-color: var(--border-hover);
+  }
+
+  .calc-stat.highlight {
+    grid-column: 1 / -1;
+    border-top: 3px solid var(--green);
+    background: rgba(16,185,129,0.06);
+  }
+
+  .calc-stat-value {
+    font-size: clamp(24px, 2.5vw, 36px);
+    font-weight: 800;
+    letter-spacing: -1.5px;
+    line-height: 1;
+    margin-bottom: 6px;
+    font-variant-numeric: tabular-nums;
+    transition: color 0.3s;
+  }
+
+  .calc-stat-value.green { color: var(--green-light); }
+  .calc-stat-value.teal { color: var(--teal-light); }
+  .calc-stat-value.coral { color: var(--coral-light); }
+  .calc-stat-value.amber { color: var(--amber); }
+
+  .calc-stat-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    line-height: 1.3;
+  }
+
+  /* Responsive */
+  @media (max-width: 900px) {
+    .calc-container { grid-template-columns: 1fr; }
+  }
+</style>
+
+<!-- ===== ROI Calculator Section HTML ===== -->
+<section id="roi-calculator">
+  <div class="glow-orb" style="width:400px;height:400px;background:rgba(16,185,129,0.08);top:-10%;right:-5%;animation-delay:2s;"></div>
+  <div class="glow-orb" style="width:350px;height:350px;background:rgba(126,202,193,0.06);bottom:-8%;left:-5%;animation-delay:5s;"></div>
+
+  <div class="section-inner">
+    <p class="section-label reveal" style="color:var(--green);">{{SECTION_LABEL}}</p>
+    <h2 class="section-title reveal reveal-delay-1">{{SECTION_TITLE}}</h2>
+    <p class="section-subtitle reveal reveal-delay-2">{{SECTION_SUBTITLE}}</p>
+
+    <div class="calc-container reveal reveal-delay-3">
+      <!-- ===== INPUTS ===== -->
+      <div class="calc-inputs">
+        <div class="glass">
+          <div class="calc-group-title">Assumptions</div>
+
+          <!-- FTE Hourly Rate -->
+          <div class="slider-group">
+            <div class="slider-header">
+              <span class="slider-label">FTE Hourly Rate</span>
+              <span class="slider-value-display" id="display-fteRate">$45</span>
+            </div>
+            <input type="range" id="fteRate" min="25" max="85" value="45" step="1">
+          </div>
+
+          <!-- Annual Invoice Volume -->
+          <div class="slider-group">
+            <div class="slider-header">
+              <span class="slider-label">Annual Invoice Volume</span>
+              <span class="slider-value-display" id="display-invoiceVolume">100,000</span>
+            </div>
+            <input type="range" id="invoiceVolume" min="10000" max="1000000" value="100000" step="5000">
+          </div>
+
+          <!-- Current Cost Per Invoice -->
+          <div class="slider-group">
+            <div class="slider-header">
+              <span class="slider-label">Current Cost Per Invoice</span>
+              <span class="slider-value-display" id="display-costPerInvoice">$12.88</span>
+            </div>
+            <input type="range" id="costPerInvoice" min="5" max="25" value="12.88" step="0.25">
+          </div>
+
+          <!-- Current DSO -->
+          <div class="slider-group">
+            <div class="slider-header">
+              <span class="slider-label">Current DSO</span>
+              <span class="slider-value-display" id="display-currentDSO">45 days</span>
+            </div>
+            <input type="range" id="currentDSO" min="15" max="90" value="45" step="1">
+          </div>
+
+          <!-- Target DSO Reduction -->
+          <div class="slider-group">
+            <div class="slider-header">
+              <span class="slider-label">Target DSO Reduction</span>
+              <span class="slider-value-display" id="display-dsoReduction">5 days</span>
+            </div>
+            <input type="range" id="dsoReduction" min="1" max="30" value="5" step="1">
+          </div>
+
+          <!-- FTEs in AP -->
+          <div class="slider-group">
+            <div class="slider-header">
+              <span class="slider-label">FTEs in AP</span>
+              <span class="slider-value-display" id="display-ftes">10</span>
+            </div>
+            <input type="range" id="ftes" min="1" max="50" value="10" step="1">
+          </div>
+
+          <!-- Discount Rate -->
+          <div class="slider-group">
+            <div class="slider-header">
+              <span class="slider-label">Discount Rate</span>
+              <span class="slider-value-display" id="display-discountRate">8%</span>
+            </div>
+            <input type="range" id="discountRate" min="3" max="15" value="8" step="0.5">
+          </div>
+        </div>
+      </div>
+
+      <!-- ===== OUTPUTS ===== -->
+      <div class="calc-outputs">
+        <div class="glass">
+          <div class="calc-group-title">Projected Impact</div>
+
+          <div class="calc-output-grid">
+            <!-- Annual AP Savings -->
+            <div class="calc-stat">
+              <div class="calc-stat-value green" id="out-apSavings">$0</div>
+              <div class="calc-stat-label">Annual AP<br>Savings</div>
+            </div>
+
+            <!-- FTE Reallocation Value -->
+            <div class="calc-stat">
+              <div class="calc-stat-value teal" id="out-fteValue">$0</div>
+              <div class="calc-stat-label">FTE Reallocation<br>Value</div>
+            </div>
+
+            <!-- Working Capital Freed -->
+            <div class="calc-stat">
+              <div class="calc-stat-value amber" id="out-workingCapital">$0</div>
+              <div class="calc-stat-label">Working Capital<br>Freed</div>
+            </div>
+
+            <!-- Total Annual Benefit (highlight) -->
+            <div class="calc-stat highlight">
+              <div class="calc-stat-value green" id="out-totalBenefit">$0</div>
+              <div class="calc-stat-label">Total Annual Benefit</div>
+            </div>
+
+            <!-- Payback Period -->
+            <div class="calc-stat">
+              <div class="calc-stat-value coral" id="out-payback">0 mo</div>
+              <div class="calc-stat-label">Payback<br>Period</div>
+            </div>
+
+            <!-- 3-Year ROI -->
+            <div class="calc-stat">
+              <div class="calc-stat-value green" id="out-roi">0%</div>
+              <div class="calc-stat-label">3-Year<br>ROI</div>
+            </div>
+
+            <!-- NPV -->
+            <div class="calc-stat">
+              <div class="calc-stat-value teal" id="out-npv">$0</div>
+              <div class="calc-stat-label">Net Present<br>Value</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== ROI Calculator JavaScript ===== -->
+<script>
+(function() {
+  const ESKER_COST_PER_INVOICE = 2.78; // industry benchmark
+  const IMPLEMENTATION_FEE = 45000;
+  const ANNUAL_SAAS = 85000;
+
+  // Slider elements
+  const sliders = {
+    fteRate: document.getElementById('fteRate'),
+    invoiceVolume: document.getElementById('invoiceVolume'),
+    costPerInvoice: document.getElementById('costPerInvoice'),
+    currentDSO: document.getElementById('currentDSO'),
+    dsoReduction: document.getElementById('dsoReduction'),
+    ftes: document.getElementById('ftes'),
+    discountRate: document.getElementById('discountRate')
+  };
+
+  // Display elements
+  const displays = {
+    fteRate: document.getElementById('display-fteRate'),
+    invoiceVolume: document.getElementById('display-invoiceVolume'),
+    costPerInvoice: document.getElementById('display-costPerInvoice'),
+    currentDSO: document.getElementById('display-currentDSO'),
+    dsoReduction: document.getElementById('display-dsoReduction'),
+    ftes: document.getElementById('display-ftes'),
+    discountRate: document.getElementById('display-discountRate')
+  };
+
+  // Output elements
+  const outputs = {
+    apSavings: document.getElementById('out-apSavings'),
+    fteValue: document.getElementById('out-fteValue'),
+    workingCapital: document.getElementById('out-workingCapital'),
+    totalBenefit: document.getElementById('out-totalBenefit'),
+    payback: document.getElementById('out-payback'),
+    roi: document.getElementById('out-roi'),
+    npv: document.getElementById('out-npv')
+  };
+
+  // Format helpers
+  function fmtCurrency(n) {
+    if (Math.abs(n) >= 1e6) return '$' + (n / 1e6).toFixed(1) + 'M';
+    if (Math.abs(n) >= 1e3) return '$' + Math.round(n).toLocaleString('en-US');
+    return '$' + n.toFixed(0);
+  }
+
+  function fmtPct(n) { return n.toFixed(0) + '%'; }
+
+  // Smooth value transition
+  let animFrame = null;
+  const currentValues = {};
+  const targetValues = {};
+
+  function animateValues() {
+    let needsUpdate = false;
+    for (const key in targetValues) {
+      if (currentValues[key] === undefined) currentValues[key] = 0;
+      const diff = targetValues[key] - currentValues[key];
+      if (Math.abs(diff) > 0.5) {
+        currentValues[key] += diff * 0.15;
+        needsUpdate = true;
+      } else {
+        currentValues[key] = targetValues[key];
+      }
+    }
+
+    // Render current values
+    outputs.apSavings.textContent = fmtCurrency(currentValues.apSavings || 0);
+    outputs.fteValue.textContent = fmtCurrency(currentValues.fteValue || 0);
+    outputs.workingCapital.textContent = fmtCurrency(currentValues.workingCapital || 0);
+    outputs.totalBenefit.textContent = fmtCurrency(currentValues.totalBenefit || 0);
+    outputs.payback.textContent = (currentValues.payback || 0).toFixed(1) + ' mo';
+    outputs.roi.textContent = fmtPct(currentValues.roi || 0);
+    outputs.npv.textContent = fmtCurrency(currentValues.npv || 0);
+
+    if (needsUpdate) {
+      animFrame = requestAnimationFrame(animateValues);
+    } else {
+      animFrame = null;
+    }
+  }
+
+  function calculate() {
+    const fteRate = parseFloat(sliders.fteRate.value);
+    const invoiceVolume = parseFloat(sliders.invoiceVolume.value);
+    const costPerInvoice = parseFloat(sliders.costPerInvoice.value);
+    const currentDSO = parseFloat(sliders.currentDSO.value);
+    const dsoReduction = parseFloat(sliders.dsoReduction.value);
+    const ftes = parseFloat(sliders.ftes.value);
+    const discountRate = parseFloat(sliders.discountRate.value) / 100;
+
+    // Update display labels
+    displays.fteRate.textContent = '$' + fteRate;
+    displays.invoiceVolume.textContent = invoiceVolume.toLocaleString('en-US');
+    displays.costPerInvoice.textContent = '$' + costPerInvoice.toFixed(2);
+    displays.currentDSO.textContent = currentDSO + ' days';
+    displays.dsoReduction.textContent = dsoReduction + ' days';
+    displays.ftes.textContent = ftes;
+    displays.discountRate.textContent = (discountRate * 100).toFixed(1) + '%';
+
+    // Calculations
+    const annualAPSavings = (costPerInvoice - ESKER_COST_PER_INVOICE) * invoiceVolume;
+    const ftesFreed = Math.max(1, Math.floor(ftes * 0.6));
+    const fteReallocationValue = ftesFreed * fteRate * 2080;
+    const annualRevenue = invoiceVolume * costPerInvoice * 8; // rough proxy
+    const workingCapitalFreed = dsoReduction * (annualRevenue / 365);
+    const totalAnnualBenefit = annualAPSavings + fteReallocationValue + workingCapitalFreed;
+    const monthlyBenefit = totalAnnualBenefit / 12;
+    const paybackMonths = monthlyBenefit > 0 ? (ANNUAL_SAAS + IMPLEMENTATION_FEE) / monthlyBenefit : 99;
+    const threeYearBenefit = totalAnnualBenefit * 3;
+    const threeYearCost = ANNUAL_SAAS * 3 + IMPLEMENTATION_FEE;
+    const threeYearROI = threeYearCost > 0 ? ((threeYearBenefit - threeYearCost) / threeYearCost) * 100 : 0;
+
+    // NPV calculation
+    let npv = -IMPLEMENTATION_FEE;
+    for (let year = 1; year <= 3; year++) {
+      npv += totalAnnualBenefit / Math.pow(1 + discountRate, year);
+      npv -= ANNUAL_SAAS / Math.pow(1 + discountRate, year);
+    }
+
+    // Set targets for animation
+    targetValues.apSavings = annualAPSavings;
+    targetValues.fteValue = fteReallocationValue;
+    targetValues.workingCapital = workingCapitalFreed;
+    targetValues.totalBenefit = totalAnnualBenefit;
+    targetValues.payback = Math.min(paybackMonths, 99);
+    targetValues.roi = threeYearROI;
+    targetValues.npv = npv;
+
+    if (!animFrame) {
+      animFrame = requestAnimationFrame(animateValues);
+    }
+  }
+
+  // Bind events
+  Object.values(sliders).forEach(slider => {
+    slider.addEventListener('input', calculate);
+  });
+
+  // Initial calculation
+  calculate();
+})();
+</script>

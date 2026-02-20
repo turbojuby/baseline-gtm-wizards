@@ -1,0 +1,447 @@
+{
+  "base_name": "GTM Wizards - Deal Calculator",
+  "description": "Centralized deal data for the baseline-gtm-wizards Claude plugin. Stores company metrics, pricing, assumptions, and calculated ROI outputs that feed into generated sales decks.",
+  "tables": [
+    {
+      "name": "Deals",
+      "description": "Active deals in the pipeline. Each deal links to a company, pricing configuration, and assumptions.",
+      "fields": [
+        {
+          "name": "Deal Name",
+          "type": "singleLineText",
+          "primary": true,
+          "description": "Human-readable deal identifier (e.g. 'Lululemon - AP Automation')"
+        },
+        {
+          "name": "HubSpot Deal ID",
+          "type": "singleLineText",
+          "description": "ID from HubSpot CRM for cross-reference"
+        },
+        {
+          "name": "Stage",
+          "type": "singleSelect",
+          "options": {
+            "choices": [
+              { "name": "Lead-in", "color": "grayLight1" },
+              { "name": "Discovery", "color": "cyanLight1" },
+              { "name": "Demo", "color": "tealLight1" },
+              { "name": "Scoping", "color": "yellowLight1" },
+              { "name": "Proposal", "color": "orangeLight1" },
+              { "name": "SOW", "color": "greenLight1" }
+            ]
+          },
+          "description": "Current pipeline stage. Maps to stage deck templates."
+        },
+        {
+          "name": "AE Owner",
+          "type": "singleSelect",
+          "options": {
+            "choices": [
+              { "name": "Tyler", "color": "blueLight1" },
+              { "name": "Marc", "color": "purpleLight1" }
+            ]
+          },
+          "description": "Account Executive responsible for this deal"
+        },
+        {
+          "name": "Company",
+          "type": "linkedRecord",
+          "linkedTable": "Companies",
+          "description": "Link to the Companies table for financial metrics"
+        },
+        {
+          "name": "Created Date",
+          "type": "date",
+          "options": {
+            "dateFormat": { "name": "iso" }
+          },
+          "description": "When this deal was created"
+        },
+        {
+          "name": "Last Deck Generated",
+          "type": "dateTime",
+          "options": {
+            "dateFormat": { "name": "iso" },
+            "timeFormat": { "name": "24hour" }
+          },
+          "description": "Timestamp of last deck generation for this deal"
+        },
+        {
+          "name": "Deck URL",
+          "type": "url",
+          "description": "URL of the most recently generated deck (hub.baselinepayments.com)"
+        },
+        {
+          "name": "Notes",
+          "type": "multilineText",
+          "description": "Free-form notes about the deal"
+        }
+      ]
+    },
+    {
+      "name": "Companies",
+      "description": "Company financial and operational data. Sourced from HubSpot, public filings, and discovery meetings.",
+      "fields": [
+        {
+          "name": "Company Name",
+          "type": "singleLineText",
+          "primary": true,
+          "description": "Legal or common company name"
+        },
+        {
+          "name": "Industry",
+          "type": "singleSelect",
+          "options": {
+            "choices": [
+              { "name": "Retail", "color": "blueLight1" },
+              { "name": "Manufacturing", "color": "cyanLight1" },
+              { "name": "Healthcare", "color": "greenLight1" },
+              { "name": "Technology", "color": "purpleLight1" },
+              { "name": "Financial Services", "color": "yellowLight1" },
+              { "name": "Distribution", "color": "orangeLight1" },
+              { "name": "Energy", "color": "redLight1" },
+              { "name": "Other", "color": "grayLight1" }
+            ]
+          },
+          "description": "Industry vertical for peer benchmarking"
+        },
+        {
+          "name": "Annual Revenue",
+          "type": "currency",
+          "options": {
+            "precision": 0,
+            "symbol": "$"
+          },
+          "description": "Total annual revenue (most recent fiscal year)"
+        },
+        {
+          "name": "Current DSO",
+          "type": "number",
+          "options": {
+            "precision": 0
+          },
+          "description": "Days Sales Outstanding — current value from financials"
+        },
+        {
+          "name": "Current DPO",
+          "type": "number",
+          "options": {
+            "precision": 0
+          },
+          "description": "Days Payable Outstanding — for comparison bars in teaser decks"
+        },
+        {
+          "name": "Annual Invoice Volume",
+          "type": "number",
+          "options": {
+            "precision": 0
+          },
+          "description": "Total annual AP invoice volume"
+        },
+        {
+          "name": "Current FTEs in AP",
+          "type": "number",
+          "options": {
+            "precision": 1
+          },
+          "description": "Full-time equivalents dedicated to accounts payable"
+        },
+        {
+          "name": "ERP System",
+          "type": "singleLineText",
+          "description": "Primary ERP (e.g. SAP, Oracle, NetSuite, Microsoft Dynamics)"
+        },
+        {
+          "name": "HubSpot Company ID",
+          "type": "singleLineText",
+          "description": "HubSpot company record ID for API lookups"
+        },
+        {
+          "name": "Peer 1 Name",
+          "type": "singleLineText",
+          "description": "Industry peer for comparison (DPO/DSO bars)"
+        },
+        {
+          "name": "Peer 1 DPO",
+          "type": "number",
+          "options": { "precision": 0 },
+          "description": "Peer 1's DPO value"
+        },
+        {
+          "name": "Peer 2 Name",
+          "type": "singleLineText",
+          "description": "Second industry peer for comparison"
+        },
+        {
+          "name": "Peer 2 DPO",
+          "type": "number",
+          "options": { "precision": 0 },
+          "description": "Peer 2's DPO value"
+        }
+      ]
+    },
+    {
+      "name": "Pricing",
+      "description": "AE-configured pricing for each deal. Feeds into business case and SOW decks. Only AEs update this table.",
+      "fields": [
+        {
+          "name": "Pricing ID",
+          "type": "autoNumber",
+          "primary": true,
+          "description": "Auto-generated pricing record identifier"
+        },
+        {
+          "name": "Deal",
+          "type": "linkedRecord",
+          "linkedTable": "Deals",
+          "description": "Link to the deal this pricing applies to"
+        },
+        {
+          "name": "Esker SaaS Annual",
+          "type": "currency",
+          "options": {
+            "precision": 0,
+            "symbol": "$"
+          },
+          "description": "Annual Esker SaaS license cost (list price before discount)"
+        },
+        {
+          "name": "Implementation Fee",
+          "type": "currency",
+          "options": {
+            "precision": 0,
+            "symbol": "$"
+          },
+          "description": "One-time implementation and configuration fee"
+        },
+        {
+          "name": "Transaction Fee Per Invoice",
+          "type": "currency",
+          "options": {
+            "precision": 2,
+            "symbol": "$"
+          },
+          "description": "Per-invoice transaction fee (if applicable)"
+        },
+        {
+          "name": "Discount %",
+          "type": "percent",
+          "options": {
+            "precision": 1
+          },
+          "description": "Negotiated discount percentage applied to SaaS annual"
+        },
+        {
+          "name": "Effective SaaS Annual",
+          "type": "formula",
+          "options": {
+            "formula": "{Esker SaaS Annual} * (1 - {Discount %})"
+          },
+          "description": "SaaS annual after discount: Esker SaaS Annual * (1 - Discount %)"
+        },
+        {
+          "name": "Effective Cost Per Invoice",
+          "type": "formula",
+          "options": {
+            "formula": "{Transaction Fee Per Invoice} + ({Effective SaaS Annual} / IF({Annual Invoice Volume} > 0, {Annual Invoice Volume}, 1))"
+          },
+          "description": "Total effective cost per invoice including SaaS spread. Uses linked company's invoice volume via rollup."
+        },
+        {
+          "name": "Annual Invoice Volume",
+          "type": "rollup",
+          "options": {
+            "linkedTable": "Deals",
+            "throughField": "Deal",
+            "targetField": "Annual Invoice Volume",
+            "aggregation": "MAX"
+          },
+          "description": "Rolled up from company data via Deal link"
+        }
+      ]
+    },
+    {
+      "name": "Assumptions",
+      "description": "Editable assumptions for ROI calculations. Defaults can be overridden per deal. These feed the interactive calculator in discovery and business-case decks.",
+      "fields": [
+        {
+          "name": "Assumption ID",
+          "type": "autoNumber",
+          "primary": true,
+          "description": "Auto-generated assumption record identifier"
+        },
+        {
+          "name": "Deal",
+          "type": "linkedRecord",
+          "linkedTable": "Deals",
+          "description": "Link to the deal these assumptions apply to"
+        },
+        {
+          "name": "FTE Hourly Rate",
+          "type": "currency",
+          "options": {
+            "precision": 2,
+            "symbol": "$"
+          },
+          "description": "Fully-loaded hourly cost of an AP FTE. Default: $45.00"
+        },
+        {
+          "name": "Target DSO Reduction",
+          "type": "number",
+          "options": {
+            "precision": 0
+          },
+          "description": "Expected DSO improvement in days. Default: 5"
+        },
+        {
+          "name": "Current Cost Per Invoice",
+          "type": "currency",
+          "options": {
+            "precision": 2,
+            "symbol": "$"
+          },
+          "description": "Prospect's current all-in cost to process one invoice. Default: $12.88 (IOFM benchmark)"
+        },
+        {
+          "name": "Esker Cost Per Invoice",
+          "type": "currency",
+          "options": {
+            "precision": 2,
+            "symbol": "$"
+          },
+          "description": "Esker's benchmark cost per invoice. Default: $2.78"
+        },
+        {
+          "name": "Automation Rate",
+          "type": "percent",
+          "options": {
+            "precision": 0
+          },
+          "description": "Expected FTE automation/reallocation rate. Default: 60%"
+        },
+        {
+          "name": "Discount Rate",
+          "type": "percent",
+          "options": {
+            "precision": 1
+          },
+          "description": "Discount rate for NPV calculations. Default: 8.0%"
+        },
+        {
+          "name": "Revenue Proxy Multiplier",
+          "type": "number",
+          "options": {
+            "precision": 0
+          },
+          "description": "Multiplier for annualRevenue = invoiceVolume * costPerInvoice * X. Default: 8"
+        }
+      ]
+    },
+    {
+      "name": "Calculated Outputs",
+      "description": "Formula-driven ROI outputs. Auto-calculated from Pricing + Assumptions + Company data. These values feed directly into deck stat cards and projection tables.",
+      "fields": [
+        {
+          "name": "Output ID",
+          "type": "autoNumber",
+          "primary": true,
+          "description": "Auto-generated output record identifier"
+        },
+        {
+          "name": "Deal",
+          "type": "linkedRecord",
+          "linkedTable": "Deals",
+          "description": "Link to the deal"
+        },
+        {
+          "name": "Annual AP Savings",
+          "type": "formula",
+          "options": {
+            "formula": "({Current Cost Per Invoice} - {Esker Cost Per Invoice}) * {Annual Invoice Volume}"
+          },
+          "description": "(Current Cost Per Invoice - Esker Cost Per Invoice) * Annual Invoice Volume"
+        },
+        {
+          "name": "FTEs Freed",
+          "type": "formula",
+          "options": {
+            "formula": "MAX(1, FLOOR({Current FTEs in AP} * {Automation Rate}))"
+          },
+          "description": "Number of FTEs reallocated: MAX(1, FLOOR(FTEs * Automation Rate))"
+        },
+        {
+          "name": "FTE Reallocation Value",
+          "type": "formula",
+          "options": {
+            "formula": "{FTEs Freed} * {FTE Hourly Rate} * 2080"
+          },
+          "description": "FTEs Freed * FTE Hourly Rate * 2080 hours/year"
+        },
+        {
+          "name": "Annual Revenue Proxy",
+          "type": "formula",
+          "options": {
+            "formula": "{Annual Invoice Volume} * {Current Cost Per Invoice} * {Revenue Proxy Multiplier}"
+          },
+          "description": "Rough revenue proxy for working capital calculation"
+        },
+        {
+          "name": "Working Capital Freed",
+          "type": "formula",
+          "options": {
+            "formula": "{Target DSO Reduction} * ({Annual Revenue Proxy} / 365)"
+          },
+          "description": "DSO Reduction * (Annual Revenue Proxy / 365)"
+        },
+        {
+          "name": "Total Annual Benefit",
+          "type": "formula",
+          "options": {
+            "formula": "{Annual AP Savings} + {FTE Reallocation Value} + {Working Capital Freed}"
+          },
+          "description": "Sum of all three benefit streams"
+        },
+        {
+          "name": "Payback Months",
+          "type": "formula",
+          "options": {
+            "formula": "IF({Total Annual Benefit} > 0, ({Implementation Fee} + {Effective SaaS Annual}) / ({Total Annual Benefit} / 12), 99)"
+          },
+          "description": "(Implementation Fee + Year 1 SaaS) / Monthly Benefit"
+        },
+        {
+          "name": "Three Year Benefit",
+          "type": "formula",
+          "options": {
+            "formula": "{Total Annual Benefit} * 3"
+          },
+          "description": "Total Annual Benefit * 3"
+        },
+        {
+          "name": "Three Year Cost",
+          "type": "formula",
+          "options": {
+            "formula": "{Effective SaaS Annual} * 3 + {Implementation Fee}"
+          },
+          "description": "3 years of SaaS + implementation"
+        },
+        {
+          "name": "Three Year ROI",
+          "type": "formula",
+          "options": {
+            "formula": "IF({Three Year Cost} > 0, (({Three Year Benefit} - {Three Year Cost}) / {Three Year Cost}) * 100, 0)"
+          },
+          "description": "((3-Year Benefit - 3-Year Cost) / 3-Year Cost) * 100"
+        },
+        {
+          "name": "NPV",
+          "type": "formula",
+          "options": {
+            "formula": "-{Implementation Fee} + ({Total Annual Benefit} - {Effective SaaS Annual}) / (1 + {Discount Rate}) + ({Total Annual Benefit} - {Effective SaaS Annual}) / POWER(1 + {Discount Rate}, 2) + ({Total Annual Benefit} - {Effective SaaS Annual}) / POWER(1 + {Discount Rate}, 3)"
+          },
+          "description": "Net Present Value: -Implementation + sum of (Annual Net Benefit / (1+r)^year) for years 1-3"
+        }
+      ]
+    }
+  ]
+}

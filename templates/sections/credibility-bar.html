@@ -1,0 +1,44 @@
+<!--
+  SECTION TEMPLATE: Credibility Bar
+  Pattern extracted from Lululemon Esker Teaser Deck #value section.
+
+  A centered glass card with a concise credibility statement.
+  Teal-highlighted bold phrases for emphasis.
+
+  Dynamic placeholders:
+    {{CREDIBILITY_BOLD_1}}  — First bold teal phrase (e.g. "90-day Proof of Value")
+    {{CREDIBILITY_TEXT}}    — Full statement (HTML with <strong> tags for teal highlights)
+-->
+
+<!-- ===== CSS for Credibility Bar ===== -->
+<style>
+  .credibility-bar {
+    text-align: center;
+    padding: 20px 32px;
+    border: 1px solid rgba(126,202,193,0.2);
+    border-radius: 12px;
+    background: rgba(126,202,193,0.04);
+  }
+
+  .credibility-bar p {
+    font-size: 16px;
+    color: var(--text-mid);
+    font-weight: 500;
+  }
+
+  .credibility-bar strong {
+    color: var(--teal-light);
+  }
+</style>
+
+<!-- ===== Credibility Bar HTML ===== -->
+<div class="credibility-bar glass reveal reveal-delay-6">
+  <p>{{CREDIBILITY_TEXT}}</p>
+</div>
+
+<!--
+  Example usage:
+  <div class="credibility-bar glass reveal reveal-delay-6">
+    <p><strong>90-day Proof of Value</strong> — not a 12-month implementation. Real invoices, real results.</p>
+  </div>
+-->

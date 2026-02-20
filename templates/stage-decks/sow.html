@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{{DECK_TITLE}} | Baseline Payments + Esker</title>
+<!--
+  STAGE DECK TEMPLATE: Statement of Work (SOW)
+  ========================================
+  Purpose: Final statement of work for contract signing. Clean, professional,
+           no-nonsense layout focused on scope, deliverables, and pricing.
+  Persona: CFO, Procurement, Legal
+  Calculator: None — fixed pricing display from Airtable
+  Pipeline Stage: Form Out / Form In
+
+  Section composition:
+    1. Hero                → sections/hero.html
+    2. Scope Definition    → Custom: what's included and excluded
+    3. Phase Breakdown     → Custom: detailed phases with milestones
+    4. Deliverables        → Custom: explicit deliverable list with acceptance criteria
+    5. Pricing Summary     → Custom: line-item pricing from Airtable
+    6. Terms               → Custom: payment terms, SLA, warranties
+    7. Contacts            → Custom: key contacts from both sides
+    8. CTA                 → sections/cta.html (signature-focused)
+
+  Data sources:
+    - Scoping data from previous meetings
+    - Pricing from Airtable (Pricing table)
+    - Standard Esker SOW terms from Notion Sales Wiki
+    - Contact info from HubSpot
+-->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #01395d; --bg-dark: #012d4a; --bg-darker: #01243c;
+    --surface: rgba(255,255,255,0.06); --surface-hover: rgba(255,255,255,0.10);
+    --border: rgba(255,255,255,0.10); --border-hover: rgba(255,255,255,0.18);
+    --text: #ffffff; --text-mid: rgba(255,255,255,0.75); --text-dim: rgba(255,255,255,0.50);
+    --coral: #e85d56; --coral-light: #f08a85; --teal: #7ecac1; --teal-light: #a8ddd7;
+    --green: #10b981; --green-light: #34d399; --amber: #f59e0b; --amber-light: #fbbf24;
+    --esker-red: #e4042a;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; scroll-snap-type: y mandatory; font-size: 16px; }
+  body { font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; color: var(--text); background: var(--bg); overflow-x: hidden; -webkit-font-smoothing: antialiased; }
+
+  /* Core UI */
+  .progress-bar { position: fixed; top: 0; left: 0; height: 3px; background: linear-gradient(90deg, var(--teal), var(--coral)); z-index: 200; transition: width 0.15s ease-out; }
+  .nav-dots { position: fixed; right: 28px; top: 50%; transform: translateY(-50%); z-index: 100; display: flex; flex-direction: column; gap: 14px; }
+  .nav-dot { width: 10px; height: 10px; border-radius: 50%; background: rgba(255,255,255,0.2); border: 1.5px solid rgba(255,255,255,0.35); cursor: pointer; transition: all 0.4s; position: relative; }
+  .nav-dot.active { background: var(--teal); border-color: var(--teal); transform: scale(1.4); box-shadow: 0 0 12px rgba(126,202,193,0.5); }
+  .nav-dot .tooltip { position: absolute; right: 24px; top: 50%; transform: translateY(-50%); background: var(--bg-dark); color: var(--text); padding: 6px 14px; border-radius: 6px; font-size: 12px; font-weight: 500; white-space: nowrap; opacity: 0; pointer-events: none; transition: opacity 0.3s; border: 1px solid var(--border); }
+  .nav-dot:hover .tooltip { opacity: 1; }
+  section { min-height: 100vh; scroll-snap-align: start; display: flex; flex-direction: column; justify-content: center; align-items: center; position: relative; overflow: hidden; padding: clamp(40px,6vh,80px) clamp(24px,5vw,120px); }
+  .section-inner { width: 100%; max-width: 1100px; position: relative; z-index: 2; }
+  .reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.8s cubic-bezier(0.16,1,0.3,1), transform 0.8s cubic-bezier(0.16,1,0.3,1); }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+  .reveal-scale { opacity: 0; transform: scale(0.88); transition: opacity 0.8s cubic-bezier(0.16,1,0.3,1), transform 0.8s cubic-bezier(0.16,1,0.3,1); }
+  .reveal-scale.visible { opacity: 1; transform: scale(1); }
+  .reveal-delay-1{transition-delay:.1s} .reveal-delay-2{transition-delay:.2s} .reveal-delay-3{transition-delay:.3s} .reveal-delay-4{transition-delay:.4s} .reveal-delay-5{transition-delay:.5s} .reveal-delay-6{transition-delay:.6s}
+  .glass { background: var(--surface); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid var(--border); border-radius: 16px; padding: 28px 32px; transition: background 0.3s, border-color 0.3s, transform 0.4s cubic-bezier(0.16,1,0.3,1); }
+  .glass:hover { background: var(--surface-hover); border-color: var(--border-hover); transform: translateY(-3px); }
+  @keyframes shimmer { 0% { background-position: -200% center; } 100% { background-position: 200% center; } }
+  .shimmer-text { background: linear-gradient(90deg, var(--teal-light) 0%, #fff 30%, var(--coral-light) 60%, var(--teal-light) 100%); background-size: 200% auto; -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; animation: shimmer 6s linear infinite; }
+  @keyframes pulse { 0%,100%{opacity:.15;transform:scale(1)} 50%{opacity:.28;transform:scale(1.05)} }
+  .glow-orb { position: absolute; border-radius: 50%; filter: blur(120px); pointer-events: none; animation: pulse 8s ease-in-out infinite; z-index: 0; }
+
+  /* Hero */
+  #hero { background: linear-gradient(160deg, var(--bg-darker) 0%, var(--bg) 40%, var(--bg-dark) 100%); text-align: center; }
+  .logo-row { display: flex; align-items: center; justify-content: center; gap: 28px; margin-bottom: 56px; }
+  .logo-row img { height: 52px; } .logo-row svg { height: 46px; }
+  .logo-divider { width: 1px; height: 56px; background: rgba(255,255,255,0.2); }
+  .hero-title { font-size: clamp(48px,6vw,80px); font-weight: 800; letter-spacing: -3px; line-height: 1.05; margin-bottom: 20px; }
+  .hero-subtitle { font-size: clamp(18px,1.6vw,24px); font-weight: 400; color: var(--text-mid); letter-spacing: 0.5px; margin-bottom: 64px; }
+  .hero-meta { font-size: 13px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; color: var(--text-dim); }
+
+  .section-label { font-size: 13px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: var(--coral); margin-bottom: 16px; }
+  .section-title { font-size: clamp(40px,5vw,64px); font-weight: 800; letter-spacing: -2.5px; line-height: 1.1; margin-bottom: 12px; }
+  .section-subtitle { font-size: 17px; color: var(--text-mid); margin-bottom: 44px; max-width: 650px; }
+
+  /* Scope — in/out columns */
+  .scope-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+  .scope-card { padding: 28px; }
+  .scope-card .scope-header { font-size: 13px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 20px; }
+  .scope-card.in-scope { border-top: 3px solid var(--green); }
+  .scope-card.in-scope .scope-header { color: var(--green); }
+  .scope-card.out-scope { border-top: 3px solid var(--coral); }
+  .scope-card.out-scope .scope-header { color: var(--coral); }
+  .scope-list { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+  .scope-list li { font-size: 15px; color: var(--text-mid); line-height: 1.4; display: flex; align-items: flex-start; gap: 10px; }
+  .scope-list li::before { content: ''; width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; margin-top: 7px; }
+  .scope-card.in-scope .scope-list li::before { background: var(--green); }
+  .scope-card.out-scope .scope-list li::before { background: var(--coral); }
+
+  /* Phase breakdown */
+  .phase-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; }
+  .phase-card { padding: 24px; border-top: 3px solid var(--teal); }
+  .phase-card .phase-num { font-size: 28px; font-weight: 800; color: var(--teal-light); margin-bottom: 4px; }
+  .phase-card .phase-name { font-size: 15px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--text-mid); margin-bottom: 4px; }
+  .phase-card .phase-duration { font-size: 13px; color: var(--amber); font-weight: 600; margin-bottom: 12px; }
+  .phase-card .phase-milestones { list-style: none; display: flex; flex-direction: column; gap: 6px; }
+  .phase-card .phase-milestones li { font-size: 14px; color: var(--text-mid); display: flex; align-items: flex-start; gap: 8px; }
+  .phase-card .phase-milestones li::before { content: ''; width: 5px; height: 5px; border-radius: 50%; background: var(--teal); flex-shrink: 0; margin-top: 6px; }
+
+  /* Deliverables table */
+  .deliverable-table { width: 100%; border-collapse: separate; border-spacing: 0; }
+  .deliverable-table th { font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--text-dim); padding: 12px 16px; text-align: left; border-bottom: 1px solid var(--border); }
+  .deliverable-table td { font-size: 15px; color: var(--text-mid); padding: 14px 16px; border-bottom: 1px solid rgba(255,255,255,0.04); }
+  .deliverable-table td strong { color: var(--text); }
+
+  /* Pricing summary */
+  .pricing-card { max-width: 700px; margin: 0 auto; padding: 36px; }
+  .pricing-line { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.04); font-size: 16px; color: var(--text-mid); }
+  .pricing-line .pricing-value { font-weight: 700; color: var(--text); font-variant-numeric: tabular-nums; }
+  .pricing-line.subtotal { border-top: 1px solid var(--border); margin-top: 8px; padding-top: 16px; }
+  .pricing-total { display: flex; justify-content: space-between; padding: 16px 0; margin-top: 8px; border-top: 2px solid var(--teal); font-size: 20px; font-weight: 800; }
+  .pricing-total .pricing-value { color: var(--teal-light); }
+  .pricing-note { font-size: 13px; color: var(--text-dim); margin-top: 16px; text-align: center; }
+
+  /* Terms */
+  .terms-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 20px; }
+  .term-card { padding: 24px; border-left: 3px solid var(--amber); }
+  .term-card .term-title { font-size: 14px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--amber); margin-bottom: 12px; }
+  .term-card .term-text { font-size: 15px; color: var(--text-mid); line-height: 1.5; }
+
+  /* Contacts — two-column cards */
+  .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+  .contact-card { padding: 28px; text-align: center; }
+  .contact-card.baseline-contact { border-top: 3px solid var(--teal); }
+  .contact-card.client-contact { border-top: 3px solid var(--amber); }
+  .contact-card .cc-org { font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--text-dim); margin-bottom: 12px; }
+  .contact-card .cc-name { font-size: 18px; font-weight: 700; margin-bottom: 4px; }
+  .contact-card .cc-title { font-size: 14px; color: var(--text-mid); margin-bottom: 4px; }
+  .contact-card .cc-email { font-size: 14px; }
+  .contact-card .cc-email a { color: var(--teal); text-decoration: none; }
+
+  /* CTA */
+  #cta { background: linear-gradient(160deg, var(--bg) 0%, var(--bg-darker) 100%); text-align: center; }
+  .cta-title { font-size: clamp(40px,5vw,64px); font-weight: 800; letter-spacing: -2.5px; line-height: 1.1; margin-bottom: 12px; }
+  .cta-subtitle { font-size: 18px; color: var(--text-mid); margin-bottom: 40px; max-width: 520px; margin-left: auto; margin-right: auto; }
+  .cta-card { max-width: 600px; margin: 0 auto 48px; text-align: left; padding: 32px 36px; }
+  .cta-list { list-style: none; display: flex; flex-direction: column; gap: 18px; }
+  .cta-list li { display: flex; align-items: flex-start; gap: 14px; font-size: 17px; color: var(--text-mid); line-height: 1.5; }
+  .cta-list li strong { color: var(--text); }
+  .cta-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--teal); box-shadow: 0 0 12px rgba(126,202,193,0.5); flex-shrink: 0; margin-top: 6px; }
+  .contact-block { margin-bottom: 40px; }
+  .contact-name { font-size: 20px; font-weight: 700; margin-bottom: 4px; }
+  .contact-details { font-size: 16px; color: var(--text-mid); }
+  .contact-details a { color: var(--teal); text-decoration: none; }
+  .footer-logos { display: flex; align-items: center; justify-content: center; gap: 24px; opacity: 0.5; }
+  .footer-logos img { height: 38px; } .footer-logos svg { height: 32px; }
+  .footer-divider { width: 1px; height: 42px; background: rgba(255,255,255,0.15); }
+
+  @media (max-width: 900px) { .scope-grid, .contact-grid, .terms-grid { grid-template-columns: 1fr; } .nav-dots { display: none; } }
+  @media (max-width: 600px) { section { padding: 40px 20px; } .logo-row { gap: 16px; } .logo-row img { height: 28px; } .logo-row svg { height: 24px; } }
+</style>
+</head>
+<body>
+
+<div class="progress-bar" id="progressBar"></div>
+<nav class="nav-dots" id="navDots">
+  <div class="nav-dot active" data-section="hero"><span class="tooltip">Cover</span></div>
+  <div class="nav-dot" data-section="scope"><span class="tooltip">Scope</span></div>
+  <div class="nav-dot" data-section="phases"><span class="tooltip">Phases</span></div>
+  <div class="nav-dot" data-section="deliverables"><span class="tooltip">Deliverables</span></div>
+  <div class="nav-dot" data-section="pricing"><span class="tooltip">Pricing</span></div>
+  <div class="nav-dot" data-section="terms"><span class="tooltip">Terms</span></div>
+  <div class="nav-dot" data-section="contacts"><span class="tooltip">Contacts</span></div>
+  <div class="nav-dot" data-section="cta"><span class="tooltip">Sign</span></div>
+</nav>
+
+<!-- ===== SECTION 1: HERO ===== -->
+<section id="hero">
+  <div class="glow-orb" style="width:500px;height:500px;background:rgba(126,202,193,0.12);top:-15%;right:-10%;"></div>
+  <div class="section-inner">
+    <div class="logo-row reveal">
+      <img src="data:image/webp;base64,..." alt="Baseline Payments">
+      <div class="logo-divider"></div>
+      <svg viewBox="0 0 1555 725" fill="none" xmlns="http://www.w3.org/2000/svg" style="height:32px;"><!-- Esker --></svg>
+    </div>
+    <h1 class="hero-title shimmer-text reveal reveal-delay-1">{{DECK_TITLE}}</h1>
+    <p class="hero-subtitle reveal reveal-delay-2">{{DECK_SUBTITLE}}</p>
+    <p class="hero-meta reveal reveal-delay-3">Confidential &middot; {{PREPARED_FOR}} &middot; {{DATE}}</p>
+  </div>
+</section>
+
+<!-- ===== SECTION 2: SCOPE ===== -->
+<section id="scope">
+  <div class="section-inner">
+    <p class="section-label reveal" style="color:var(--teal);">{{SCOPE_LABEL}}</p>
+    <h2 class="section-title reveal reveal-delay-1">{{SCOPE_TITLE}}</h2>
+    <p class="section-subtitle reveal reveal-delay-2">{{SCOPE_SUBTITLE}}</p>
+    <div class="scope-grid">
+      <div class="glass scope-card in-scope reveal reveal-delay-3">
+        <div class="scope-header">In Scope</div>
+        <ul class="scope-list">
+          <li>{{IN_SCOPE_1}}</li><li>{{IN_SCOPE_2}}</li><li>{{IN_SCOPE_3}}</li><li>{{IN_SCOPE_4}}</li><li>{{IN_SCOPE_5}}</li>
+        </ul>
+      </div>
+      <div class="glass scope-card out-scope reveal reveal-delay-4">
+        <div class="scope-header">Out of Scope</div>
+        <ul class="scope-list">
+          <li>{{OUT_SCOPE_1}}</li><li>{{OUT_SCOPE_2}}</li><li>{{OUT_SCOPE_3}}</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== SECTION 3: PHASE BREAKDOWN ===== -->
+<section id="phases">
+  <div class="glow-orb" style="width:400px;height:400px;background:rgba(126,202,193,0.06);top:-8%;left:10%;animation-delay:2s;"></div>
+  <div class="section-inner">
+    <p class="section-label reveal" style="color:var(--teal);">{{PHASES_LABEL}}</p>
+    <h2 class="section-title reveal reveal-delay-1">{{PHASES_TITLE}}</h2>
+    <div class="phase-grid">
+      <div class="glass phase-card reveal-scale reveal-delay-2"><div class="phase-num">1</div><div class="phase-name">{{P1_NAME}}</div><div class="phase-duration">{{P1_DURATION}}</div><ul class="phase-milestones"><li>{{P1_M1}}</li><li>{{P1_M2}}</li><li>{{P1_M3}}</li></ul></div>
+      <div class="glass phase-card reveal-scale reveal-delay-3"><div class="phase-num">2</div><div class="phase-name">{{P2_NAME}}</div><div class="phase-duration">{{P2_DURATION}}</div><ul class="phase-milestones"><li>{{P2_M1}}</li><li>{{P2_M2}}</li><li>{{P2_M3}}</li></ul></div>
+      <div class="glass phase-card reveal-scale reveal-delay-4"><div class="phase-num">3</div><div class="phase-name">{{P3_NAME}}</div><div class="phase-duration">{{P3_DURATION}}</div><ul class="phase-milestones"><li>{{P3_M1}}</li><li>{{P3_M2}}</li><li>{{P3_M3}}</li></ul></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== SECTION 4: DELIVERABLES ===== -->
+<section id="deliverables">
+  <div class="section-inner">
+    <p class="section-label reveal" style="color:var(--green);">{{DELIVERABLES_LABEL}}</p>
+    <h2 class="section-title reveal reveal-delay-1">{{DELIVERABLES_TITLE}}</h2>
+    <div class="glass reveal reveal-delay-2" style="overflow-x:auto;">
+      <table class="deliverable-table">
+        <thead><tr><th>Deliverable</th><th>Description</th><th>Acceptance Criteria</th><th>Phase</th></tr></thead>
+        <tbody>
+          <tr><td><strong>{{DEL_1_NAME}}</strong></td><td>{{DEL_1_DESC}}</td><td>{{DEL_1_CRITERIA}}</td><td>{{DEL_1_PHASE}}</td></tr>
+          <tr><td><strong>{{DEL_2_NAME}}</strong></td><td>{{DEL_2_DESC}}</td><td>{{DEL_2_CRITERIA}}</td><td>{{DEL_2_PHASE}}</td></tr>
+          <tr><td><strong>{{DEL_3_NAME}}</strong></td><td>{{DEL_3_DESC}}</td><td>{{DEL_3_CRITERIA}}</td><td>{{DEL_3_PHASE}}</td></tr>
+          <tr><td><strong>{{DEL_4_NAME}}</strong></td><td>{{DEL_4_DESC}}</td><td>{{DEL_4_CRITERIA}}</td><td>{{DEL_4_PHASE}}</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ===== SECTION 5: PRICING ===== -->
+<section id="pricing">
+  <div class="glow-orb" style="width:400px;height:400px;background:rgba(16,185,129,0.06);bottom:-10%;right:-5%;animation-delay:3s;"></div>
+  <div class="section-inner" style="text-align:center;">
+    <p class="section-label reveal" style="color:var(--green);">{{PRICING_LABEL}}</p>
+    <h2 class="section-title reveal reveal-delay-1">{{PRICING_TITLE}}</h2>
+    <div class="glass pricing-card reveal reveal-delay-2">
+      <div class="pricing-line"><span>Esker SaaS License (Annual)</span><span class="pricing-value">{{PRICE_SAAS}}</span></div>
+      <div class="pricing-line"><span>Implementation &amp; Configuration</span><span class="pricing-value">{{PRICE_IMPL}}</span></div>
+      <div class="pricing-line"><span>Transaction Fee (per invoice)</span><span class="pricing-value">{{PRICE_TXN}}</span></div>
+      <div class="pricing-line"><span>Discount Applied</span><span class="pricing-value" style="color:var(--green-light);">{{PRICE_DISCOUNT}}</span></div>
+      <div class="pricing-line subtotal"><span>Effective Annual Cost</span><span class="pricing-value">{{PRICE_EFFECTIVE_ANNUAL}}</span></div>
+      <div class="pricing-total"><span>Year 1 Total Investment</span><span class="pricing-value">{{PRICE_Y1_TOTAL}}</span></div>
+      <div class="pricing-note">{{PRICING_NOTE}}</div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== SECTION 6: TERMS ===== -->
+<section id="terms">
+  <div class="section-inner">
+    <p class="section-label reveal" style="color:var(--amber);">{{TERMS_LABEL}}</p>
+    <h2 class="section-title reveal reveal-delay-1">{{TERMS_TITLE}}</h2>
+    <div class="terms-grid">
+      <div class="glass term-card reveal reveal-delay-2"><div class="term-title">Payment Terms</div><div class="term-text">{{TERM_PAYMENT}}</div></div>
+      <div class="glass term-card reveal reveal-delay-3"><div class="term-title">SLA</div><div class="term-text">{{TERM_SLA}}</div></div>
+      <div class="glass term-card reveal reveal-delay-4"><div class="term-title">Contract Duration</div><div class="term-text">{{TERM_DURATION}}</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== SECTION 7: CONTACTS ===== -->
+<section id="contacts">
+  <div class="section-inner">
+    <p class="section-label reveal" style="color:var(--teal);">{{CONTACTS_LABEL}}</p>
+    <h2 class="section-title reveal reveal-delay-1">{{CONTACTS_TITLE}}</h2>
+    <div class="contact-grid">
+      <div class="glass contact-card baseline-contact reveal-scale reveal-delay-2">
+        <div class="cc-org">Baseline Payments</div>
+        <div class="cc-name">{{BP_CONTACT_NAME}}</div>
+        <div class="cc-title">{{BP_CONTACT_TITLE}}</div>
+        <div class="cc-email"><a href="mailto:{{BP_CONTACT_EMAIL}}">{{BP_CONTACT_EMAIL}}</a></div>
+      </div>
+      <div class="glass contact-card client-contact reveal-scale reveal-delay-3">
+        <div class="cc-org">{{COMPANY_NAME}}</div>
+        <div class="cc-name">{{CLIENT_CONTACT_NAME}}</div>
+        <div class="cc-title">{{CLIENT_CONTACT_TITLE}}</div>
+        <div class="cc-email"><a href="mailto:{{CLIENT_CONTACT_EMAIL}}">{{CLIENT_CONTACT_EMAIL}}</a></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== SECTION 8: CTA ===== -->
+<section id="cta">
+  <div class="glow-orb" style="width:500px;height:500px;background:rgba(126,202,193,0.10);top:-20%;left:50%;transform:translateX(-50%);"></div>
+  <div class="section-inner">
+    <h2 class="cta-title reveal">{{CTA_TITLE_LINE1}}<br><span class="shimmer-text">{{CTA_TITLE_SHIMMER}}</span></h2>
+    <p class="cta-subtitle reveal reveal-delay-1">{{CTA_SUBTITLE}}</p>
+    <div class="glass cta-card reveal reveal-delay-2">
+      <ul class="cta-list">
+        <li><div class="cta-dot"></div><span>{{CTA_ITEM_1}}</span></li>
+        <li><div class="cta-dot"></div><span>{{CTA_ITEM_2}}</span></li>
+        <li><div class="cta-dot"></div><span>{{CTA_ITEM_3}}</span></li>
+      </ul>
+    </div>
+    <div class="contact-block reveal reveal-delay-3">
+      <div class="contact-name">{{CONTACT_NAME}}</div>
+      <div class="contact-details">{{CONTACT_COMPANY}} &middot; <a href="mailto:{{CONTACT_EMAIL}}">{{CONTACT_EMAIL}}</a></div>
+    </div>
+    <div class="footer-logos reveal reveal-delay-4">
+      <img src="data:image/webp;base64,..." alt="Baseline Payments">
+      <div class="footer-divider"></div>
+      <svg viewBox="0 0 1555 725" fill="none" xmlns="http://www.w3.org/2000/svg" style="height:24px;"><!-- Esker --></svg>
+    </div>
+  </div>
+</section>
+
+<script>
+const observer = new IntersectionObserver((entries) => { entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); }); }, { threshold: 0.15 });
+document.querySelectorAll('.reveal, .reveal-scale').forEach(el => observer.observe(el));
+const progressBar = document.getElementById('progressBar');
+window.addEventListener('scroll', () => { const h = document.documentElement.scrollHeight - window.innerHeight; progressBar.style.width = (h>0?(window.scrollY/h)*100:0)+'%'; });
+const dots = document.querySelectorAll('.nav-dot');
+dots.forEach(d => d.addEventListener('click', () => { const t = document.getElementById(d.dataset.section); if(t) t.scrollIntoView({behavior:'smooth'}); }));
+const so = new IntersectionObserver((entries) => { entries.forEach(e => { if(e.isIntersecting) { dots.forEach(d=>d.classList.remove('active')); const d = document.querySelector(`.nav-dot[data-section="${e.target.id}"]`); if(d) d.classList.add('active'); } }); }, { threshold: 0.5 });
+document.querySelectorAll('section').forEach(s => so.observe(s));
+</script>
+</body>
+</html>

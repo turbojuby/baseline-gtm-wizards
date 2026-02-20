@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{{DECK_TITLE}} | Baseline Payments + Esker</title>
+<!--
+  STAGE DECK TEMPLATE: Discovery
+  ========================================
+  Purpose: Guide the discovery conversation. Educate on industry landscape,
+           identify pain points, size the opportunity, and frame Esker as the solution.
+  Persona: CFO, Controller
+  Calculator: Pre-discovery (prospect-editable assumptions, no pricing shown)
+  Pipeline Stage: Discovery / Needs Analysis
+
+  Section composition:
+    1. Hero                     → sections/hero.html
+    2. Industry Landscape       → Custom section: market trends, peer benchmarks
+    3. Pain Identification      → Custom section: common AP challenges with data
+    4. Opportunity Sizing       → sections/stat-grid.html + sections/roi-calculator.html (discovery mode)
+    5. Platform Overview        → Custom section: Esker capabilities mapped to pains
+    6. Case Studies             → Custom section: 2-3 relevant customer stories
+    7. Discussion Framework     → Custom section: discovery questions for the meeting
+    8. CTA                      → sections/cta.html
+
+  Data sources:
+    - Industry benchmarks from research (IOFM, Ardent Partners, Gartner)
+    - Company-specific data from HubSpot + public filings
+    - Esker case studies from Notion Sales Wiki
+    - ROI calculator with editable assumptions (no pricing — discovery mode)
+-->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  /* ===== Design System CSS Custom Properties ===== */
+  :root {
+    --bg: #01395d;
+    --bg-dark: #012d4a;
+    --bg-darker: #01243c;
+    --surface: rgba(255,255,255,0.06);
+    --surface-hover: rgba(255,255,255,0.10);
+    --border: rgba(255,255,255,0.10);
+    --border-hover: rgba(255,255,255,0.18);
+    --text: #ffffff;
+    --text-mid: rgba(255,255,255,0.75);
+    --text-dim: rgba(255,255,255,0.50);
+    --coral: #e85d56;
+    --coral-light: #f08a85;
+    --teal: #7ecac1;
+    --teal-light: #a8ddd7;
+    --green: #10b981;
+    --green-light: #34d399;
+    --amber: #f59e0b;
+    --amber-light: #fbbf24;
+    --esker-red: #e4042a;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; scroll-snap-type: y mandatory; font-size: 16px; }
+  body { font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; color: var(--text); background: var(--bg); overflow-x: hidden; -webkit-font-smoothing: antialiased; }
+
+  /* Progress bar, nav dots, sections, reveals, glass, shimmer, glow orbs, particles — same as teaser.html */
+  .progress-bar { position: fixed; top: 0; left: 0; height: 3px; background: linear-gradient(90deg, var(--teal), var(--coral)); z-index: 200; transition: width 0.15s ease-out; box-shadow: 0 0 12px rgba(126,202,193,0.4); }
+  .nav-dots { position: fixed; right: 28px; top: 50%; transform: translateY(-50%); z-index: 100; display: flex; flex-direction: column; gap: 14px; }
+  .nav-dot { width: 10px; height: 10px; border-radius: 50%; background: rgba(255,255,255,0.2); border: 1.5px solid rgba(255,255,255,0.35); cursor: pointer; transition: all 0.4s cubic-bezier(0.25,0.46,0.45,0.94); position: relative; }
+  .nav-dot.active { background: var(--teal); border-color: var(--teal); transform: scale(1.4); box-shadow: 0 0 12px rgba(126,202,193,0.5); }
+  .nav-dot .tooltip { position: absolute; right: 24px; top: 50%; transform: translateY(-50%); background: var(--bg-dark); color: var(--text); padding: 6px 14px; border-radius: 6px; font-size: 12px; font-weight: 500; white-space: nowrap; opacity: 0; pointer-events: none; transition: opacity 0.3s; border: 1px solid var(--border); }
+  .nav-dot:hover .tooltip { opacity: 1; }
+
+  section { min-height: 100vh; scroll-snap-align: start; display: flex; flex-direction: column; justify-content: center; align-items: center; position: relative; overflow: hidden; padding: clamp(40px,6vh,80px) clamp(24px,5vw,120px); }
+  .section-inner { width: 100%; max-width: 1100px; position: relative; z-index: 2; }
+
+  .reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.8s cubic-bezier(0.16,1,0.3,1), transform 0.8s cubic-bezier(0.16,1,0.3,1); }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+  .reveal-scale { opacity: 0; transform: scale(0.88); transition: opacity 0.8s cubic-bezier(0.16,1,0.3,1), transform 0.8s cubic-bezier(0.16,1,0.3,1); }
+  .reveal-scale.visible { opacity: 1; transform: scale(1); }
+  .reveal-delay-1 { transition-delay: 0.1s; } .reveal-delay-2 { transition-delay: 0.2s; } .reveal-delay-3 { transition-delay: 0.3s; } .reveal-delay-4 { transition-delay: 0.4s; } .reveal-delay-5 { transition-delay: 0.5s; } .reveal-delay-6 { transition-delay: 0.6s; } .reveal-delay-7 { transition-delay: 0.7s; }
+
+  .glass { background: var(--surface); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid var(--border); border-radius: 16px; padding: 28px 32px; transition: background 0.3s, border-color 0.3s, transform 0.4s cubic-bezier(0.16,1,0.3,1); }
+  .glass:hover { background: var(--surface-hover); border-color: var(--border-hover); transform: translateY(-3px); }
+
+  @keyframes shimmer { 0% { background-position: -200% center; } 100% { background-position: 200% center; } }
+  .shimmer-text { background: linear-gradient(90deg, var(--teal-light) 0%, #fff 30%, var(--coral-light) 60%, var(--teal-light) 100%); background-size: 200% auto; -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; animation: shimmer 6s linear infinite; }
+  @keyframes pulse { 0%,100% { opacity: 0.15; transform: scale(1); } 50% { opacity: 0.28; transform: scale(1.05); } }
+  .glow-orb { position: absolute; border-radius: 50%; filter: blur(120px); pointer-events: none; animation: pulse 8s ease-in-out infinite; z-index: 0; }
+  @keyframes float-up { 0% { transform: translateY(0) translateX(0); opacity: 0; } 10% { opacity: 0.6; } 90% { opacity: 0.6; } 100% { transform: translateY(-100vh) translateX(30px); opacity: 0; } }
+  .particle { position: fixed; width: 2px; height: 2px; background: var(--teal); border-radius: 50%; pointer-events: none; z-index: 1; opacity: 0; animation: float-up var(--duration) var(--delay) linear infinite; }
+
+  /* Hero */
+  #hero { background: linear-gradient(160deg, var(--bg-darker) 0%, var(--bg) 40%, var(--bg-dark) 100%); text-align: center; }
+  .logo-row { display: flex; align-items: center; justify-content: center; gap: 28px; margin-bottom: 56px; }
+  .logo-row img { height: 52px; } .logo-row svg { height: 46px; }
+  .logo-divider { width: 1px; height: 56px; background: rgba(255,255,255,0.2); }
+  .hero-title { font-size: clamp(48px,6vw,80px); font-weight: 800; letter-spacing: -3px; line-height: 1.05; margin-bottom: 20px; }
+  .hero-subtitle { font-size: clamp(18px,1.6vw,24px); font-weight: 400; color: var(--text-mid); letter-spacing: 0.5px; margin-bottom: 64px; }
+  .hero-meta { font-size: 13px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; color: var(--text-dim); }
+
+  /* Section common */
+  .section-label { font-size: 13px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: var(--coral); margin-bottom: 16px; }
+  .section-title { font-size: clamp(40px,5vw,64px); font-weight: 800; letter-spacing: -2.5px; line-height: 1.1; margin-bottom: 12px; }
+  .section-subtitle { font-size: 17px; color: var(--text-mid); margin-bottom: 44px; max-width: 650px; }
+
+  /* Industry landscape — 2-column grid of glass cards */
+  .landscape-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  .landscape-card { padding: 28px; }
+  .landscape-card .card-icon { font-size: 28px; margin-bottom: 12px; }
+  .landscape-card .card-stat { font-size: clamp(28px,2.5vw,36px); font-weight: 800; color: var(--teal-light); margin-bottom: 4px; }
+  .landscape-card .card-title { font-size: 14px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-mid); margin-bottom: 12px; }
+  .landscape-card .card-desc { font-size: 15px; color: var(--text-mid); line-height: 1.5; }
+  .landscape-card .card-desc strong { color: var(--text); }
+
+  /* Pain identification — numbered list with glass cards */
+  .pain-list { display: flex; flex-direction: column; gap: 16px; }
+  .pain-item { display: flex; gap: 20px; padding: 24px 28px; align-items: flex-start; }
+  .pain-number { font-size: 32px; font-weight: 800; color: var(--coral); flex-shrink: 0; width: 40px; }
+  .pain-content .pain-title { font-size: 18px; font-weight: 700; margin-bottom: 6px; }
+  .pain-content .pain-desc { font-size: 15px; color: var(--text-mid); line-height: 1.5; }
+  .pain-content .pain-desc strong { color: var(--text); }
+
+  /* Stat grid */
+  .stat-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 16px; }
+  .stat-card { text-align: center; padding: 24px 16px; }
+  .stat-value { font-size: clamp(36px,3.5vw,48px); font-weight: 800; letter-spacing: -2px; line-height: 1; margin-bottom: 8px; font-variant-numeric: tabular-nums; }
+  .stat-label { font-size: 12px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--text-dim); line-height: 1.4; }
+  .stat-card.coral .stat-value { color: var(--coral); } .stat-card.coral { border-top: 3px solid var(--coral); }
+  .stat-card.teal .stat-value { color: var(--teal); } .stat-card.teal { border-top: 3px solid var(--teal); }
+  .stat-card.amber .stat-value { color: var(--amber); } .stat-card.amber { border-top: 3px solid var(--amber); }
+  .stat-card.green .stat-value { color: var(--green-light); } .stat-card.green { border-top: 3px solid var(--green); }
+
+  /* Platform overview — feature cards */
+  .platform-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 20px; }
+  .platform-card { padding: 28px; text-align: center; }
+  .platform-card .card-icon { font-size: 36px; margin-bottom: 16px; }
+  .platform-card .card-title { font-size: 15px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-mid); margin-bottom: 12px; }
+  .platform-card .card-desc { font-size: 15px; color: var(--text-mid); line-height: 1.5; }
+
+  /* Case studies */
+  .case-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  .case-card { padding: 28px; border-top: 3px solid var(--teal); }
+  .case-card .case-company { font-size: 13px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--teal); margin-bottom: 12px; }
+  .case-card .case-stat { font-size: clamp(28px,2.5vw,36px); font-weight: 800; color: var(--green-light); margin-bottom: 4px; }
+  .case-card .case-metric { font-size: 14px; font-weight: 600; color: var(--text-mid); margin-bottom: 16px; }
+  .case-card .case-desc { font-size: 15px; color: var(--text-mid); line-height: 1.5; }
+
+  /* Discussion framework — question cards */
+  .discussion-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .question-card { padding: 24px; border-left: 3px solid var(--amber); }
+  .question-card .q-category { font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--amber); margin-bottom: 8px; }
+  .question-card .q-text { font-size: 16px; color: var(--text); font-weight: 600; line-height: 1.4; }
+
+  /* CTA */
+  #cta { background: linear-gradient(160deg, var(--bg) 0%, var(--bg-darker) 100%); text-align: center; }
+  .cta-title { font-size: clamp(40px,5vw,64px); font-weight: 800; letter-spacing: -2.5px; line-height: 1.1; margin-bottom: 12px; }
+  .cta-subtitle { font-size: 18px; color: var(--text-mid); margin-bottom: 40px; max-width: 520px; margin-left: auto; margin-right: auto; }
+  .cta-card { max-width: 600px; margin: 0 auto 48px; text-align: left; padding: 32px 36px; }
+  .cta-list { list-style: none; display: flex; flex-direction: column; gap: 18px; }
+  .cta-list li { display: flex; align-items: flex-start; gap: 14px; font-size: 17px; color: var(--text-mid); line-height: 1.5; }
+  .cta-list li strong { color: var(--text); }
+  .cta-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--teal); box-shadow: 0 0 12px rgba(126,202,193,0.5); flex-shrink: 0; margin-top: 6px; }
+  .contact-block { margin-bottom: 40px; }
+  .contact-name { font-size: 20px; font-weight: 700; margin-bottom: 4px; }
+  .contact-details { font-size: 16px; color: var(--text-mid); }
+  .contact-details a { color: var(--teal); text-decoration: none; }
+  .footer-logos { display: flex; align-items: center; justify-content: center; gap: 24px; opacity: 0.5; }
+  .footer-logos img { height: 38px; } .footer-logos svg { height: 32px; }
+  .footer-divider { width: 1px; height: 42px; background: rgba(255,255,255,0.15); }
+
+  /* ROI Calculator — included inline from sections/roi-calculator.html */
+  /* (See roi-calculator.html for full CSS — include here when generating) */
+
+  @media (max-width: 900px) {
+    .stat-grid, .landscape-grid, .platform-grid, .case-grid, .discussion-grid { grid-template-columns: 1fr; }
+    .nav-dots { display: none; }
+  }
+  @media (max-width: 600px) {
+    section { padding: 40px 20px; }
+    .stat-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
+    .logo-row { gap: 16px; } .logo-row img { height: 28px; } .logo-row svg { height: 24px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="progress-bar" id="progressBar"></div>
+
+<nav class="nav-dots" id="navDots">
+  <div class="nav-dot active" data-section="hero"><span class="tooltip">Cover</span></div>
+  <div class="nav-dot" data-section="landscape"><span class="tooltip">Industry</span></div>
+  <div class="nav-dot" data-section="pain"><span class="tooltip">Challenges</span></div>
+  <div class="nav-dot" data-section="opportunity"><span class="tooltip">Opportunity</span></div>
+  <div class="nav-dot" data-section="platform"><span class="tooltip">Platform</span></div>
+  <div class="nav-dot" data-section="cases"><span class="tooltip">Case Studies</span></div>
+  <div class="nav-dot" data-section="discussion"><span class="tooltip">Discussion</span></div>
+  <div class="nav-dot" data-section="cta"><span class="tooltip">Next Steps</span></div>
+</nav>
+
+<!-- Particles -->
+<div class="particle" style="left:8%;--duration:18s;--delay:0s;"></div>
+<div class="particle" style="left:22%;--duration:22s;--delay:3s;"></div>
+<div class="particle" style="left:45%;--duration:20s;--delay:6s;"></div>
+<div class="particle" style="left:67%;--duration:24s;--delay:2s;"></div>
+<div class="particle" style="left:85%;--duration:19s;--delay:5s;"></div>
+
+<!-- ===== SECTION 1: HERO ===== -->
+<!-- #include sections/hero.html -->
+<section id="hero">
+  <div class="glow-orb" style="width:500px;height:500px;background:rgba(126,202,193,0.12);top:-15%;right:-10%;"></div>
+  <div class="glow-orb" style="width:400px;height:400px;background:rgba(232,93,86,0.08);bottom:-20%;left:-8%;animation-delay:3s;"></div>
+  <div class="section-inner">
+    <div class="logo-row reveal">
+      <img src="data:image/webp;base64,..." alt="Baseline Payments">
+      <div class="logo-divider"></div>
+      <svg viewBox="0 0 1555 725" fill="none" xmlns="http://www.w3.org/2000/svg" style="height:32px;"><!-- Esker --></svg>
+    </div>
+    <h1 class="hero-title shimmer-text reveal reveal-delay-1">{{DECK_TITLE}}</h1>
+    <p class="hero-subtitle reveal reveal-delay-2">{{DECK_SUBTITLE}}</p>
+    <p class="hero-meta reveal reveal-delay-3">Confidential &middot; {{PREPARED_FOR}} &middot; {{DATE}}</p>
+  </div>
+</section>
+
+<!-- ===== SECTION 2: INDUSTRY LANDSCAPE ===== -->
+<!--
+  Data: Industry benchmarks (IOFM, Ardent Partners, Gartner)
+  Show 4 cards with market trends relevant to the prospect's industry
+-->
+<section id="landscape">
+  <div class="glow-orb" style="width:400px;height:400px;background:rgba(126,202,193,0.08);top:-10%;left:-5%;animation-delay:1s;"></div>
+  <div class="section-inner">
+    <p class="section-label reveal" style="color:var(--amber);">{{LANDSCAPE_LABEL}}</p>
+    <h2 class="section-title reveal reveal-delay-1">{{LANDSCAPE_TITLE}}</h2>
+    <p class="section-subtitle reveal reveal-delay-2">{{LANDSCAPE_SUBTITLE}}</p>
+
+    <div class="landscape-grid">
+      <div class="glass landscape-card reveal-scale reveal-delay-3">
+        <div class="card-stat">{{TREND_1_STAT}}</div>
+        <div class="card-title">{{TREND_1_TITLE}}</div>
+        <div class="card-desc">{{TREND_1_DESC}}</div>
+      </div>
+      <div class="glass landscape-card reveal-scale reveal-delay-4">
+        <div class="card-stat">{{TREND_2_STAT}}</div>
+        <div class="card-title">{{TREND_2_TITLE}}</div>
+        <div class="card-desc">{{TREND_2_DESC}}</div>
+      </div>
+      <div class="glass landscape-card reveal-scale reveal-delay-5">
+        <div class="card-stat">{{TREND_3_STAT}}</div>
+        <div class="card-title">{{TREND_3_TITLE}}</div>
+        <div class="card-desc">{{TREND_3_DESC}}</div>
+      </div>
+      <div class="glass landscape-card reveal-scale reveal-delay-6">
+        <div class="card-stat">{{TREND_4_STAT}}</div>
+        <div class="card-title">{{TREND_4_TITLE}}</div>
+        <div class="card-desc">{{TREND_4_DESC}}</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== SECTION 3: PAIN IDENTIFICATION ===== -->
+<!--
+  Data: Common AP challenges with industry-specific data points
+  Numbered list format to structure the discovery conversation
+-->
+<section id="pain">
+  <div class="glow-orb" style="width:400px;height:400px;background:rgba(232,93,86,0.08);bottom:-10%;right:-5%;animation-delay:2s;"></div>
+  <div class="section-inner">
+    <p class="section-label reveal" style="color:var(--coral);">{{PAIN_LABEL}}</p>
+    <h2 class="section-title reveal reveal-delay-1">{{PAIN_TITLE}}</h2>
+    <p class="section-subtitle reveal reveal-delay-2">{{PAIN_SUBTITLE}}</p>
+
+    <div class="pain-list">
+      <div class="glass pain-item reveal reveal-delay-3">
+        <div class="pain-number">1</div>
+        <div class="pain-content">
+          <div class="pain-title">{{PAIN_1_TITLE}}</div>
+          <div class="pain-desc">{{PAIN_1_DESC}}</div>
+        </div>
+      </div>
+      <div class="glass pain-item reveal reveal-delay-4">
+        <div class="pain-number">2</div>
+        <div class="pain-content">
+          <div class="pain-title">{{PAIN_2_TITLE}}</div>
+          <div class="pain-desc">{{PAIN_2_DESC}}</div>
+        </div>
+      </div>
+      <div class="glass pain-item reveal reveal-delay-5">
+        <div class="pain-number">3</div>
+        <div class="pain-content">
+          <div class="pain-title">{{PAIN_3_TITLE}}</div>
+          <div class="pain-desc">{{PAIN_3_DESC}}</div>
+        </div>
+      </div>
+      <div class="glass pain-item reveal reveal-delay-6">
+        <div class="pain-number">4</div>
+        <div class="pain-content">
+          <div class="pain-title">{{PAIN_4_TITLE}}</div>
+          <div class="pain-desc">{{PAIN_4_DESC}}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== SECTION 4: OPPORTUNITY SIZING ===== -->
+<!-- #include sections/stat-grid.html (top stats) + sections/roi-calculator.html (discovery mode) -->
+<!--
+  Data: Prospect-specific opportunity size + interactive calculator
+  Calculator runs in "discovery" mode: prospect can adjust assumptions, no pricing shown
+-->
+<section id="opportunity">
+  <div class="glow-orb" style="width:450px;height:450px;background:rgba(16,185,129,0.08);top:5%;right:-8%;animation-delay:1s;"></div>
+  <div class="section-inner">
+    <p class="section-label reveal" style="color:var(--green);">{{OPPORTUNITY_LABEL}}</p>
+    <h2 class="section-title reveal reveal-delay-1">{{OPPORTUNITY_TITLE}}</h2>
+    <p class="section-subtitle reveal reveal-delay-2">{{OPPORTUNITY_SUBTITLE}}</p>
+
+    <!-- Top-level stat cards summarizing opportunity -->
+    <div class="stat-grid" style="margin-bottom:40px;">
+      <div class="glass stat-card {{OPP_STAT_1_COLOR}} reveal-scale reveal-delay-3">
+        <div class="stat-value" data-target="{{OPP_STAT_1_TARGET}}" data-prefix="{{OPP_STAT_1_PREFIX}}" data-suffix="{{OPP_STAT_1_SUFFIX}}">0</div>
+        <div class="stat-label">{{OPP_STAT_1_LABEL}}</div>
+      </div>
+      <div class="glass stat-card {{OPP_STAT_2_COLOR}} reveal-scale reveal-delay-4">
+        <div class="stat-value" data-target="{{OPP_STAT_2_TARGET}}" data-prefix="{{OPP_STAT_2_PREFIX}}" data-suffix="{{OPP_STAT_2_SUFFIX}}">0</div>
+        <div class="stat-label">{{OPP_STAT_2_LABEL}}</div>
+      </div>
+      <div class="glass stat-card {{OPP_STAT_3_COLOR}} reveal-scale reveal-delay-5">
+        <div class="stat-value" data-target="{{OPP_STAT_3_TARGET}}" data-prefix="{{OPP_STAT_3_PREFIX}}" data-suffix="{{OPP_STAT_3_SUFFIX}}">0</div>
+        <div class="stat-label">{{OPP_STAT_3_LABEL}}</div>
+      </div>
+      <div class="glass stat-card {{OPP_STAT_4_COLOR}} reveal-scale reveal-delay-6">
+        <div class="stat-value" data-target="{{OPP_STAT_4_TARGET}}" data-prefix="{{OPP_STAT_4_PREFIX}}" data-suffix="{{OPP_STAT_4_SUFFIX}}">0</div>
+        <div class="stat-label">{{OPP_STAT_4_LABEL}}</div>
+      </div>
+    </div>
+
+    <!-- Inline ROI Calculator (discovery mode — no pricing) -->
+    <!-- #include sections/roi-calculator.html -->
+    <p class="reveal reveal-delay-7" style="text-align:center;font-size:14px;color:var(--text-dim);margin-top:16px;">Adjust the sliders to model your specific scenario</p>
+  </div>
+</section>
+
+<!-- ===== SECTION 5: PLATFORM OVERVIEW ===== -->
+<!--
+  Data: Esker capabilities mapped to the pain points identified in section 3
+  3-column grid showing key platform features
+-->
+<section id="platform">
+  <div class="glow-orb" style="width:400px;height:400px;background:rgba(228,4,42,0.06);top:-8%;left:-5%;animation-delay:3s;"></div>
+  <div class="section-inner">
+    <p class="section-label reveal" style="color:var(--esker-red);">{{PLATFORM_LABEL}}</p>
+    <h2 class="section-title reveal reveal-delay-1">{{PLATFORM_TITLE}}</h2>
+    <p class="section-subtitle reveal reveal-delay-2">{{PLATFORM_SUBTITLE}}</p>
+
+    <div class="platform-grid">
+      <div class="glass platform-card reveal-scale reveal-delay-3">
+        <div class="card-title">{{FEATURE_1_TITLE}}</div>
+        <div class="card-desc">{{FEATURE_1_DESC}}</div>
+      </div>
+      <div class="glass platform-card reveal-scale reveal-delay-4">
+        <div class="card-title">{{FEATURE_2_TITLE}}</div>
+        <div class="card-desc">{{FEATURE_2_DESC}}</div>
+      </div>
+      <div class="glass platform-card reveal-scale reveal-delay-5">
+        <div class="card-title">{{FEATURE_3_TITLE}}</div>
+        <div class="card-desc">{{FEATURE_3_DESC}}</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== SECTION 6: CASE STUDIES ===== -->
+<!--
+  Data: 2-3 relevant Esker customer stories from Notion Sales Wiki
+  Matched by industry, company size, or use case
+-->
+<section id="cases">
+  <div class="glow-orb" style="width:350px;height:350px;background:rgba(126,202,193,0.06);bottom:-5%;right:10%;animation-delay:4s;"></div>
+  <div class="section-inner">
+    <p class="section-label reveal" style="color:var(--teal);">{{CASES_LABEL}}</p>
+    <h2 class="section-title reveal reveal-delay-1">{{CASES_TITLE}}</h2>
+    <p class="section-subtitle reveal reveal-delay-2">{{CASES_SUBTITLE}}</p>
+
+    <div class="case-grid">
+      <div class="glass case-card reveal-scale reveal-delay-3">
+        <div class="case-company">{{CASE_1_COMPANY}}</div>
+        <div class="case-stat">{{CASE_1_STAT}}</div>
+        <div class="case-metric">{{CASE_1_METRIC}}</div>
+        <div class="case-desc">{{CASE_1_DESC}}</div>
+      </div>
+      <div class="glass case-card reveal-scale reveal-delay-4">
+        <div class="case-company">{{CASE_2_COMPANY}}</div>
+        <div class="case-stat">{{CASE_2_STAT}}</div>
+        <div class="case-metric">{{CASE_2_METRIC}}</div>
+        <div class="case-desc">{{CASE_2_DESC}}</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== SECTION 7: DISCUSSION FRAMEWORK ===== -->
+<!--
+  Data: Discovery questions organized by category
+  Used as a guide during the meeting — shown on screen while discussing
+-->
+<section id="discussion">
+  <div class="glow-orb" style="width:400px;height:400px;background:rgba(245,158,11,0.06);top:-10%;left:10%;animation-delay:2s;"></div>
+  <div class="section-inner">
+    <p class="section-label reveal" style="color:var(--amber);">{{DISCUSSION_LABEL}}</p>
+    <h2 class="section-title reveal reveal-delay-1">{{DISCUSSION_TITLE}}</h2>
+    <p class="section-subtitle reveal reveal-delay-2">{{DISCUSSION_SUBTITLE}}</p>
+
+    <div class="discussion-grid">
+      <div class="glass question-card reveal reveal-delay-3">
+        <div class="q-category">{{Q1_CATEGORY}}</div>
+        <div class="q-text">{{Q1_TEXT}}</div>
+      </div>
+      <div class="glass question-card reveal reveal-delay-4">
+        <div class="q-category">{{Q2_CATEGORY}}</div>
+        <div class="q-text">{{Q2_TEXT}}</div>
+      </div>
+      <div class="glass question-card reveal reveal-delay-5">
+        <div class="q-category">{{Q3_CATEGORY}}</div>
+        <div class="q-text">{{Q3_TEXT}}</div>
+      </div>
+      <div class="glass question-card reveal reveal-delay-6">
+        <div class="q-category">{{Q4_CATEGORY}}</div>
+        <div class="q-text">{{Q4_TEXT}}</div>
+      </div>
+      <div class="glass question-card reveal reveal-delay-7">
+        <div class="q-category">{{Q5_CATEGORY}}</div>
+        <div class="q-text">{{Q5_TEXT}}</div>
+      </div>
+      <div class="glass question-card reveal reveal-delay-7">
+        <div class="q-category">{{Q6_CATEGORY}}</div>
+        <div class="q-text">{{Q6_TEXT}}</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== SECTION 8: CTA ===== -->
+<!-- #include sections/cta.html -->
+<section id="cta">
+  <div class="glow-orb" style="width:500px;height:500px;background:rgba(126,202,193,0.10);top:-20%;left:50%;transform:translateX(-50%);"></div>
+  <div class="section-inner">
+    <h2 class="cta-title reveal">{{CTA_TITLE_LINE1}}<br><span class="shimmer-text">{{CTA_TITLE_SHIMMER}}</span></h2>
+    <p class="cta-subtitle reveal reveal-delay-1">{{CTA_SUBTITLE}}</p>
+    <div class="glass cta-card reveal reveal-delay-2">
+      <ul class="cta-list">
+        <li><div class="cta-dot"></div><span>{{CTA_ITEM_1}}</span></li>
+        <li><div class="cta-dot"></div><span>{{CTA_ITEM_2}}</span></li>
+        <li><div class="cta-dot"></div><span>{{CTA_ITEM_3}}</span></li>
+      </ul>
+    </div>
+    <div class="contact-block reveal reveal-delay-3">
+      <div class="contact-name">{{CONTACT_NAME}}</div>
+      <div class="contact-details">{{CONTACT_COMPANY}} &middot; <a href="mailto:{{CONTACT_EMAIL}}">{{CONTACT_EMAIL}}</a></div>
+    </div>
+    <div class="footer-logos reveal reveal-delay-4">
+      <img src="data:image/webp;base64,..." alt="Baseline Payments">
+      <div class="footer-divider"></div>
+      <svg viewBox="0 0 1555 725" fill="none" xmlns="http://www.w3.org/2000/svg" style="height:24px;"><!-- Esker --></svg>
+    </div>
+  </div>
+</section>
+
+<script>
+// ===== Standard deck JavaScript (reveals, counters, progress, nav, bars) =====
+const observer = new IntersectionObserver((entries) => { entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); }); }, { threshold: 0.15 });
+document.querySelectorAll('.reveal, .reveal-scale, .reveal-left, .reveal-right').forEach(el => observer.observe(el));
+
+const counterObserver = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (!e.isIntersecting || e.target.dataset.counted) return;
+    e.target.dataset.counted = 'true';
+    const target = parseFloat(e.target.dataset.target);
+    if (isNaN(target)) return;
+    const decimals = parseInt(e.target.dataset.decimals) || 0, prefix = e.target.dataset.prefix || '', suffix = e.target.dataset.suffix || '';
+    const start = performance.now();
+    function update(now) { const p = Math.min((now-start)/1800,1), eased = 1-Math.pow(1-p,3); e.target.textContent = prefix+(target*eased).toFixed(decimals)+suffix; if(p<1) requestAnimationFrame(update); }
+    requestAnimationFrame(update);
+  });
+}, { threshold: 0.3 });
+document.querySelectorAll('[data-target]').forEach(el => counterObserver.observe(el));
+
+const progressBar = document.getElementById('progressBar');
+window.addEventListener('scroll', () => { const h = document.documentElement.scrollHeight - window.innerHeight; progressBar.style.width = (h>0?(window.scrollY/h)*100:0)+'%'; });
+
+const dots = document.querySelectorAll('.nav-dot');
+dots.forEach(d => d.addEventListener('click', () => { const t = document.getElementById(d.dataset.section); if(t) t.scrollIntoView({behavior:'smooth'}); }));
+const so = new IntersectionObserver((entries) => { entries.forEach(e => { if(e.isIntersecting) { dots.forEach(d=>d.classList.remove('active')); const d = document.querySelector(`.nav-dot[data-section="${e.target.id}"]`); if(d) d.classList.add('active'); } }); }, { threshold: 0.5 });
+document.querySelectorAll('section').forEach(s => so.observe(s));
+
+// ROI Calculator JavaScript would be included here from sections/roi-calculator.html
+</script>
+</body>
+</html>
