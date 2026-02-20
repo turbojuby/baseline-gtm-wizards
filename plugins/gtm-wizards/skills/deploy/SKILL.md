@@ -1,3 +1,7 @@
+---
+description: Deploy an HTML file to hub.baselinepayments.com (production) or a quick-share draft URL (internal review).
+---
+
 # /gtm:deploy
 
 Deploy an HTML file to hub.baselinepayments.com (production, prospect-facing) or to a quick-share draft URL (internal review). Handles Netlify CLI deployment with the correct site IDs, directory structure, and build overrides.

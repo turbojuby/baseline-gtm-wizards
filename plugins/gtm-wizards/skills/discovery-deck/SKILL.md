@@ -1,3 +1,7 @@
+---
+description: Generate a discovery presentation deck with interactive ROI calculator, pain mapping, case studies, and discussion framework.
+---
+
 # /gtm:discovery-deck
 
 Generate a discovery presentation deck for a prospect company. Deeper than the teaser — includes interactive ROI calculator, industry pain mapping, case studies, and a structured discussion framework for the discovery call.

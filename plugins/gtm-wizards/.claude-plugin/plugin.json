@@ -1,15 +1,8 @@
 {
   "name": "gtm-wizards",
-  "displayName": "GTM Wizards",
   "description": "Baseline Payments GTM team toolkit — branded sales decks, digital deal rooms, interactive ROI calculators, and deployment to hub.baselinepayments.com",
   "version": "1.0.0",
-  "author": "Baseline Payments",
-  "skills": [
-    "teaser-deck",
-    "discovery-deck",
-    "business-case",
-    "roi-calculator",
-    "check-design",
-    "deploy"
-  ]
+  "author": {
+    "name": "Baseline Payments"
+  }
 }

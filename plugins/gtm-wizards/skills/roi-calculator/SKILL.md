@@ -1,3 +1,7 @@
+---
+description: Generate a standalone interactive ROI calculator with slider inputs and real-time outputs. No pricing — just value sizing.
+---
+
 # /gtm:roi-calc
 
 Generate a standalone interactive ROI calculator page for a prospect company. Pre-discovery tool — no pricing information, just value sizing. Designed to be shared before or during a discovery call to collaboratively quantify the opportunity.

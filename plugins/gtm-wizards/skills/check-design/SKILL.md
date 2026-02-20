@@ -1,3 +1,7 @@
+---
+description: Validate an HTML file against the GTM Wizards design system. Outputs a pass/fail checklist with fix instructions.
+---
+
 # /gtm:check-design
 
 Validate an HTML file against the GTM Wizards design system. Checks for correct colors, typography, components, animations, responsiveness, and self-containment. Outputs a pass/fail checklist with specific fix instructions for any failures.

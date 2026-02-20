@@ -1,3 +1,7 @@
+---
+description: Generate a pre-discovery teaser deck for a prospect company. Short, punchy, data-driven, Challenger Sales framing.
+---
+
 # /gtm:teaser-deck
 
 Generate a pre-discovery teaser deck for a prospect company. Designed to provoke interest before the first meeting — short, punchy, data-driven, Challenger Sales framing.

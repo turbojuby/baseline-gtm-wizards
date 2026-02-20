@@ -1,3 +1,7 @@
+---
+description: Generate a full ROI business case deck with locked Airtable pricing, 3-year projection, and implementation timeline.
+---
+
 # /gtm:business-case
 
 Generate a full ROI business case deck with locked pricing from Airtable. This is the post-discovery proposal — comprehensive financial model, 3-year projection, implementation timeline, and investment summary.
