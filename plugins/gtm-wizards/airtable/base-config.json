@@ -1,0 +1,16 @@
+{
+  "baseId": "apphIEJ1MRUISs8mK",
+  "baseUrl": "https://airtable.com/apphIEJ1MRUISs8mK",
+  "tables": {
+    "Companies": "tblkhSBbxXmijUCq7",
+    "Deals": "tbljzM6OI6AnjYD8b",
+    "Pricing": "tblgvcvQo5FMljAMG",
+    "Assumptions": "tblZv4uy1y1MWGHyo",
+    "Calculated Outputs": "tblLPoROapCKjmRQE"
+  },
+  "notes": {
+    "formulaFields": "Formula fields cannot be created via Airtable REST API. Add manually in the UI: Pricing > 'Effective SaaS Annual', and all fields in Calculated Outputs (Annual AP Savings, FTEs Freed, FTE Reallocation Value, Total Annual Benefit, Payback Months, Three Year Benefit, Three Year Cost, Three Year ROI, NPV). Formulas are in airtable/schema.json.",
+    "deletedTable": "The original 'Table 1' can be deleted from the Airtable UI."
+  },
+  "createdAt": "2026-02-20T07:00:00Z"
+}
