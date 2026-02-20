@@ -10,7 +10,7 @@ Voice, messaging, persona targeting, and competitive positioning for all Baselin
 
 **What we sell:** Supply-to-Pay (S2P) and Procure-to-Pay (P2P) automation powered by Esker's AI platform — invoice processing, payment orchestration, workflow automation, and strategic cash management.
 
-**Average deal:** ~$60K ACV.
+**Deal size:** Mid-market enterprise.
 
 **Sales methodology:** Challenger Sales — reframe the prospect's understanding of their own pain, teach them something they didn't know, and push them toward a solution they didn't realize they needed.
 

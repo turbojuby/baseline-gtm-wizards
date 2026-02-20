@@ -148,8 +148,8 @@ Pricing is AE-controlled. The plugin reads but never writes to the Pricing table
 The plugin accesses Airtable via the Airtable MCP server or REST API:
 
 ```
-GET /v0/{baseId}/Deals?filterByFormula={Deal Name}='Lululemon - AP Automation'
-GET /v0/{baseId}/Companies?filterByFormula={Company Name}='Lululemon'
+GET /v0/{baseId}/Deals?filterByFormula={Deal Name}='Acme Corp - AP Automation'
+GET /v0/{baseId}/Companies?filterByFormula={Company Name}='Acme Corp'
 GET /v0/{baseId}/Pricing?filterByFormula=FIND('rec123', ARRAYJOIN({Deal}))
 GET /v0/{baseId}/Assumptions?filterByFormula=FIND('rec123', ARRAYJOIN({Deal}))
 GET /v0/{baseId}/Calculated%20Outputs?filterByFormula=FIND('rec123', ARRAYJOIN({Deal}))
@@ -167,19 +167,19 @@ The plugin uses this data to:
 
 | Company Name | Industry | Annual Revenue | Current DSO | Current DPO | Annual Invoice Volume | FTEs in AP | ERP |
 |-------------|----------|---------------|-------------|-------------|----------------------|-----------|-----|
-| Lululemon | Retail | $9,400,000,000 | 23 | 23 | 180,000 | 35 | SAP |
-| Test Corp | Manufacturing | $500,000,000 | 45 | 38 | 50,000 | 10 | Oracle |
+| Acme Corp | Manufacturing | $500,000,000 | 45 | 38 | 50,000 | 10 | Oracle |
+| Globex Industries | Distribution | $1,200,000,000 | 52 | 41 | 120,000 | 22 | SAP |
 
 ### Pricing
 
 | Deal | Esker SaaS Annual | Implementation Fee | Transaction Fee | Discount % |
 |------|------------------|--------------------|-----------------|-----------|
-| Lululemon - AP Automation | $85,000 | $45,000 | $0.00 | 0% |
-| Test Corp - AP Automation | $65,000 | $35,000 | $0.15 | 10% |
+| Acme Corp - AP Automation | $65,000 | $35,000 | $0.15 | 10% |
+| Globex Industries - P2P | $78,000 | $40,000 | $0.10 | 5% |
 
 ### Assumptions (using defaults)
 
 | Deal | FTE Hourly Rate | Target DSO Reduction | Current Cost Per Invoice | Esker Cost | Automation Rate | Discount Rate |
 |------|----------------|---------------------|------------------------|------------|----------------|--------------|
-| Lululemon | $45.00 | 5 | $12.88 | $2.78 | 60% | 8.0% |
-| Test Corp | $45.00 | 5 | $12.88 | $2.78 | 60% | 8.0% |
+| Acme Corp | $45.00 | 5 | $12.88 | $2.78 | 60% | 8.0% |
+| Globex Industries | $52.00 | 7 | $14.50 | $2.78 | 60% | 8.0% |
