@@ -1,0 +1,216 @@
+<!--
+  SECTION TEMPLATE: Video Embed
+  Pattern: Full-viewport scroll-snap section with responsive 16:9 YouTube iframe.
+
+  Dynamic placeholders:
+    {{VIDEO_SECTION_LABEL}}   — Section eyebrow label (e.g. "See It In Action")
+    {{VIDEO_SECTION_TITLE}}   — Section heading above the embed
+    {{VIDEO_SECTION_SUBTITLE}} — Optional caption / supporting line below the embed
+    {{VIDEO_VIDEO_ID}}        — YouTube video ID (e.g. "dQw4w9WgXcQ")
+                                Skills replace this via data-video-id attribute at generation time.
+
+  Usage:
+    Skills read `data-video-id` on `.video-embed-wrapper` and build the iframe src:
+      https://www.youtube.com/embed/{VIDEO_ID}?rel=0&modestbranding=1&color=white
+
+    If the video is not a YouTube embed (e.g. Fathom recording), replace the <iframe>
+    with the appropriate embed code. The `.video-placeholder` fallback div can be shown
+    instead when no video is available yet.
+
+  Slot position:
+    This section is designed to slot between the solution overview / use-case-fit section
+    and the implementation preview section. See <!-- VIDEO_EMBED_SECTION --> in the
+    post-demo stage deck template for the exact insertion point.
+-->
+
+<!-- ===== CSS for Video Embed Section ===== -->
+<style>
+  /* Video embed section background — alternates direction from adjacent sections */
+  #video-embed {
+    background: linear-gradient(175deg, var(--bg-dark) 0%, var(--bg) 60%, var(--bg-darker) 100%);
+    text-align: center;
+  }
+
+  /* Section label above title */
+  #video-embed .section-label {
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--esker-red);
+    margin-bottom: 16px;
+  }
+
+  /* Section title */
+  #video-embed .section-title {
+    font-size: clamp(40px, 5vw, 64px);
+    font-weight: 800;
+    letter-spacing: -2.5px;
+    line-height: 1.1;
+    margin-bottom: 12px;
+  }
+
+  /* Optional subtitle / caption */
+  #video-embed .section-subtitle {
+    font-size: 17px;
+    color: var(--text-mid);
+    margin-bottom: 40px;
+    max-width: 650px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  /* Caption below the embed (optional) */
+  .video-caption {
+    margin-top: 20px;
+    font-size: 14px;
+    color: var(--text-dim);
+    letter-spacing: 0.5px;
+    max-width: 700px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  /* Glass card wrapper for the iframe */
+  .video-embed-wrapper {
+    position: relative;
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto;
+
+    /* Glass card style matching design system */
+    background: var(--surface);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 6px; /* thin inner border effect */
+    overflow: hidden;
+
+    transition: background 0.3s, border-color 0.3s, transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .video-embed-wrapper:hover {
+    background: var(--surface-hover);
+    border-color: var(--border-hover);
+    transform: translateY(-3px);
+  }
+
+  /* Responsive 16:9 container inside the glass card */
+  .video-ratio-box {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    border-radius: 12px;
+    overflow: hidden;
+    background: var(--bg-darker);
+  }
+
+  /* The actual iframe */
+  .video-ratio-box iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: none;
+    display: block;
+  }
+
+  /* Fallback shown when no video ID is set */
+  .video-placeholder {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    color: var(--text-dim);
+    font-size: 16px;
+    font-weight: 500;
+  }
+  .video-placeholder-icon {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  /* Play icon via CSS triangle */
+  .video-placeholder-icon::after {
+    content: '';
+    width: 0;
+    height: 0;
+    border-top: 10px solid transparent;
+    border-bottom: 10px solid transparent;
+    border-left: 16px solid rgba(255,255,255,0.3);
+    margin-left: 4px;
+  }
+
+  /* Mobile responsive */
+  @media (max-width: 600px) {
+    #video-embed .section-title { letter-spacing: -2px; }
+    .video-caption { font-size: 13px; }
+  }
+</style>
+
+<!-- ===== Video Embed Section HTML ===== -->
+<section id="video-embed">
+  <!-- Ambient glow orbs -->
+  <div class="glow-orb" style="width:500px;height:500px;background:rgba(228,4,42,0.05);top:-15%;left:-8%;animation-delay:0s;"></div>
+  <div class="glow-orb" style="width:400px;height:400px;background:rgba(126,202,193,0.08);bottom:-15%;right:-6%;animation-delay:4s;"></div>
+
+  <div class="section-inner" style="text-align:center;">
+
+    <!-- Section eyebrow label — replace {{VIDEO_SECTION_LABEL}} -->
+    <p class="section-label reveal">{{VIDEO_SECTION_LABEL}}</p>
+
+    <!-- Section heading — replace {{VIDEO_SECTION_TITLE}} -->
+    <h2 class="section-title reveal reveal-delay-1">{{VIDEO_SECTION_TITLE}}</h2>
+
+    <!-- Supporting subtitle — replace {{VIDEO_SECTION_SUBTITLE}} (or remove this line) -->
+    <p class="section-subtitle reveal reveal-delay-2">{{VIDEO_SECTION_SUBTITLE}}</p>
+
+    <!--
+      Glass card wrapper.
+      data-video-id: YouTube video ID. Skills replace "PLACEHOLDER" at generation time.
+      The iframe src is built as:
+        https://www.youtube.com/embed/{VIDEO_ID}?rel=0&modestbranding=1&color=white
+    -->
+    <div class="video-embed-wrapper reveal-scale reveal-delay-3" data-video-id="PLACEHOLDER">
+      <div class="video-ratio-box">
+
+        <!--
+          Iframe — skills replace {{VIDEO_VIDEO_ID}} with the actual YouTube ID.
+          If this is a non-YouTube embed (Fathom, Vimeo, etc.), replace the src entirely.
+          Remove this iframe and uncomment .video-placeholder if no video is available.
+        -->
+        <iframe
+          src="https://www.youtube.com/embed/{{VIDEO_VIDEO_ID}}?rel=0&modestbranding=1&color=white"
+          title="{{VIDEO_SECTION_TITLE}}"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+          allowfullscreen
+        ></iframe>
+
+        <!--
+          Fallback: uncomment when no video ID is available yet.
+          <div class="video-placeholder">
+            <div class="video-placeholder-icon"></div>
+            Video recording coming soon
+          </div>
+        -->
+
+      </div>
+    </div>
+
+    <!-- Optional caption below the embed — replace {{VIDEO_SECTION_SUBTITLE}} or remove -->
+    <p class="video-caption reveal reveal-delay-4">{{VIDEO_SECTION_SUBTITLE}}</p>
+
+  </div>
+</section>

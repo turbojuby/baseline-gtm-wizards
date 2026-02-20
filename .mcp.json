@@ -1,0 +1,14 @@
+{
+  "mcpServers": {
+    "airtable-gtm": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["tsx", "mcp-servers/airtable-mcp/src/index.ts"],
+      "env": {
+        "AIRTABLE_PAT": "${AIRTABLE_PAT}",
+        "AIRTABLE_BASE_ID": "${AIRTABLE_BASE_ID}",
+        "MODE": "stdio"
+      }
+    }
+  }
+}
