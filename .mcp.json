@@ -9,6 +9,15 @@
         "AIRTABLE_BASE_ID": "${AIRTABLE_BASE_ID}",
         "MODE": "stdio"
       }
+    },
+    "netlify-gtm": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["tsx", "mcp-servers/netlify-mcp/src/index.ts"],
+      "env": {
+        "NETLIFY_TOKEN": "${NETLIFY_TOKEN}",
+        "MODE": "stdio"
+      }
     }
   }
 }

@@ -4,7 +4,7 @@ description: Deploy an HTML file to hub.baselinepayments.com (production) or a q
 
 # /gtm:deploy
 
-Deploy an HTML file to hub.baselinepayments.com (production, prospect-facing) or to a quick-share draft URL (internal review). Handles Netlify CLI deployment with the correct site IDs, directory structure, and build overrides.
+Deploy an HTML file to hub.baselinepayments.com (production, prospect-facing) or to a quick-share draft URL (internal review). Uses the `netlify-gtm` MCP server — no CLI required, works in Claude Code and Claude Cowork.
 
 ## Usage
 
@@ -16,20 +16,20 @@ Deploy an HTML file to hub.baselinepayments.com (production, prospect-facing) or
 
 **Default (no flag):** Production deploy to `hub.baselinepayments.com/d/{hex}` — prospect-facing, branded subdomain, unguessable URL.
 
-**`--draft` flag:** Draft deploy to quick-share Netlify site — internal review, non-guessable URL, not on the branded domain.
+**`--draft` flag:** Draft deploy to quick-share Netlify site — internal review, non-guessable hash URL, not on the branded domain.
 
 ## How It Works
 
-1. **Validate** — Confirm the HTML file exists and is readable
-2. **Prepare** — Create temp directory with correct structure and `netlify.toml`
-3. **Deploy** — Run Netlify CLI from within the temp directory
+1. **Validate** — Confirm the HTML file exists and read its content
+2. **Determine target** — Parse flags to choose production or draft
+3. **Deploy** — Call the appropriate `netlify-gtm` MCP tool with the file content
 4. **Report** — Output the live URL
 
 ## Instructions
 
-### Step 1: Validate the File
+### Step 1: Validate and Read the File
 
-Read the target HTML file to confirm it exists:
+Read the target HTML file to confirm it exists and get its content:
 
 ```
 Read: <file-path>
@@ -47,62 +47,53 @@ Parse the command arguments:
 
 Deploy to `hub.baselinepayments.com` with an unguessable path.
 
-**Site ID:** `f5700f38-35d8-4b71-8d11-615d96717291`
+Call the `deploy_to_hub` MCP tool (server: `netlify-gtm`):
 
-**WARNING:** Each production deploy to this site overwrites the entire site content. If other resources have been previously deployed to `hub.baselinepayments.com/d/...`, they will be removed by this deploy unless they are included in the deploy directory. If unsure, use `--draft` first for review.
-
-Run the following bash commands:
-
-```bash
-# Generate a random 16-character hex path (2^64 combinations — unguessable)
-PATH_ID=$(openssl rand -hex 8)
-
-# Create temp deploy directory with the /d/{hex} structure
-DEPLOY_DIR=$(mktemp -d)
-mkdir -p "$DEPLOY_DIR/d/$PATH_ID"
-
-# Copy the HTML file as index.html
-cp "<file-path>" "$DEPLOY_DIR/d/$PATH_ID/index.html"
-
-# Create netlify.toml to override team build defaults
-printf '[build]\n  command = ""\n  publish = "."\n' > "$DEPLOY_DIR/netlify.toml"
-
-# Deploy — MUST cd into the directory (Netlify uses CWD for build context)
-cd "$DEPLOY_DIR" && netlify deploy --dir=. --site=f5700f38-35d8-4b71-8d11-615d96717291 --prod --skip-functions-cache --message "Deploy: <description>"
+```
+Tool: deploy_to_hub
+Arguments:
+  html_content: <full content of the HTML file>
+  description: <brief description, e.g. "Lululemon teaser deck">
 ```
 
-**Live URL:** `https://hub.baselinepayments.com/d/{PATH_ID}`
+**WARNING:** Each production deploy to this site replaces the entire site content. The MCP tool handles this by fetching all existing `/d/` files and including them in the deploy manifest, so previously deployed paths are preserved. If the site has never been deployed via this MCP tool before, existing paths may not be preserved — use `--draft` for review first if unsure.
 
-Replace `<description>` with a brief description of what's being deployed (e.g., "Lululemon teaser deck" or "Acme ROI calculator").
+The tool returns:
+```json
+{
+  "url": "https://hub.baselinepayments.com/d/{hex}",
+  "deploy_id": "...",
+  "path_id": "..."
+}
+```
 
 ### Step 3b: Draft Deploy (`--draft`)
 
 Deploy to the quick-share Netlify site for internal review.
 
-**Site ID:** `1554d55b-7194-4f8a-be8c-8ad77e26c3a9`
+Call the `deploy_draft` MCP tool (server: `netlify-gtm`):
 
-```bash
-# Create temp deploy directory
-DEPLOY_DIR=$(mktemp -d)
-
-# Copy the HTML file as index.html (flat structure, no /d/ prefix)
-cp "<file-path>" "$DEPLOY_DIR/index.html"
-
-# Create netlify.toml to override team build defaults
-printf '[build]\n  command = ""\n  publish = "."\n' > "$DEPLOY_DIR/netlify.toml"
-
-# Deploy — no --prod flag, generates a draft URL with random hash
-cd "$DEPLOY_DIR" && netlify deploy --dir=. --site=1554d55b-7194-4f8a-be8c-8ad77e26c3a9 --skip-functions-cache --message "Draft: <description>"
+```
+Tool: deploy_draft
+Arguments:
+  html_content: <full content of the HTML file>
+  description: <brief description, e.g. "Acme ROI calculator draft">
 ```
 
-The Netlify CLI output will include a "Website draft URL" with a random hash subdomain (e.g., `abc123def--quick-share-f58d870368e7.netlify.app`). Extract and report this URL.
+The tool returns:
+```json
+{
+  "url": "https://{hash}--quick-share-f58d870368e7.netlify.app",
+  "deploy_id": "..."
+}
+```
 
 ### Step 4: Report the URL
 
 **For production deploy:**
 ```
 Deployed to production:
-  https://hub.baselinepayments.com/d/{PATH_ID}
+  https://hub.baselinepayments.com/d/{path_id}
 
 Site: baseline-hub (f5700f38-35d8-4b71-8d11-615d96717291)
 Source: {original file path}
@@ -114,7 +105,7 @@ Do not deploy sensitive internal documents to production.
 **For draft deploy:**
 ```
 Deployed as draft:
-  {draft-url-from-netlify-output}
+  {url from tool response}
 
 Site: quick-share (1554d55b-7194-4f8a-be8c-8ad77e26c3a9)
 Source: {original file path}
@@ -125,44 +116,24 @@ To deploy to production: /gtm:deploy {file} (without --draft)
 
 ### Important Rules
 
-**Must `cd` into the deploy directory.** The Netlify CLI uses the current working directory for build context. If you run `netlify deploy` from the project root, it picks up the team's default Hugo build command and the deploy fails. Always `cd "$DEPLOY_DIR"` before running `netlify deploy`.
-
-**Must include `netlify.toml`.** The team account has default build settings (Hugo). The `netlify.toml` with an empty build command overrides these defaults. Without it, the deploy will fail with a Hugo build error.
-
-**Production uses `--prod`.** Without `--prod`, Netlify creates a draft deploy even on the production site, which won't be served on the custom domain.
-
-**Draft omits `--prod`.** This generates a deploy preview URL with a random hash that isn't served on any custom domain — good for internal review.
-
-**Each production deploy overwrites everything.** Netlify deploys are atomic — the entire site content is replaced. If `hub.baselinepayments.com/d/abc123` was previously deployed and you deploy a new file to `/d/def456`, the old `abc123` path will 404 unless you include it in the new deploy directory. For this reason:
-- Prefer `--draft` for review and iteration
-- Only use production deploy for the final version
-- If multiple resources need to coexist on the production site, all must be included in a single deploy
-
 **Never deploy sensitive internal documents.** The production site (`hub.baselinepayments.com`) is for prospect/client/partner-facing content. Internal strategy documents, meeting notes, and competitive analysis should use `--draft` only.
+
+**Production preserves existing paths.** The `deploy_to_hub` tool fetches all currently deployed files and includes their SHAs in the manifest — Netlify's content-addressed storage means only the new file gets uploaded. All existing `/d/` paths survive.
+
+**Draft is flat, production is nested.** Draft deploys are served as `index.html` at the site root. Production deploys live at `/d/{hex}/index.html` — the MCP server handles the path structure automatically.
+
+**The netlify-gtm MCP server must be running.** In Claude Code, it starts automatically via `.mcp.json`. In Claude Cowork, it runs on Cloud Run — ensure the Cloud Run URL is configured in the plugin's MCP server settings.
 
 ## Troubleshooting
 
-### Netlify CLI not found
-The Netlify CLI must be installed globally:
-```bash
-npm install -g netlify-cli
-```
-And authenticated:
-```bash
-netlify login
-```
+### Tool not found / MCP server not connected
+Verify the `netlify-gtm` server is listed in your MCP server config. For Claude Code, check `.mcp.json`. For Cowork, check the plugin MCP settings. The server needs `NETLIFY_TOKEN` to be set.
 
-### Deploy fails with Hugo build error
-This means the `netlify.toml` is missing or not being picked up. Verify:
-1. The `netlify.toml` file exists in the deploy directory root (not in a subdirectory)
-2. You `cd`'d into the deploy directory before running `netlify deploy`
-3. The `netlify.toml` content is exactly: `[build]\n  command = ""\n  publish = "."`
-
-### Draft URL not appearing in output
-The Netlify CLI prints the draft URL as "Website draft URL: ..." in its output. Look for this line. If the deploy succeeds but no draft URL is shown, the `--prod` flag may have been accidentally included.
+### Deploy tool returns an error
+Check the error message. Common issues:
+- `NETLIFY_TOKEN environment variable is not set` — set the token in your env or MCP config
+- `Netlify API error 401` — token is invalid or expired, generate a new one at netlify.com
+- `Deploy did not become ready` — Netlify is slow; the tool polls for up to 60 seconds
 
 ### Previous production content disappeared
-This is expected — each deploy replaces the entire site. To restore previous content, you need to include all previously deployed files in the new deploy directory. For critical content, keep track of deployed PATH_IDs and their source files.
-
-### Permission denied on Netlify deploy
-Verify the Netlify CLI is authenticated with an account that has access to the target site. Run `netlify status` to check the current auth state.
+If you deployed before this MCP tool existed (e.g., via CLI), the old deploy's files may not have been tracked. Use `--draft` for new content and keep a record of your PATH_IDs.
