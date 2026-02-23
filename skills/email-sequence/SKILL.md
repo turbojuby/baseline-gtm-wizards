@@ -39,7 +39,7 @@ Build a multi-touch email sequence for execution in HubSpot. Covers the full ran
 ### Step 2: Load Persona Messaging
 
 ```
-Read: baseline-gtm-wizards/plugins/gtm-wizards/BRAND_GUIDE.md
+Read: BRAND_GUIDE.md
 ```
 
 Match email angle to the target persona:

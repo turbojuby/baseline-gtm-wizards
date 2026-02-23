@@ -93,7 +93,7 @@ Score each deal 0-100 based on Esker-specific criteria. Each criterion is worth 
 Read the Airtable schema for supplemental deal data:
 
 ```
-Read: baseline-gtm-wizards/airtable/schema.json
+Read: airtable/schema.json
 ```
 
 Cross-reference deals with Airtable for pricing data, module selection, and deal-specific assumptions. Flag any discrepancies between HubSpot deal amounts and Airtable pricing.

@@ -53,7 +53,7 @@ A deal SHOULD exist at this stage. If no deal is found, warn the user — busine
 Read the Airtable schema to understand the data structure:
 
 ```
-Read: baseline-gtm-wizards/airtable/schema.json
+Read: airtable/schema.json
 ```
 
 The Airtable base contains four key tables:
@@ -90,7 +90,7 @@ Fill gaps not covered by HubSpot or Airtable:
 
 ### Step 5: Load Design Assets
 
-Read from the plugin directory (`baseline-gtm-wizards/`):
+Read the design assets:
 
 ```
 Read: DESIGN_SYSTEM.md

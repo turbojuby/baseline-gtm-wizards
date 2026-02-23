@@ -82,7 +82,7 @@ Industry Average: DPO 45, DSO 40
 
 ### Step 5: Load Design Assets
 
-Read the following files from the plugin directory (`baseline-gtm-wizards/`):
+Read the following design assets:
 
 ```
 Read: DESIGN_SYSTEM.md        — full color system, typography, components, animation patterns

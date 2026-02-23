@@ -38,7 +38,7 @@ Generate quick-turn marketing copy in Baseline's brand voice. Faster and lighter
 ### Step 2: Load Brand Voice
 
 ```
-Read: baseline-gtm-wizards/plugins/gtm-wizards/BRAND_GUIDE.md
+Read: BRAND_GUIDE.md
 ```
 
 **Voice checklist for all content:**

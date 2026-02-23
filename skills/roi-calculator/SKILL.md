@@ -69,7 +69,7 @@ Estimate invoice volumes if not available:
 If the company has an existing deal in Airtable, read default assumptions from the Assumptions table:
 
 ```
-Read: baseline-gtm-wizards/airtable/schema.json
+Read: airtable/schema.json
 ```
 
 Use Airtable defaults for slider starting positions if available. Otherwise, use industry benchmarks.
@@ -77,12 +77,12 @@ Use Airtable defaults for slider starting positions if available. Otherwise, use
 ### Step 5: Load Design Assets
 
 ```
-Read: baseline-gtm-wizards/DESIGN_SYSTEM.md
-Read: baseline-gtm-wizards/BRAND_GUIDE.md
-Read: baseline-gtm-wizards/assets/logos/baseline-logo.b64
-Read: baseline-gtm-wizards/assets/logos/esker-logo.svg
-Read: baseline-gtm-wizards/assets/colors.css
-Read: baseline-gtm-wizards/assets/fonts.css
+Read: DESIGN_SYSTEM.md
+Read: BRAND_GUIDE.md
+Read: assets/logos/baseline-logo.b64
+Read: assets/logos/esker-logo.svg
+Read: assets/colors.css
+Read: assets/fonts.css
 ```
 
 ### Step 6: Generate the HTML Calculator

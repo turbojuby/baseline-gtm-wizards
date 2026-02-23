@@ -68,7 +68,7 @@ Note: Airtable access may require manual lookup or API integration. If Airtable 
 
 ### Step 5: Load Design Assets
 
-Read from the plugin directory (`baseline-gtm-wizards/`):
+Read the design assets:
 
 ```
 Read: DESIGN_SYSTEM.md

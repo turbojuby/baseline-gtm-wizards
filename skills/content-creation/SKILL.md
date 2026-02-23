@@ -69,7 +69,7 @@ Search the Esker folder for case studies, white papers, and data sheets relevant
 Read the brand guide:
 
 ```
-Read: baseline-gtm-wizards/plugins/gtm-wizards/BRAND_GUIDE.md
+Read: BRAND_GUIDE.md
 ```
 
 Apply these voice principles to all content:

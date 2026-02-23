@@ -1,21 +1,14 @@
 {
   "name": "baseline-gtm-wizards",
-  "owner": {
-    "name": "Baseline Payments"
-  },
+  "owner": { "name": "Baseline Payments" },
   "metadata": {
-    "description": "GTM team toolkit for branded sales decks, digital deal rooms, and interactive ROI calculators"
+    "description": "GTM toolkit for Baseline Payments — branded sales decks, pipeline management, outreach automation, and marketing content"
   },
   "plugins": [
     {
       "name": "gtm-wizards",
-      "source": "./plugins/gtm-wizards",
-      "description": "Branded sales decks, digital deal rooms, interactive ROI calculators, and deployment to hub.baselinepayments.com",
-      "version": "1.0.0",
-      "author": {
-        "name": "Baseline Payments"
-      },
-      "keywords": ["sales", "decks", "roi", "esker"]
+      "source": "./",
+      "description": "Sales intelligence, branded decks, outreach, pipeline, marketing content, and workflow orchestration"
     }
   ]
 }

@@ -27,7 +27,7 @@ Read the target HTML file and the design system:
 
 ```
 Read: <target-file-path>
-Read: baseline-gtm-wizards/DESIGN_SYSTEM.md
+Read: DESIGN_SYSTEM.md
 ```
 
 ### Step 2: Run Validation Checks

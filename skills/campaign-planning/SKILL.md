@@ -43,7 +43,7 @@ Clarify with the user (or infer from the brief):
 Pull ICP definitions from BRAND_GUIDE.md:
 
 ```
-Read: baseline-gtm-wizards/plugins/gtm-wizards/BRAND_GUIDE.md
+Read: BRAND_GUIDE.md
 ```
 
 **Primary ICPs for Esker campaigns:**

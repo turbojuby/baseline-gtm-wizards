@@ -28,7 +28,7 @@ Generate any branded HTML output from a freeform description. Adapts structure, 
 
 ### Step 1: Load Design Assets
 
-Read the following files from the plugin directory (`baseline-gtm-wizards/`):
+Read the following design assets:
 
 ```
 Read: DESIGN_SYSTEM.md        — full color system, typography, components, animation patterns
