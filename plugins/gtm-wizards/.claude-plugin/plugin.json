@@ -1,7 +1,7 @@
 {
   "name": "gtm-wizards",
-  "description": "Baseline Payments GTM team toolkit — branded sales decks, digital deal rooms, interactive ROI calculators, and deployment to hub.baselinepayments.com",
-  "version": "1.0.0",
+  "description": "Baseline Payments consolidated GTM hub — sales intelligence, branded decks, outreach, pipeline management, marketing content, and workflow orchestration for the Esker North American go-to-market team",
+  "version": "2.0.0",
   "author": {
     "name": "Baseline Payments"
   }

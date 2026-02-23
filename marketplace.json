@@ -1,0 +1,23 @@
+{
+  "name": "gtm-wizards",
+  "version": "2.0.0",
+  "description": "Consolidated GTM toolkit for Baseline Payments — one plugin for the entire Esker sales team",
+  "repository": "turbojuby/baseline-gtm-wizards",
+  "visibility": "team",
+  "team_members": [
+    {
+      "name": "Tyler Massey",
+      "role": "admin",
+      "github": "turbojuby"
+    },
+    {
+      "name": "Matt",
+      "role": "member"
+    },
+    {
+      "name": "Marc",
+      "role": "member"
+    }
+  ],
+  "install_instructions": "Clone this repo and add it as a Claude Code plugin:\n\ngit clone https://github.com/turbojuby/baseline-gtm-wizards.git\n\nThen in Claude Code or Cowork, reference the plugin directory."
+}
