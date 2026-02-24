@@ -1,3 +1,6 @@
+# MCP server build artifacts
+mcp-servers/*/build/
+
 # Logs
 logs
 *.log

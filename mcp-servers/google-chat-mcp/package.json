@@ -1,0 +1,24 @@
+{
+  "name": "google-chat-mcp",
+  "version": "2.0.0",
+  "description": "Google Chat MCP Server — per-user OAuth, dual transport (stdio + Streamable HTTP)",
+  "type": "module",
+  "main": "build/stdio.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "node build/http.js",
+    "start:stdio": "node build/stdio.js"
+  },
+  "dependencies": {
+    "@google-cloud/firestore": "^7.11.0",
+    "@modelcontextprotocol/sdk": "^1.10.1",
+    "dotenv": "^17.3.1",
+    "express": "^5.1.0",
+    "zod": "^3.24.3"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.1",
+    "@types/node": "^22.14.1",
+    "typescript": "^5.8.3"
+  }
+}
