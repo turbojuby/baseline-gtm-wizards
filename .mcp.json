@@ -10,12 +10,11 @@
         "MODE": "stdio"
       }
     },
-    "netlify-gtm": {
+    "firebase-gtm": {
       "type": "stdio",
       "command": "npx",
-      "args": ["tsx", "mcp-servers/netlify-mcp/src/index.ts"],
+      "args": ["tsx", "mcp-servers/firebase-mcp/src/index.ts"],
       "env": {
-        "NETLIFY_TOKEN": "${NETLIFY_TOKEN}",
         "MODE": "stdio"
       }
     }

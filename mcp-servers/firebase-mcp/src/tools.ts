@@ -1,13 +1,13 @@
 /**
- * MCP tool definitions and handlers for Netlify deployments.
+ * MCP tool definitions and handlers for Firebase Hosting deployments.
  *
  * Tools:
  *   deploy_to_hub   — Deploy HTML to hub.baselinepayments.com/d/{hex}
- *   deploy_draft    — Deploy HTML as a draft to the quick-share Netlify site
+ *   deploy_draft    — Deploy HTML as a draft to a Firebase preview channel (7-day TTL)
  */
 
 import { Tool } from "@modelcontextprotocol/sdk/types.js";
-import { deployToHub, deployDraft } from "./netlify.js";
+import { deployToHub, deployDraft } from "./firebase.js";
 
 // ─── Tool definitions ────────────────────────────────────────────────────────
 
@@ -36,8 +36,8 @@ export const TOOL_DEFINITIONS: Tool[] = [
   {
     name: "deploy_draft",
     description:
-      "Deploy an HTML file as a draft to the quick-share Netlify site for internal review. " +
-      "Returns a non-guessable hash URL (not on the branded domain). Use this before promoting to production.",
+      "Deploy an HTML file as a draft to a Firebase preview channel for internal review. " +
+      "Returns a preview URL (expires after 7 days). Use this before promoting to production.",
     inputSchema: {
       type: "object",
       properties: {

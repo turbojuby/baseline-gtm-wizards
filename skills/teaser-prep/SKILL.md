@@ -31,7 +31,7 @@ Feed in the research from Step 1. This produces: a concise, visually compelling 
 ### Step 3: Deploy Draft
 Invoke `/gtm:deploy {deck-file} --draft` using the Skill tool.
 
-Deploy the teaser deck to a draft Netlify URL for review and sharing.
+Deploy the teaser deck to a draft Firebase preview URL for review and sharing.
 
 ### Step 4: Draft Outreach Message
 Based on the research, draft a suggested outreach message (email or LinkedIn) to send alongside the teaser deck link. The message should:

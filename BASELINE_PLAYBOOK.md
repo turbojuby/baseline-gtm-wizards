@@ -26,7 +26,7 @@ The DNA file for all GTM skills. Every `/gtm:*` skill references this playbook a
 | Calendar | Google Calendar | Meeting context, attendee lookup |
 | Team chat | Google Chat | Team notifications, deal updates |
 | Meeting recordings | Fathom | Call transcripts, summaries, action items |
-| Deploy | Netlify (via GTM MCP) | Publishing HTML decks/assets |
+| Deploy | Firebase Hosting (via GTM MCP) | Publishing HTML decks/assets |
 | Deal data | Airtable (via GTM MCP) | Pricing, assumptions, ROI calculations |
 
 ---
@@ -80,7 +80,7 @@ All available `/gtm:` skills organized by category.
 ### Deployment
 | Skill | Purpose |
 |-------|---------|
-| `/gtm:deploy` | Deploy HTML output to Netlify (draft or prod) |
+| `/gtm:deploy` | Deploy HTML output to Firebase Hosting (draft or prod) |
 | `/gtm:check-design` | Screenshot and visually QA an HTML file before deploy |
 
 ### Sales Intelligence

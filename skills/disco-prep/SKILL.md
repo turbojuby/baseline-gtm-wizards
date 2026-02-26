@@ -36,7 +36,7 @@ Feed in the research and call prep from Steps 1-2. This produces: an interactive
 ### Step 4: Deploy Draft
 Invoke `/gtm:deploy {deck-file} --draft` using the Skill tool.
 
-Deploy the generated deck HTML to a draft Netlify URL for review and sharing.
+Deploy the generated deck HTML to a draft Firebase preview URL for review and sharing.
 
 ## Deliverables
 

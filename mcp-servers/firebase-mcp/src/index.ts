@@ -1,9 +1,9 @@
 /**
- * Netlify MCP Server — Entry Point
+ * Firebase MCP Server — Entry Point
  *
  * Reads MODE env var to determine transport:
  *   MODE=stdio  (default) — for Claude Code, Claude Cowork, Claude.ai
- *   MODE=http             — for GCP Cloud Run (SSE transport)
+ *   MODE=http             — for GCP Cloud Run (Streamable HTTP transport)
  */
 
 import { Server } from "@modelcontextprotocol/sdk/server/index.js";
@@ -18,7 +18,7 @@ import { TOOL_DEFINITIONS, handleTool } from "./tools.js";
 export function createMcpServer(): Server {
   const server = new Server(
     {
-      name: "netlify-gtm",
+      name: "firebase-gtm",
       version: "1.0.0",
     },
     {
@@ -79,15 +79,15 @@ async function main() {
     const server = createMcpServer();
     const transport = new StdioServerTransport();
 
-    process.stderr.write("[netlify-mcp] Starting in stdio mode\n");
+    process.stderr.write("[firebase-mcp] Starting in stdio mode\n");
 
     await server.connect(transport);
 
-    process.stderr.write("[netlify-mcp] Ready\n");
+    process.stderr.write("[firebase-mcp] Ready\n");
   }
 }
 
 main().catch((err) => {
-  process.stderr.write(`[netlify-mcp] Fatal error: ${err}\n`);
+  process.stderr.write(`[firebase-mcp] Fatal error: ${err}\n`);
   process.exit(1);
 });

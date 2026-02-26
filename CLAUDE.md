@@ -17,4 +17,4 @@ Shared workspace for the Baseline Payments go-to-market team. Used for collabora
 ## Conventions
 
 - Follow the HTML design system from global CLAUDE.md for any generated output
-- Use Netlify quick deploy for sharing HTML outputs with the team
+- Use Firebase Hosting deploy for sharing HTML outputs with the team

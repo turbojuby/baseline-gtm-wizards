@@ -106,8 +106,8 @@ export function startHttpServer(port: number): void {
   });
 
   app.listen(port, () => {
-    console.error(`[netlify-mcp] Streamable HTTP server listening on port ${port}`);
-    console.error(`[netlify-mcp] MCP endpoint: http://localhost:${port}/mcp`);
-    console.error(`[netlify-mcp] Health check: http://localhost:${port}/health`);
+    console.error(`[firebase-mcp] Streamable HTTP server listening on port ${port}`);
+    console.error(`[firebase-mcp] MCP endpoint: http://localhost:${port}/mcp`);
+    console.error(`[firebase-mcp] Health check: http://localhost:${port}/health`);
   });
 }
