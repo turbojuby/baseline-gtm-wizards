@@ -184,8 +184,7 @@ All content lives inside `.section-inner`:
   section { padding: 40px 20px; }
   .stat-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
   .logo-row { gap: 16px; }
-  .logo-row img { height: 28px; }
-  .logo-row svg { height: 24px; }
+  .logo-row svg { height: 40px; }
   .hero-title { letter-spacing: -2px; }
   .cta-card { padding: 24px 20px; }
 }
@@ -408,15 +407,15 @@ Used in hero section and footer.
 
 ```html
 <div class="logo-row reveal">
-  <img src="data:image/webp;base64,..." alt="Baseline Payments">
+  <svg viewBox="0 0 213 93" ...><!-- Baseline logo (inline from assets/logos/baseline-logo.svg) --></svg>
   <div class="logo-divider"></div>
   <svg viewBox="0 0 1555 725" ...><!-- Esker logo --></svg>
 </div>
 ```
 
-**Hero:** `img { height: 52px }`, `svg { height: 46px }`, gap `28px`, divider height `56px`
+**Hero:** `svg { height: 80px }`, gap `28px`, divider height `56px`
 
-**Footer:** `img { height: 38px }`, `svg { height: 32px }`, gap `24px`, divider height `42px`, container `opacity: 0.5`
+**Footer:** `svg { height: 60px }`, gap `24px`, divider height `42px`, container `opacity: 0.5`
 
 ```css
 .logo-divider { width: 1px; height: 56px; background: rgba(255,255,255,0.2); }
@@ -834,6 +833,6 @@ Glow orb: single large teal orb, centered top.
 2. **CSS custom properties only.** Never hardcode color values. Always reference `var(--name)`.
 3. **Reveal classes required.** Every visible content element must have a `.reveal`, `.reveal-scale`, `.reveal-left`, or `.reveal-right` class.
 4. **Real data only.** Stats and metrics must come from real sources. Include source attribution (e.g., "Source: 10-K FY2024" in a hook footer or credibility bar).
-5. **Logos from assets.** Load the Baseline logo from `assets/logos/baseline-logo.b64` (prepend `data:image/webp;base64,`). Inline the Esker SVG from `assets/logos/esker-logo.svg`.
+5. **Logos from assets.** Inline the Baseline SVG from `assets/logos/baseline-logo.svg`. Inline the Esker SVG from `assets/logos/esker-logo.svg`. Both logos are pasted as inline `<svg>` markup.
 6. **Confidential header.** Every deck must include a hero meta line: `Confidential · Prepared for [Company] Finance Leadership · [Month Year]`.
 7. **No paragraphs.** Copy must be ruthlessly concise. Bold key phrase + dim supporting text. Each section = one glanceable screen.

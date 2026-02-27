@@ -1,13 +1,13 @@
 {
   "logos": {
     "baseline": {
-      "file": "baseline-logo.b64",
-      "format": "webp",
-      "usage": "<img> tag with data:image/webp;base64, prefix",
+      "file": "baseline-logo.svg",
+      "format": "svg",
+      "usage": "Inline <svg> markup (read file contents and paste directly)",
       "heights": {
-        "hero": "52px",
-        "footer": "38px",
-        "mobile": "28px"
+        "hero": "80px",
+        "footer": "60px",
+        "mobile": "40px"
       }
     },
     "esker": {
@@ -15,9 +15,9 @@
       "format": "svg",
       "usage": "Inline <svg> or <img> tag",
       "heights": {
-        "hero": "46px (viewBox scaled)",
-        "footer": "32px",
-        "mobile": "24px"
+        "hero": "80px",
+        "footer": "60px",
+        "mobile": "40px"
       }
     }
   }

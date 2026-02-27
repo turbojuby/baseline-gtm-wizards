@@ -105,17 +105,17 @@ Check each rule against the HTML source. For each check, scan the HTML content f
 **Pass:** At least 2 responsive breakpoints with meaningful layout changes
 **Fail:** List what's missing and suggest specific responsive rules to add
 
-#### Check 6: Base64 Logos Embedded
+#### Check 6: Logos Embedded as Inline SVG
 
 **What to check:** Logos are embedded inline, not loaded from external URLs.
 
 **How to check:**
-- Find `<img>` tags for logos — `src` should start with `data:image/` (Base64)
-- Find `<svg>` tags for logos — should be inline SVG markup, not `<img src="logo.svg">`
-- No references to `baseline-logo.png`, `esker-logo.svg` as external files
+- Find `<svg>` tags for both logos — should be inline SVG markup, not `<img src="logo.svg">`
+- No references to `baseline-logo.svg`, `esker-logo.svg` as external file URLs
+- No `<img>` tags with base64 data URIs for logos (logos should be inline `<svg>`)
 
-**Pass:** All logos embedded as Base64 or inline SVG
-**Fail:** List each logo that references an external file
+**Pass:** All logos embedded as inline SVG
+**Fail:** List each logo that references an external file or uses a base64 `<img>` tag
 
 #### Check 7: Stat Counters Pattern
 
@@ -196,7 +196,7 @@ Design System Validation: {filename}
          Fix: Inline the chart.js code or replace with CSS-only chart
  [PASS] Required Components — progress bar, nav dots, particles, glow orbs
  [PASS] Responsive Breakpoints — 768px and 480px breakpoints
- [PASS] Base64 Logos — both logos embedded inline
+ [PASS] Inline SVG Logos — both logos embedded as inline SVG
  [FAIL] Stat Counters — 3 stat elements missing data-target attribute
          Fix: Add data-target="1234567" to elements at lines 342, 356, 371
  [PASS] Glass Card Pattern — backdrop-filter with webkit prefix

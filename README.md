@@ -79,7 +79,7 @@ baseline-gtm-wizards/
     marketplace.json        # Marketplace catalog
   skills/                   # 24 slash command definitions (SKILL.md each)
   templates/                # HTML section + stage deck templates
-  assets/                   # Colors, fonts, logos (Base64/SVG)
+  assets/                   # Colors, fonts, logos (SVG)
   airtable/                 # Airtable schema and setup guide
   mcp-servers/              # MCP server configs (Airtable)
   DESIGN_SYSTEM.md          # Full design system spec

@@ -33,7 +33,7 @@ Read the following design assets:
 ```
 Read: DESIGN_SYSTEM.md        — full color system, typography, components, animation patterns
 Read: BRAND_GUIDE.md          — voice, tone, persona targeting
-Read: assets/logos/baseline-logo.b64  — Base64-encoded Baseline Payments logo
+Read: assets/logos/baseline-logo.svg  — Baseline Payments SVG logo (inline as <svg>)
 Read: assets/logos/esker-logo.svg     — Esker SVG logo markup
 Read: assets/colors.css               — CSS custom properties
 Read: assets/fonts.css                — Google Fonts import
@@ -182,7 +182,7 @@ IntersectionObserver in JS adds `.visible` class when elements enter viewport.
 JS reads `data-target`, animates from 0 to value with easing, formats with commas/prefix/suffix.
 
 **Logos:**
-- Baseline: embed the full Base64 string from `baseline-logo.b64` as `<img src="data:image/png;base64,..."/>`
+- Baseline: inline the full SVG markup from `baseline-logo.svg` as `<svg>` element
 - Esker: paste the full SVG markup inline
 
 **Responsive breakpoints:**
@@ -206,7 +206,7 @@ Before saving, mentally scan the generated HTML for each check. Fix failures inl
 | 3 | Self-Contained | No external deps except Google Fonts |
 | 4 | Required Components | Progress bar, nav dots, particles, glow orbs (deck only) |
 | 5 | Responsive Breakpoints | `@media` at 768px and 480px with layout changes |
-| 6 | Logos Embedded | Both logos as Base64/inline SVG, no external URLs |
+| 6 | Logos Embedded | Both logos as inline SVG, no external URLs |
 | 7 | Stat Counters | `data-target` + JS animation (if stats present) |
 | 8 | Glass Card Pattern | `backdrop-filter` + `-webkit-backdrop-filter` + hover lift |
 | 9 | Section Structure | `scroll-snap-type` on html, `scroll-snap-align` on sections (deck only) |

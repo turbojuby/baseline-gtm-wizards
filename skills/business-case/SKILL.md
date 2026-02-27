@@ -95,7 +95,7 @@ Read the design assets:
 ```
 Read: DESIGN_SYSTEM.md
 Read: BRAND_GUIDE.md
-Read: assets/logos/baseline-logo.b64
+Read: assets/logos/baseline-logo.svg
 Read: assets/logos/esker-logo.svg
 Read: assets/colors.css
 Read: assets/fonts.css

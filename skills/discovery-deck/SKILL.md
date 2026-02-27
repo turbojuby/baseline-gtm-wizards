@@ -73,7 +73,7 @@ Read the design assets:
 ```
 Read: DESIGN_SYSTEM.md
 Read: BRAND_GUIDE.md
-Read: assets/logos/baseline-logo.b64
+Read: assets/logos/baseline-logo.svg
 Read: assets/logos/esker-logo.svg
 Read: assets/colors.css
 Read: assets/fonts.css
@@ -124,7 +124,7 @@ Build a single self-contained HTML file with 6-8 full-screen scroll-snap section
 - CSS custom properties from `:root` only
 - `.reveal` classes on all content elements
 - Progress bar, nav dots, floating particles, glow orbs
-- Inline Base64/SVG logos
+- Inline SVG logos
 - Glass card components
 - Responsive for screen sharing (1920x1080) and tablets
 

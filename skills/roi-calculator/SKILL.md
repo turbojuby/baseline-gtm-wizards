@@ -79,7 +79,7 @@ Use Airtable defaults for slider starting positions if available. Otherwise, use
 ```
 Read: DESIGN_SYSTEM.md
 Read: BRAND_GUIDE.md
-Read: assets/logos/baseline-logo.b64
+Read: assets/logos/baseline-logo.svg
 Read: assets/logos/esker-logo.svg
 Read: assets/colors.css
 Read: assets/fonts.css
@@ -93,7 +93,7 @@ Build a single self-contained HTML file. This is NOT a scroll-snap deck — it i
 - All CSS/JS inline, no external deps except Google Fonts
 - CSS custom properties from `:root`
 - Responsive: works on desktop for screen sharing AND tablets for in-person
-- Inline Base64/SVG logos
+- Inline SVG logos
 - Glass card components for input groups and output displays
 - Animated number counters on output values (update on slider change)
 - **NO pricing information anywhere** — this is purely a value-sizing tool

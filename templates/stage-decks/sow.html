@@ -70,7 +70,7 @@
   /* Hero */
   #hero { background: linear-gradient(160deg, var(--bg-darker) 0%, var(--bg) 40%, var(--bg-dark) 100%); text-align: center; }
   .logo-row { display: flex; align-items: center; justify-content: center; gap: 28px; margin-bottom: 56px; }
-  .logo-row img { height: 52px; } .logo-row svg { height: 46px; }
+  .logo-row svg { height: 80px; }
   .logo-divider { width: 1px; height: 56px; background: rgba(255,255,255,0.2); }
   .hero-title { font-size: clamp(48px,6vw,80px); font-weight: 800; letter-spacing: -3px; line-height: 1.05; margin-bottom: 20px; }
   .hero-subtitle { font-size: clamp(18px,1.6vw,24px); font-weight: 400; color: var(--text-mid); letter-spacing: 0.5px; margin-bottom: 64px; }
@@ -150,11 +150,11 @@
   .contact-details { font-size: 16px; color: var(--text-mid); }
   .contact-details a { color: var(--teal); text-decoration: none; }
   .footer-logos { display: flex; align-items: center; justify-content: center; gap: 24px; opacity: 0.5; }
-  .footer-logos img { height: 38px; } .footer-logos svg { height: 32px; }
+  .footer-logos svg { height: 60px; }
   .footer-divider { width: 1px; height: 42px; background: rgba(255,255,255,0.15); }
 
   @media (max-width: 900px) { .scope-grid, .contact-grid, .terms-grid { grid-template-columns: 1fr; } .nav-dots { display: none; } }
-  @media (max-width: 600px) { section { padding: 40px 20px; } .logo-row { gap: 16px; } .logo-row img { height: 28px; } .logo-row svg { height: 24px; } }
+  @media (max-width: 600px) { section { padding: 40px 20px; } .logo-row { gap: 16px; } .logo-row svg { height: 40px; } }
 </style>
 </head>
 <body>
@@ -176,9 +176,10 @@
   <div class="glow-orb" style="width:500px;height:500px;background:rgba(126,202,193,0.12);top:-15%;right:-10%;"></div>
   <div class="section-inner">
     <div class="logo-row reveal">
-      <img src="data:image/webp;base64,..." alt="Baseline Payments">
+      <!-- {{BASELINE_LOGO_SVG}} — inline from assets/logos/baseline-logo.svg -->
+      <svg viewBox="0 0 213 93" xmlns="http://www.w3.org/2000/svg" style="height:80px;"><!-- ... --></svg>
       <div class="logo-divider"></div>
-      <svg viewBox="0 0 1555 725" fill="none" xmlns="http://www.w3.org/2000/svg" style="height:32px;"><!-- Esker --></svg>
+      <svg viewBox="0 0 1555 725" fill="none" xmlns="http://www.w3.org/2000/svg" style="height:80px;"><!-- Esker --></svg>
     </div>
     <h1 class="hero-title shimmer-text reveal reveal-delay-1">{{DECK_TITLE}}</h1>
     <p class="hero-subtitle reveal reveal-delay-2">{{DECK_SUBTITLE}}</p>
@@ -313,9 +314,10 @@
       <div class="contact-details">{{CONTACT_COMPANY}} &middot; <a href="mailto:{{CONTACT_EMAIL}}">{{CONTACT_EMAIL}}</a></div>
     </div>
     <div class="footer-logos reveal reveal-delay-4">
-      <img src="data:image/webp;base64,..." alt="Baseline Payments">
+      <!-- {{BASELINE_LOGO_SVG}} — inline from assets/logos/baseline-logo.svg -->
+      <svg viewBox="0 0 213 93" xmlns="http://www.w3.org/2000/svg" style="height:60px;"><!-- ... --></svg>
       <div class="footer-divider"></div>
-      <svg viewBox="0 0 1555 725" fill="none" xmlns="http://www.w3.org/2000/svg" style="height:24px;"><!-- Esker --></svg>
+      <svg viewBox="0 0 1555 725" fill="none" xmlns="http://www.w3.org/2000/svg" style="height:60px;"><!-- Esker --></svg>
     </div>
   </div>
 </section>

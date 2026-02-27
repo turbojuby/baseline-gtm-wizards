@@ -87,7 +87,7 @@ Read the following design assets:
 ```
 Read: DESIGN_SYSTEM.md        — full color system, typography, components, animation patterns
 Read: BRAND_GUIDE.md          — voice, tone, persona targeting for CFO/VP Finance audience
-Read: assets/logos/baseline-logo.b64  — Base64-encoded Baseline Payments logo
+Read: assets/logos/baseline-logo.svg  — Baseline Payments SVG logo (inline as <svg>)
 Read: assets/logos/esker-logo.svg     — Esker SVG logo markup
 Read: assets/colors.css               — CSS custom properties
 Read: assets/fonts.css                — Google Fonts import
@@ -135,7 +135,7 @@ Build a single self-contained HTML file with 4 full-screen scroll-snap sections.
 - Use CSS custom properties from `:root` — never hardcode colors
 - Every content element gets a `.reveal` class (or `.reveal-left`, `.reveal-right`, `.reveal-scale`)
 - Include: progress bar, nav dots, floating particles, ambient glow orbs
-- Embed logos as inline Base64/SVG — no external image URLs
+- Embed logos as inline SVG — no external image URLs
 - Font: Inter (or Plus Jakarta Sans per design system) via Google Fonts, weight 800 for headlines
 - Stat counters use `data-target` attribute for animated counting
 - Glass card pattern: `background: var(--surface); backdrop-filter: blur(20px); border: 1px solid var(--border);`
