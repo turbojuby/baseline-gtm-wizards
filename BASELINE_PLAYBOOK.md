@@ -64,6 +64,34 @@ Where to find what — always go to the live source, never rely on cached data.
 
 ---
 
+## Esker Pipeline & CRM Reference
+
+All skills that interact with HubSpot deals **MUST** read these reference files before any CRM writes:
+
+- **`references/esker-pipeline.md`** — Hardcoded Esker pipeline ID and stage IDs. NEVER use HubSpot's `dealstage` enumeration to look up stages. It returns 60+ stages across dead pipelines and will silently reassign deals.
+- **`references/esker-deal-properties.md`** — Deal, company, and contact property map with exact property names and valid enumeration values.
+
+These files are the canonical source of truth for Esker CRM data. They override any values returned by HubSpot's property definition endpoints.
+
+---
+
+## HubSpot Writeback Standard
+
+**All GTM skills that extract intel from calls, research, or analysis MUST write findings back to HubSpot.** Intel that stays in a Claude session is invisible to the rest of the team. HubSpot is the shared brain.
+
+| Skill | What Gets Written |
+|-------|-------------------|
+| `/gtm:call-summary` | Company properties, contact records (create/update), deal properties + stage, HubSpot note with cumulative deal context |
+| `/gtm:call-prep` | Pre-call research brief note on deal/company, company property enrichment |
+| `/gtm:account-research` | Company properties, research note on company/deal |
+| `/gtm:deal-review` | Deal properties (next step, pain points), health assessment note |
+
+**Default UX:** Show a diff table of proposed changes (current value vs. proposed value), then execute all on "go." Writeback is the expected outcome, not an optional menu. The user can skip specific items but the default is to write everything.
+
+**Why this matters:** Tyler has Fathom access. Andrew (SE) and SDRs do not. Without writeback, meeting intel stays siloed. With writeback, anyone running `/gtm:call-prep` pulls rich context directly from HubSpot — no Fathom needed.
+
+---
+
 ## Skill Reference
 
 All available `/gtm:` skills organized by category.

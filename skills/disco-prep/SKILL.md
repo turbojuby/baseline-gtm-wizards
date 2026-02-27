@@ -28,6 +28,8 @@ Invoke `/gtm:call-prep {company}` using the Skill tool.
 
 Feed in the account research from Step 1. This produces: structured call agenda, discovery questions tailored to the company's pain signals, likely objections with responses, and a qualification checklist (BANT/3Ps).
 
+**Note:** Both `/gtm:account-research` (Step 1) and `/gtm:call-prep` (this step) now write to HubSpot automatically. By the time Step 3 runs, the company record will have been enriched with research data, and a pre-call research brief note will be logged to HubSpot. This means the research and prep work are available to the entire team — not just whoever ran this command.
+
 ### Step 3: Discovery Deck
 Invoke `/gtm:discovery-deck {company}` using the Skill tool.
 

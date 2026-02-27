@@ -17,6 +17,8 @@ Research a target account and produce a structured brief with CRM context, ICP f
 
 ### Step 1: Pull HubSpot Data First
 
+**Read `references/esker-pipeline.md` to interpret deal stages correctly. Read `references/esker-deal-properties.md` for the full property map and valid enumeration values.**
+
 Always start with CRM. Load HubSpot tools via `ToolSearch: "+hubspot search"`, then:
 
 1. **Search companies** — `mcp__claude_ai_HubSpot__search_crm_objects` with `objectType: "companies"`
@@ -128,5 +130,68 @@ Structure the output as:
 ### Data Sources
 {List all sources used: HubSpot, Notion, Google Drive, Web (specific URLs)}
 ```
+
+### Step 8: Write Research to HubSpot
+
+**ALWAYS write research findings to HubSpot.** Research that stays in a Claude session is invisible to the rest of the team.
+
+#### 8a: Update Company Properties
+
+If the company exists in HubSpot, update any properties where the research found new or better data:
+- `annualrevenue` — if found via web research and current HubSpot value is empty
+- `numberofemployees` — if found and current value is empty
+- `industry` — if more specific than current value
+- `erp_system` — if discovered (use company-level property)
+- `ap_invoice_volume_annual` / `ar_invoice_volume_annual` — if estimated from public filings
+- `dso_current` — if found in public filings
+- `strategic_goals_summary` — if strategic initiatives were uncovered
+
+Use exact property names from `references/esker-deal-properties.md`. Only update properties where the current HubSpot value is empty or stale. Do NOT overwrite existing values without flagging to the user.
+
+#### 8b: Create Research Note
+
+Create a HubSpot note on the company (and deal, if one exists):
+
+**Note content:**
+
+```
+<h2>Account Research Brief — {Company}</h2>
+<p><strong>Date:</strong> {date}</p>
+<p><strong>ICP Tier:</strong> {tier} — {justification}</p>
+<hr>
+
+<h3>Company Profile</h3>
+<p>{Industry, revenue, employees, HQ, ERP}</p>
+
+<h3>Financial Metrics</h3>
+<p>{DPO, DSO, AP/AR volumes — if available}</p>
+
+<h3>Qualification Signals</h3>
+<ul>
+<li>{signal 1}</li>
+<li>{signal 2}</li>
+</ul>
+
+<h3>Competitive Landscape</h3>
+<p>{Known AP/AR tools or "Status Quo assumed"}</p>
+
+<h3>Recommended Talk Tracks</h3>
+<ol>
+<li>{angle 1}</li>
+<li>{angle 2}</li>
+</ol>
+
+<h3>Data Sources</h3>
+<p>{HubSpot, Notion, Google Drive, Web — specific URLs}</p>
+```
+
+Use `manage_crm_objects` with objectType `notes`, setting `hs_note_body` and `hs_timestamp`, with associations to the company and deal (if applicable).
+
+#### 8c: Create Company if Not Found
+
+If the company was NOT found in HubSpot in Step 1:
+- Offer to create it with the firmographic data gathered (name, industry, revenue, employees, website)
+- If created, add the research note to the new company record
+- Flag to user: "Created {company} in HubSpot — may want to assign owner and create a deal"
 
 See BASELINE_PLAYBOOK.md for full connector instructions and knowledge source map.

@@ -19,6 +19,10 @@ Aggregates data from multiple sources to assess deal health against the team's q
 ## Steps
 
 ### Step 1: Pull Deal Data from HubSpot
+
+**Read `references/esker-pipeline.md` to interpret deal stages correctly. NEVER rely on the dealstage enumeration.**
+**Read `references/esker-deal-properties.md` for the full property map.**
+
 Search HubSpot for the company. Get associated deals, contacts, and recent activities.
 
 - Search companies by name
@@ -88,3 +92,60 @@ Return a structured deal health scorecard to the user:
 > | Competition | Yellow | Coupa also evaluating |
 >
 > **#1 Priority**: Schedule executive sponsor meeting to establish timeline and budget commitment.
+
+### Step 6: Write Assessment to HubSpot
+
+**ALWAYS write the deal review findings to HubSpot.** This creates a timestamped record of deal health and recommended actions.
+
+#### 6a: Update Deal Properties
+
+Based on the health assessment, update:
+- `hs_next_step` — the #1 priority action from Step 5
+- `key_pain_points` — if pain points were identified or validated during the review
+- `situation_overview` — if the assessment synthesized new context worth capturing
+- `champion_notes` — if champion status assessment yielded new insights
+
+Show proposed updates to the user before writing. Deal review assessments are more subjective than call extractions, so confirmation is important.
+
+#### 6b: Create Deal Review Note
+
+Create a HubSpot note on the deal:
+
+**Note content:**
+
+```
+<h2>Deal Health Review — {Company}</h2>
+<p><strong>Date:</strong> {date}</p>
+<p><strong>Deal:</strong> ${amount}, {stage}, close date {date}</p>
+<hr>
+
+<h3>Health Scorecard</h3>
+<table>
+<tr><th>Category</th><th>Status</th><th>Notes</th></tr>
+<tr><td>Budget</td><td>{Green/Yellow/Red}</td><td>{notes}</td></tr>
+<tr><td>Authority</td><td>{Green/Yellow/Red}</td><td>{notes}</td></tr>
+<tr><td>Need</td><td>{Green/Yellow/Red}</td><td>{notes}</td></tr>
+<tr><td>Timeline</td><td>{Green/Yellow/Red}</td><td>{notes}</td></tr>
+<tr><td>Champion</td><td>{Green/Yellow/Red}</td><td>{notes}</td></tr>
+<tr><td>PoV</td><td>{Green/Yellow/Red}</td><td>{notes}</td></tr>
+<tr><td>Competition</td><td>{Green/Yellow/Red}</td><td>{notes}</td></tr>
+</table>
+
+<h3>Risk Flags</h3>
+<ul>
+<li>{risk 1 — severity}</li>
+<li>{risk 2 — severity}</li>
+</ul>
+
+<h3>Recommended Actions</h3>
+<ol>
+<li><strong>#1 Priority:</strong> {action}</li>
+<li>{action 2}</li>
+<li>{action 3}</li>
+</ol>
+
+<h3>Data Sources</h3>
+<p>{HubSpot, Fathom, Notion — what was checked}</p>
+```
+
+Use `manage_crm_objects` with objectType `notes`, setting `hs_note_body` and `hs_timestamp`, with associations to the deal, company, and key contacts.

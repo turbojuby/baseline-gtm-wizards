@@ -31,6 +31,9 @@ For each attendee:
 
 ### Step 3: Pull Deal Context from HubSpot
 
+**Read `references/esker-pipeline.md` to interpret deal stages correctly. NEVER rely on the dealstage enumeration.**
+**Read `references/esker-deal-properties.md` for the full property map.**
+
 Search for the company in HubSpot:
 - Deal stage, amount, close date, pipeline
 - Activity timeline — last emails, calls, meetings logged
@@ -118,5 +121,56 @@ If Fathom returned transcripts from prior calls with this account:
 ### Risk Flags
 {Anything concerning: stalled deal, ghosting, competitor evaluation, misaligned stakeholders}
 ```
+
+### Step 8: Write Pre-Call Research Brief to HubSpot
+
+**ALWAYS write the research brief to HubSpot.** This ensures prep work survives rescheduling, handoffs, and is available to team members who don't have Fathom access. If Andrew needs to run a demo next week, he should find this prep in HubSpot.
+
+#### 8a: Load Reference Data
+Read `references/esker-pipeline.md` and `references/esker-deal-properties.md` for property names and stage IDs.
+
+#### 8b: Create HubSpot Note
+
+Create a note associated with the deal (if one exists) AND the company:
+
+**Note content:**
+
+```
+<h2>Pre-Call Research Brief</h2>
+<p><strong>Prepared for:</strong> {meeting title}</p>
+<p><strong>Meeting date:</strong> {date/time}</p>
+<p><strong>Attendees:</strong> {list with titles}</p>
+<hr>
+
+<h3>Attendee Intel</h3>
+{Condensed version of the attendee research — name, title, HubSpot status, prior call history, background}
+
+<h3>Deal Context</h3>
+{Current stage (using Esker pipeline names), amount, key history, recent activity}
+
+<h3>Prior Conversation Summary</h3>
+{From Fathom transcripts — what was discussed before, outstanding commitments}
+
+<h3>Key Questions Planned</h3>
+<ol>
+<li>{question 1}</li>
+<li>{question 2}</li>
+</ol>
+
+<h3>Research Sources</h3>
+<p>{What was checked: HubSpot, Fathom, web research, Notion, Google Drive}</p>
+```
+
+Use `manage_crm_objects` with objectType `notes`, setting `hs_note_body` and `hs_timestamp`, with associations to deal and company.
+
+#### 8c: Update Company Properties (if enriched)
+
+If web research in Steps 2-4 found new data not already in HubSpot, update the company record:
+- `erp_system` — if discovered and current HubSpot value is empty
+- `annualrevenue` — if found from public filings and current value is empty
+- `numberofemployees` — if found and current value is empty
+- `ap_invoice_volume_annual` / `ar_invoice_volume_annual` — if estimated from filings
+
+Use exact property names from `references/esker-deal-properties.md`. Only update properties where the current HubSpot value is empty/unknown. These are low-risk enrichments from public data — no user confirmation needed.
 
 See BASELINE_PLAYBOOK.md for full connector instructions and knowledge source map.
