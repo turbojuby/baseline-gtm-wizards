@@ -102,7 +102,7 @@ body {
 html {
   scroll-behavior: smooth;
   scroll-snap-type: y mandatory;
-  font-size: 16px;
+  font-size: 18px;
 }
 
 body {
