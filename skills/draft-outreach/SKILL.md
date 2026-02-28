@@ -40,14 +40,44 @@ Match the prospect to a persona from BRAND_GUIDE.md:
 
 | Persona | Lead With | Avoid |
 |---------|-----------|-------|
-| **CFO / VP Finance** | Peer DPO benchmarks, working capital impact, cash flow visibility | Feature lists, technical details |
+| **CFO / VP Finance** | Peer DPO/DSO benchmarks, working capital impact, cash flow visibility | Feature lists, technical details |
 | **Controller** | Cost per invoice, error rates, audit risk, close cycle time | Big-picture strategy language |
 | **AP Manager** | Daily workflow transformation, team capacity, touchless rates | Financial jargon, executive framing |
+| **AR Manager / Director** | DSO reduction, collection efficiency, automation rates, team capacity | AP-specific language, overly strategic framing |
+| **Collections Manager** | Worklist prioritization, dunning automation, dispute resolution speed | Cash application or credit details |
+| **Cash Application Specialist** | Straight-through processing rates, remittance matching, unapplied receipts | Collections or credit details |
+| **Credit Manager** | Credit decisioning speed, bad debt reduction, portfolio risk visibility | Operational AR details |
 | **IT / CIO** | ERP integration simplicity, implementation timeline, security | Business process details |
 
-Default to CFO messaging if the persona is unclear.
+Default to CFO messaging if the persona is unclear. For AR personas, default to AR Manager if the specific function is unknown.
 
-### Step 4: Apply Challenger Sales Framework
+### Step 4: Select Demo Link (if applicable)
+
+If the outreach email should include an interactive demo link, select the appropriate Esker Consensus demo board from `references/ar-demo-links.md`.
+
+1. **Match persona to demo link** — use the persona selection guide in the reference file
+2. **Construct the personalized URL** by replacing the template placeholders with the prospect's actual data:
+   - `{first}` → prospect's first name
+   - `{last}` → prospect's last name
+   - `{email}` → prospect's email address
+   - `{company}` → prospect's company name, **URL-encoded with `%20` for spaces** (e.g., `Acme%20Corp`, `US%20Foods`)
+   - Also encode: `&` → `%26`, `+` → `%2B`, `#` → `%23`
+3. **Embed as a hyperlink** in the email CTA — never paste the raw URL. Use natural, specific link text that describes what they'll see (e.g., "see how Esker handles cash application automation").
+
+> **Example:** For Jane Smith (jane@acme.com) at Acme Corp, CFO persona:
+> `https://play.goconsensus.com/b139e4499?fn=Jane&ln=Smith&em=jane@acme.com&co=Acme%20Corp`
+
+Not every outreach email needs a demo link. Include one when:
+- Cold outreach with a clear persona match (strong value exchange for the CTA)
+- Post-discovery follow-up (send the demo that matches their stated pain)
+- Re-engagement (give them something new to look at)
+
+Skip the demo link when:
+- Warm referral intros (too transactional)
+- Very short LinkedIn connection notes (300 char limit)
+- The prospect already completed a Consensus demo (check Demolytics first)
+
+### Step 5: Apply Challenger Sales Framework
 
 Every outreach should follow the Challenger pattern:
 1. **Teach** — lead with an insight they don't already know (peer benchmark, industry trend, cost data)
@@ -59,7 +89,7 @@ Every outreach should follow the Challenger pattern:
 - Lead with Esker features or product descriptions (feature-led)
 - Ask for "15 minutes of your time" without offering value first
 
-### Step 5: Draft the Message
+### Step 6: Draft the Message
 
 **For email (default):**
 - Subject line: 6-10 words, specific and curiosity-driving. Reference a data point or peer company.
@@ -82,14 +112,14 @@ Every outreach should follow the Challenger pattern:
 - ERP-agnostic — connects to SAP, Oracle, NetSuite, Dynamics
 - Cost per invoice: $12-15 manual to $2-3 automated
 
-### Step 6: Create Gmail Draft (if email)
+### Step 7: Create Gmail Draft (if email)
 
 If drafting an email, use Gmail to create a draft:
 - To: prospect's email from HubSpot or research
 - Subject: the drafted subject line
 - Body: the drafted message
 
-### Step 7: Output
+### Step 8: Output
 
 ```
 ## Outreach Draft: {Prospect Name}
