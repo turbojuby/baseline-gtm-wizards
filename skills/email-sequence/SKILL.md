@@ -81,8 +81,10 @@ Tool: mcp__claude_ai_Fathom__list_meetings
 
 ### Step 4: Write the Sequence
 
-**Baseline email style rules:**
-- **Confident, data-led, concise** — no hedge words ("just checking in," "I hope this finds you well")
+**Baseline email style rules (see BRAND_GUIDE.md "Email Voice" for full spec):**
+- **Equal Business Stature** — you are a trusted advisor, not a subordinate. Never grovel, never flatter, never signal that their time is more valuable than yours. Write like a peer with something valuable to share.
+- **No sycophantic openers** — NEVER "Thanks for taking the time," "It was great to connect," "I really appreciated how engaged you were." These signal desperation. Jump straight to substance.
+- **Confident, data-led, concise** — no hedge words ("just checking in," "I hope this finds you well," "I wanted to," "I'd love to")
 - **No markdown formatting** — emails render as plain text in most clients. No bold, no bullet points, no headers.
 - **Short paragraphs** — 1-3 sentences max per paragraph
 - **One idea per email** — each email has a single point and a single ask
@@ -90,6 +92,7 @@ Tool: mcp__claude_ai_Fathom__list_meetings
 - **Challenger framing** — teach them something, reframe their thinking, push toward action
 - **Personalization** — reference their company, industry, or specific situation in the first sentence
 - **CTA** — one clear ask per email (reply, meeting, resource)
+- **Signoff** — just the name. No "Best regards," "Warm regards," "Looking forward to hearing from you."
 
 ---
 

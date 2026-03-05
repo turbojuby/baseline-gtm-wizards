@@ -42,6 +42,63 @@ Voice, messaging, persona targeting, and competitive positioning for all Baselin
 - **CTA list items:** `<strong>Bold benefit</strong>` + one-line explanation. Three items max.
 - **Meta text:** Confidential notice, date, audience. Always present.
 
+### Email Voice (Sandler Equal Business Stature)
+
+Esker's sales methodology is built on the Sandler Selling System. The #1 principle is **Equal Business Stature**: we are trusted advisors, not subordinates. We showed them something valuable; they were smart enough to pay attention. That's the dynamic. Every email must reflect this.
+
+**The golden rule:** Write like a peer who has something valuable to share — not like a vendor grateful for their attention.
+
+**NEVER open an email with:**
+- "Thanks for taking the time..." / "Thanks for spending the time..."
+- "I really appreciated how engaged you were..."
+- "It was great to connect..." / "Great meeting today..."
+- "It's clear you have a deep understanding of..."
+- "Andrew and I both appreciated..." (we-focused flattery)
+- Any sentence that compliments the prospect for doing their job (being "engaged," "articulate," "knowledgeable")
+- Any opener longer than 1 sentence before getting to the point
+
+These openers signal subordination — "your time is more valuable than mine" and "I'm grateful you let me pitch you." A prospect reading this thinks: "These guys are lame."
+
+**DO open emails with:**
+- A direct reference to a specific thing discussed — jump straight into substance
+- A piece of value they need — recording link, resource, data point
+- A Challenger reframe — something that makes them think
+- A brief, peer-level acknowledgment then immediately into content (e.g., "Good conversation today. Here's the follow-up package:")
+
+**Email structure principles:**
+- **No markdown formatting** in emails — they render as plain text. No bold, no bullet points, no headers. Exception: HTML emails with explicit formatting are acceptable when the skill specifies it.
+- **Short paragraphs** — 1-3 sentences max per paragraph
+- **One clear ask per email** — don't bury the CTA
+- **Subject lines** — 4-8 words, value-driven or curiosity-driven, no clickbait
+- **Signoff** — just the name. No "Best regards," "Warm regards," "Looking forward to hearing from you." Just "Tyler" or "— Tyler"
+- **No hedge words** — eliminate "just," "I think," "I hope," "I wanted to," "I'd love to." State things directly.
+- **No sycophancy tax** — every sentence must earn its place. If a sentence exists only to make the prospect feel good about themselves, delete it. Compliments are fine if they're genuine and brief (one clause, not a whole paragraph).
+
+**Post-demo / post-call email pattern:**
+```
+Cortney,
+
+Here's everything from today's session:
+
+[Recording link]
+[Resources / screenshots / docs]
+
+Quick recap of what resonated:
+- [Specific thing 1 they reacted to]
+- [Specific thing 2]
+- [Specific thing 3]
+
+To get you pricing for Francois, I need:
+1. Annual AR invoice count
+2. Annual AR payment count
+
+Once I have those I'll turn it around fast. After you've debriefed with Francois, let's get him on a call — the forecasting piece maps directly to what he's pushing for.
+
+Tyler
+```
+
+Notice: no "thank you for your time" opener. No compliments. Straight to value. The tone says "I'm a peer who has something you need" — not "I'm a vendor who's grateful you showed up."
+
 ### Formatting Patterns
 
 | Element | Format |

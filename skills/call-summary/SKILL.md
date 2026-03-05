@@ -236,12 +236,24 @@ Execute all updates using `manage_crm_objects`. Confirm each write succeeded.
 
 ### Step 6: Draft Follow-Up Email
 
-Draft a follow-up email using Baseline voice from BRAND_GUIDE.md:
-- Reference specific discussion points from the call
-- Restate commitments (ours and theirs)
-- Attach or link any materials promised
-- Clear next step with a specific date/time proposal
-- Tone: consultative, not salesy. Data-led per brand guide.
+**Read the "Email Voice (Sandler Equal Business Stature)" section in BRAND_GUIDE.md before drafting.** This is mandatory — the email tone rules there override any default AI tendencies.
+
+Draft a follow-up email applying these principles:
+
+**Structure:**
+1. **Opener** — 1 sentence max. Peer-level, substance-first. Jump straight to the follow-up package or a specific discussion point. NO "thanks for your time," NO compliments about how engaged/articulate/knowledgeable they were. See BRAND_GUIDE.md "NEVER open an email with" list.
+2. **Resources** — Recording link, screenshots, videos, docs promised on the call. Lead with these — they're the value.
+3. **Recap** — 3-5 bullet points of what specifically resonated (from the transcript, not generic feature descriptions). Reference their words and reactions, not our pitch points.
+4. **Our ask** — What we need from them, numbered and specific. Make it easy to act on.
+5. **Next step** — One clear proposed action with enough context for them to say yes. Frame it around their priority, not ours.
+6. **Signoff** — Just the name. No "Best regards," no "Looking forward to hearing from you."
+
+**Tone rules:**
+- Equal Business Stature (Sandler) — you are a trusted advisor, not a grateful vendor
+- Every sentence must earn its place. If it exists only to flatter, delete it.
+- No hedge words: "just," "I think," "I hope," "I wanted to," "I'd love to"
+- No sycophancy tax: don't spend 2 sentences telling them how smart/engaged/impressive they are
+- Confident and direct — you showed them something valuable, now you're following through
 
 Offer to create the draft in Gmail.
 

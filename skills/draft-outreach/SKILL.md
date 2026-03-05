@@ -85,9 +85,15 @@ Every outreach should follow the Challenger pattern:
 3. **Take Control** — propose a specific next step with a clear value exchange
 
 **Do NOT:**
-- Lead with "I'd love to learn more about your business" (passive)
+- Lead with "I'd love to learn more about your business" (passive, subordinate)
 - Lead with Esker features or product descriptions (feature-led)
 - Ask for "15 minutes of your time" without offering value first
+- Open with "Thanks for taking the time" / "It was great to connect" / "I really appreciated..." (sycophantic — signals you need them more than they need you)
+- Compliment the prospect for doing their job ("how engaged you were," "how clearly you articulated") — this is flattery, not peer communication
+- Use hedge words: "just," "I think," "I hope," "I wanted to," "I'd love to"
+- Sign off with "Best regards," "Warm regards," or "Looking forward to hearing from you" — just use the name
+
+**Tone = Sandler Equal Business Stature:** You are a trusted advisor with something valuable to share. Not a vendor grateful for their attention. See BRAND_GUIDE.md "Email Voice" section for the full spec.
 
 ### Step 6: Draft the Message
 
