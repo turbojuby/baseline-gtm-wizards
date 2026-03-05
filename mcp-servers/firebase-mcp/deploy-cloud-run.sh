@@ -36,7 +36,7 @@ gcloud run deploy "$SERVICE_NAME" \
   --allow-unauthenticated \
   --set-env-vars="MODE=http" \
   --port 8080 \
-  --min-instances 0 \
+  --min-instances 1 \
   --max-instances 5 \
   --memory 256Mi \
   --cpu 1
